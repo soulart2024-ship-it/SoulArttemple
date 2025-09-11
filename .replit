@@ -1,0 +1,20 @@
+entrypoint = "index.html"
+modules = ["web"]
+
+[nix]
+channel = "stable-24_11"
+packages = ["static-web-server"]
+
+[deployment]
+publicDir = "/"
+deploymentTarget = "static"
+
+[workflows]
+runButton = "Serve static"
+
+[[ports]]
+localPort = 80
+externalPort = 80
+
+[agent]
+expertMode = true

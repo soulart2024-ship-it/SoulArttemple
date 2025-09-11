@@ -1,0 +1,85 @@
+:root {
+  --chakra-root: #B22222;
+  --chakra-sacral: #FF914D;
+  --chakra-solar: #FFD700;
+  --chakra-heart: #8ED6B7;
+  --chakra-throat: #4FB2D6;
+  --chakra-third-eye: #8F5AFF;
+  --chakra-crown: #EAD3FF;
+
+  --font-header: 'Cormorant Garamond', serif;
+  --font-body: 'Quicksand', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: linear-gradient(to bottom, #fef9f4, var(--chakra-crown));
+  color: #333;
+}
+
+header {
+  background-color: var(--chakra-heart);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-family: var(--font-header);
+  font-size: 2.2em;
+  letter-spacing: 1px;
+}
+
+nav {
+  background-color: var(--chakra-throat);
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+  font-size: 1.1em;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: var(--chakra-crown);
+}
+
+main {
+  padding: 40px;
+  text-align: center;
+}
+
+button {
+  background-color: var(--chakra-solar);
+  color: #333;
+  border: none;
+  padding: 15px 25px;
+  font-size: 1.2em;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: var(--font-body);
+}
+
+button:hover {
+  background-color: var(--chakra-sacral);
+  color: white;
+}
+
+footer {
+  background-color: var(--chakra-root);
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+html {
+  height: 100%;
+  width: 100%;
+}
