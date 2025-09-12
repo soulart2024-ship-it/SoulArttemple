@@ -1,11 +1,8 @@
 :root {
-  --chakra-root: #B22222;
-  --chakra-sacral: #FF914D;
-  --chakra-solar: #FFD700;
-  --chakra-heart: #8ED6B7;
-  --chakra-throat: #4FB2D6;
-  --chakra-third-eye: #8F5AFF;
-  --chakra-crown: #EAD3FF;
+  --color-primary: #C9A24F; /* SoulArt Gold */
+  --color-secondary: #2E3341; /* Deep Temple Blue */
+  --color-accent: #E9D8A6; /* Light Gold Text */
+  --color-bg: #F6F3EC; /* Gentle Cream Background */
 
   --font-header: 'Cormorant Garamond', serif;
   --font-body: 'Quicksand', sans-serif;
@@ -14,72 +11,92 @@
 body {
   margin: 0;
   font-family: var(--font-body);
-  background: linear-gradient(to bottom, #fef9f4, var(--chakra-crown));
-  color: #333;
+  background: var(--color-bg);
+  color: var(--color-secondary);
 }
 
 header {
-  background-color: var(--chakra-heart);
-  color: white;
-  padding: 20px;
   text-align: center;
+  padding: 40px 20px 20px;
+  background: var(--color-bg);
+}
+
+header .logo {
+  max-width: 120px;
+  margin-bottom: 15px;
+}
+
+header h1 {
   font-family: var(--font-header);
-  font-size: 2.2em;
-  letter-spacing: 1px;
+  font-size: 2.5em;
+  color: var(--color-primary);
+  margin: 0;
 }
 
 nav {
-  background-color: var(--chakra-throat);
+  background-color: var(--color-secondary);
   display: flex;
   justify-content: center;
-  padding: 10px;
+  gap: 30px;
+  padding: 15px 0;
 }
 
 nav a {
-  color: white;
+  color: var(--color-accent);
   text-decoration: none;
-  margin: 0 15px;
   font-weight: bold;
   font-size: 1.1em;
-  transition: 0.3s;
+  transition: color 0.3s;
 }
 
 nav a:hover {
-  color: var(--chakra-crown);
+  color: var(--color-primary);
 }
 
 main {
-  padding: 40px;
   text-align: center;
+  padding: 60px 20px;
+  font-size: 1.2em;
+  line-height: 1.6;
 }
 
 button {
-  background-color: var(--chakra-solar);
-  color: #333;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
   border: none;
-  padding: 15px 25px;
-  font-size: 1.2em;
-  border-radius: 10px;
+  padding: 15px 30px;
+  font-size: 1.1em;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  margin-top: 30px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-family: var(--font-body);
 }
 
 button:hover {
-  background-color: var(--chakra-sacral);
-  color: white;
+  background-color: var(--color-secondary);
+  color: var(--color-accent);
 }
 
 footer {
-  background-color: var(--chakra-root);
-  color: white;
+  background-color: var(--color-secondary);
+  color: var(--color-accent);
   text-align: center;
-  padding: 10px;
+  padding: 15px;
+  font-size: 0.9em;
   position: fixed;
   width: 100%;
   bottom: 0;
 }
-html {
-  height: 100%;
-  width: 100%;
+button:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-primary);
+}
+#main-content {
+  transition: opacity 0.4s ease;
+}
+header .logo {
+  box-shadow: 0 0 20px rgba(201, 162, 79, 0.4);
+  border-radius: 50%;
 }
