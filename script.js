@@ -2799,8 +2799,9 @@ function createSoulArtCardsSection() {
       </p>
       
       <div class="card-reading-options">
-        <button class="btn-primary" onclick="drawSingleCard()">Draw Single Card</button>
-        <button class="btn-secondary" onclick="drawThreeCards()">Three Card Spread</button>
+        <button class="btn-primary" onclick="showCardCarousel()">Choose Your Card</button>
+        <button class="btn-secondary" onclick="drawSingleCard()">Random Single Card</button>
+        <button class="btn-secondary" onclick="drawThreeCards()">Random Three Card Spread</button>
         <button class="btn-cancel" onclick="resetDeck()" id="reset-btn" style="display: none;">Reset Deck</button>
       </div>
       
@@ -2968,4 +2969,132 @@ function resetDeck() {
   renderCardDeck();
   closeCardDetails();
   document.getElementById('reset-btn').style.display = 'none';
+}
+
+function showCardCarousel() {
+  const spreadContainer = document.getElementById('card-spread');
+  
+  // Create carousel interface
+  spreadContainer.innerHTML = `
+    <div class="card-carousel-container">
+      <div class="carousel-instruction">
+        Browse through all 44 oracle cards and click on the one that calls to your intuition
+      </div>
+      
+      <div class="card-carousel" id="card-carousel">
+        ${soulArtCards.map(card => `
+          <div class="carousel-card" data-card-id="${card.id}" onclick="selectCarouselCard(${card.id})">
+            <div class="carousel-card-front" style="background: ${card.color};">
+              <div class="carousel-card-header">
+                <div class="carousel-card-symbol">✨</div>
+                <div class="carousel-card-title">${card.title}</div>
+                <div class="carousel-card-element">${card.element}</div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      
+      <div class="carousel-actions">
+        <button class="btn-secondary" onclick="scrollCarousel('left')">← Previous Cards</button>
+        <button class="btn-secondary" onclick="scrollCarousel('right')">Next Cards →</button>
+        <button class="btn-cancel" onclick="renderCardDeck()">Back to Deck</button>
+      </div>
+    </div>
+  `;
+  
+  // Center the carousel at the beginning and add touch support
+  setTimeout(() => {
+    const carousel = document.getElementById('card-carousel');
+    if (carousel) {
+      carousel.scrollLeft = 0;
+      addTouchSupport(carousel);
+    }
+  }, 100);
+}
+
+function selectCarouselCard(cardId) {
+  // Remove previous selections
+  document.querySelectorAll('.carousel-card').forEach(card => {
+    card.classList.remove('selected');
+  });
+  
+  // Mark selected card
+  const selectedCardElement = document.querySelector(`.carousel-card[data-card-id="${cardId}"]`);
+  if (selectedCardElement) {
+    selectedCardElement.classList.add('selected');
+  }
+  
+  // Find the card and set it as selected
+  const card = soulArtCards.find(c => c.id === cardId);
+  if (card) {
+    selectedCards = [card];
+    
+    // Show card details after a brief moment
+    setTimeout(() => {
+      showCardDetails(cardId);
+      document.getElementById('reset-btn').style.display = 'inline-block';
+    }, 300);
+  }
+}
+
+function scrollCarousel(direction) {
+  const carousel = document.getElementById('card-carousel');
+  if (!carousel) return;
+  
+  const scrollAmount = 300; // Adjust based on card width
+  
+  if (direction === 'left') {
+    carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  } else {
+    carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }
+}
+
+function addTouchSupport(carousel) {
+  let startX = 0;
+  let scrollLeft = 0;
+  let isDown = false;
+  
+  // Touch events for mobile
+  carousel.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+  });
+  
+  carousel.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const x = e.touches[0].pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed
+    carousel.scrollLeft = scrollLeft - walk;
+  });
+  
+  // Mouse events for desktop drag
+  carousel.addEventListener('mousedown', (e) => {
+    isDown = true;
+    carousel.style.cursor = 'grabbing';
+    startX = e.pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+  });
+  
+  carousel.addEventListener('mouseleave', () => {
+    isDown = false;
+    carousel.style.cursor = 'grab';
+  });
+  
+  carousel.addEventListener('mouseup', () => {
+    isDown = false;
+    carousel.style.cursor = 'grab';
+  });
+  
+  carousel.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 2;
+    carousel.scrollLeft = scrollLeft - walk;
+  });
+  
+  // Set initial cursor
+  carousel.style.cursor = 'grab';
 }
