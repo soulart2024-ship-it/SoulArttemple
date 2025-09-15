@@ -39,20 +39,25 @@ const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
 const pgStore = connectPg(session);
 const sessionStore = new pgStore({
   conString: process.env.DATABASE_URL,
-  createTableIfMissing: false,
+  createTableIfMissing: true,
   ttl: sessionTtl,
   tableName: "sessions",
 });
 
 app.set("trust proxy", 1);
+// For development, use a fallback secret, but require it in production
+const sessionSecret = process.env.SESSION_SECRET || (process.env.NODE_ENV === 'production' ? 
+  (() => { throw new Error("SESSION_SECRET environment variable is required in production"); })() : 
+  'development-secret-change-in-production');
+
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'soulart-temple-secret',
+  secret: sessionSecret,
   store: sessionStore,
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
     maxAge: sessionTtl,
   },
 }));
@@ -211,19 +216,18 @@ async function setupAuth() {
     verified(null, user);
   };
 
-  if (process.env.REPLIT_DOMAINS) {
-    for (const domain of process.env.REPLIT_DOMAINS.split(",")) {
-      const strategy = new Strategy(
-        {
-          name: `replitauth:${domain}`,
-          config,
-          scope: "openid email profile offline_access",
-          callbackURL: `https://${domain}/api/callback`,
-        },
-        verify,
-      );
-      passport.use(strategy);
-    }
+  const domains = process.env.REPLIT_DOMAINS ? process.env.REPLIT_DOMAINS.split(",") : ['localhost'];
+  for (const domain of domains) {
+    const strategy = new Strategy(
+      {
+        name: `replitauth:${domain}`,
+        config,
+        scope: "openid email profile offline_access",
+        callbackURL: `https://${domain}/api/callback`,
+      },
+      verify,
+    );
+    passport.use(strategy);
   }
 
   passport.serializeUser((user, cb) => cb(null, user));
@@ -405,7 +409,7 @@ app.post('/api/get-or-create-subscription', isAuthenticated, async (req, res) =>
       items: [{
         price_data: {
           currency: 'usd',
-          product: {
+          product_data: {
             name: 'SoulArt Temple Unlimited Access',
           },
           unit_amount: 399, // $3.99 in cents
@@ -459,6 +463,82 @@ app.post('/api/cancel-subscription', isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error("Cancellation error:", error);
     res.status(500).json({ error: { message: error.message } });
+  }
+});
+
+// Stripe webhook endpoint
+app.post('/api/stripe/webhook', express.raw({type: 'application/json'}), async (req, res) => {
+  try {
+    const sig = req.headers['stripe-signature'];
+    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    
+    if (!endpointSecret) {
+      console.log('Webhook secret not configured, skipping signature verification');
+      // In development, you might want to skip verification
+      if (process.env.NODE_ENV === 'production') {
+        return res.status(400).send('Webhook secret required in production');
+      }
+    }
+
+    let event;
+    if (endpointSecret) {
+      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    } else {
+      // Parse the event for development
+      event = JSON.parse(req.body);
+    }
+
+    // Handle the event
+    switch (event.type) {
+      case 'checkout.session.completed':
+        const session = event.data.object;
+        if (session.subscription) {
+          // Find user by subscription ID and update status
+          const [user] = await db.select().from(users).where(eq(users.stripeSubscriptionId, session.subscription));
+          if (user) {
+            await storage.updateSubscriptionStatus(user.id, 'active', true);
+          }
+        }
+        break;
+        
+      case 'invoice.paid':
+        const paidInvoice = event.data.object;
+        if (paidInvoice.subscription) {
+          const [user] = await db.select().from(users).where(eq(users.stripeSubscriptionId, paidInvoice.subscription));
+          if (user) {
+            await storage.updateSubscriptionStatus(user.id, 'active', true);
+          }
+        }
+        break;
+        
+      case 'invoice.payment_failed':
+        const failedInvoice = event.data.object;
+        if (failedInvoice.subscription) {
+          const [user] = await db.select().from(users).where(eq(users.stripeSubscriptionId, failedInvoice.subscription));
+          if (user) {
+            await storage.updateSubscriptionStatus(user.id, 'past_due', false);
+          }
+        }
+        break;
+        
+      case 'customer.subscription.updated':
+      case 'customer.subscription.deleted':
+        const subscription = event.data.object;
+        const [user] = await db.select().from(users).where(eq(users.stripeSubscriptionId, subscription.id));
+        if (user) {
+          const isActive = subscription.status === 'active';
+          await storage.updateSubscriptionStatus(user.id, subscription.status, isActive);
+        }
+        break;
+        
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+
+    res.json({received: true});
+  } catch (err) {
+    console.error('Webhook signature verification failed:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 });
 

@@ -835,25 +835,95 @@ async function subscribeToUnlimited() {
 }
 
 // Function to initialize Stripe payment
-function initializeStripePayment(clientSecret) {
-  // This is a simplified version - in a real app you'd want a proper checkout flow
-  const stripe = Stripe(process.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_...');
-  
-  // For now, just redirect to a simple success page
-  // In a full implementation, you'd create a proper checkout form
-  stripe.confirmPayment({
-    clientSecret,
-    confirmParams: {
-      return_url: `${window.location.origin}/?payment=success`,
-    },
-  }).then(function(result) {
-    if (result.error) {
-      alert('Payment failed: ' + result.error.message);
-    } else {
-      // Payment succeeded
-      navigate('emotion-decoder');
+async function initializeStripePayment(clientSecret) {
+  try {
+    // Load Stripe.js if not already loaded
+    if (typeof Stripe === 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://js.stripe.com/v3/';
+      document.head.appendChild(script);
+      
+      // Wait for Stripe to load
+      await new Promise((resolve) => {
+        script.onload = resolve;
+      });
     }
-  });
+
+    // Initialize Stripe - use your actual public key here
+    const stripe = Stripe('pk_test_51234...'); // Replace with actual public key
+    
+    // Create a simple payment form
+    const paymentContainer = document.createElement('div');
+    paymentContainer.innerHTML = `
+      <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%;">
+          <h3 style="color: #8F5AFF; margin-bottom: 20px; text-align: center;">Complete Your Subscription</h3>
+          <div id="card-element" style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+            <!-- Stripe Elements will create form elements here -->
+          </div>
+          <div style="text-align: center; margin-top: 20px;">
+            <button id="submit-payment" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
+              Subscribe for $3.99/month
+            </button>
+            <button onclick="this.closest('div[style*=fixed]').remove()" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
+              Cancel
+            </button>
+          </div>
+          <div id="card-errors" style="color: red; margin-top: 10px; text-align: center;"></div>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(paymentContainer);
+    
+    // Create card element
+    const elements = stripe.elements();
+    const cardElement = elements.create('card', {
+      style: {
+        base: {
+          fontSize: '16px',
+          color: '#424770',
+          '::placeholder': {
+            color: '#aab7c4',
+          },
+        },
+      },
+    });
+    
+    cardElement.mount('#card-element');
+    
+    // Handle form submission
+    const submitButton = paymentContainer.querySelector('#submit-payment');
+    const cardErrors = paymentContainer.querySelector('#card-errors');
+    
+    submitButton.addEventListener('click', async (event) => {
+      event.preventDefault();
+      
+      submitButton.disabled = true;
+      submitButton.textContent = 'Processing...';
+      
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+        }
+      });
+      
+      if (result.error) {
+        cardErrors.textContent = result.error.message;
+        submitButton.disabled = false;
+        submitButton.textContent = 'Subscribe for $3.99/month';
+      } else {
+        // Payment succeeded
+        paymentContainer.remove();
+        alert('Welcome to unlimited access! Your subscription is now active.');
+        navigate('emotion-decoder');
+      }
+    });
+    
+  } catch (error) {
+    console.error('Stripe initialization error:', error);
+    alert('Payment system unavailable. Please try again later.');
+  }
 }
 
 // Function to check authentication and load membership dashboard
