@@ -57,7 +57,21 @@ export const usageLog = pgTable("usage_log", {
   metadata: jsonb("metadata"), // additional data like healing step completed
 });
 
+// Journal entries table for Sacred Reflections
+export const journalEntries = pgTable("journal_entries", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  title: varchar("title"), // optional title for the entry
+  content: varchar("content").notNull(), // the journal entry text
+  mood: varchar("mood"), // optional mood tracking
+  tags: varchar("tags"), // comma-separated tags
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type UsageLog = typeof usageLog.$inferSelect;
 export type InsertUsageLog = typeof usageLog.$inferInsert;
+export type JournalEntry = typeof journalEntries.$inferSelect;
+export type InsertJournalEntry = typeof journalEntries.$inferInsert;

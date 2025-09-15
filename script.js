@@ -75,10 +75,50 @@ function navigate(page) {
       `;
     } else if (page === 'journal') {
       main.innerHTML = `
-        <h2>Sacred Reflections Journal</h2>
-        <textarea rows="10" cols="60" placeholder="What is rising in your awareness today?"></textarea><br><br>
-        <button>Save Reflection</button>
+        <div class="journal-container">
+          <h2>Sacred Reflections Journal</h2>
+          <p class="journal-subtitle">A space for your spiritual insights and daily reflections</p>
+          
+          <div class="journal-actions">
+            <button onclick="showJournalEntryForm()" class="btn-primary">✨ New Entry</button>
+            <button onclick="downloadJournalEntries()" class="btn-secondary">📥 Download All Entries</button>
+            <span class="entry-count">Loading entries...</span>
+          </div>
+
+          <div id="journal-entry-form" class="journal-form" style="display: none;">
+            <h3>✍️ Create New Entry</h3>
+            <input type="text" id="entry-title" placeholder="Entry title (optional)" class="journal-title-input">
+            <textarea id="entry-content" rows="8" placeholder="What is rising in your awareness today? Share your thoughts, feelings, and insights..." class="journal-content-area"></textarea>
+            
+            <div class="journal-meta">
+              <select id="entry-mood" class="journal-mood-select">
+                <option value="">Select mood (optional)</option>
+                <option value="grateful">🙏 Grateful</option>
+                <option value="peaceful">🕊️ Peaceful</option>
+                <option value="reflective">🤔 Reflective</option>
+                <option value="inspired">✨ Inspired</option>
+                <option value="curious">🔍 Curious</option>
+                <option value="challenged">💪 Challenged</option>
+                <option value="emotional">💗 Emotional</option>
+                <option value="joyful">😊 Joyful</option>
+              </select>
+              
+              <input type="text" id="entry-tags" placeholder="Tags (comma separated)" class="journal-tags-input">
+            </div>
+            
+            <div class="journal-form-actions">
+              <button onclick="saveJournalEntry()" class="btn-primary">💾 Save Entry</button>
+              <button onclick="cancelJournalEntry()" class="btn-cancel">❌ Cancel</button>
+            </div>
+          </div>
+
+          <div id="journal-entries-list" class="journal-entries">
+            <div class="loading">Loading your sacred reflections...</div>
+          </div>
+        </div>
       `;
+      
+      loadJournalEntries();
     }else if (page === 'thankyou') {
       main.innerHTML = `
         <h2>Thank You, Beloved</h2>
@@ -1968,4 +2008,341 @@ async function checkAuthAndLoadMembership() {
 // Function to manage billing (placeholder for now)
 function manageBilling() {
   alert('Billing management feature coming soon! For now, contact support for billing changes.');
+}
+
+// =============================
+// JOURNAL FUNCTIONALITY
+// =============================
+
+let currentEditingEntry = null;
+let journalEntries = [];
+
+// Load all journal entries for the user
+async function loadJournalEntries() {
+  try {
+    const response = await fetch('/api/journal/entries');
+    const data = await response.json();
+    
+    if (response.ok) {
+      journalEntries = data.entries;
+      renderJournalEntries();
+      updateEntryCount(data.totalCount);
+    } else {
+      throw new Error(data.message || 'Failed to load journal entries');
+    }
+  } catch (error) {
+    console.error('Error loading journal entries:', error);
+    const entriesList = document.getElementById('journal-entries-list');
+    entriesList.innerHTML = `
+      <div class="error-message">
+        <p>📱 Please sign in to access your journal entries</p>
+        <button onclick="window.location.href='/api/login'" class="btn-primary">Sign In</button>
+      </div>
+    `;
+  }
+}
+
+// Render journal entries in the UI
+function renderJournalEntries() {
+  const entriesList = document.getElementById('journal-entries-list');
+  
+  if (journalEntries.length === 0) {
+    entriesList.innerHTML = `
+      <div class="empty-journal">
+        <div class="empty-journal-icon">📖</div>
+        <h3>Your journal awaits your first reflection</h3>
+        <p>Click "New Entry" above to begin your sacred writing journey.</p>
+      </div>
+    `;
+    return;
+  }
+
+  entriesList.innerHTML = journalEntries.map(entry => `
+    <div class="journal-entry" data-entry-id="${entry.id}">
+      <div class="journal-entry-header">
+        <h4 class="journal-entry-title">
+          ${entry.title || 'Untitled Entry'}
+          ${entry.mood ? `<span class="mood-indicator">${getMoodEmoji(entry.mood)}</span>` : ''}
+        </h4>
+        <div class="journal-entry-meta">
+          <span class="journal-entry-date">${formatDate(entry.createdAt)}</span>
+          <div class="journal-entry-actions">
+            <button onclick="editJournalEntry('${entry.id}')" class="btn-edit" title="Edit">✏️</button>
+            <button onclick="deleteJournalEntry('${entry.id}')" class="btn-delete" title="Delete">🗑️</button>
+          </div>
+        </div>
+      </div>
+      <div class="journal-entry-content">
+        ${entry.content.substring(0, 200)}${entry.content.length > 200 ? '...' : ''}
+      </div>
+      ${entry.tags ? `<div class="journal-entry-tags">${formatTags(entry.tags)}</div>` : ''}
+      <button onclick="viewFullEntry('${entry.id}')" class="btn-view-full">Read Full Entry</button>
+    </div>
+  `).join('');
+}
+
+// Show the journal entry form
+function showJournalEntryForm() {
+  const form = document.getElementById('journal-entry-form');
+  form.style.display = 'block';
+  form.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('entry-content').focus();
+}
+
+// Cancel journal entry creation/editing
+function cancelJournalEntry() {
+  const form = document.getElementById('journal-entry-form');
+  form.style.display = 'none';
+  clearJournalForm();
+  currentEditingEntry = null;
+}
+
+// Clear journal form fields
+function clearJournalForm() {
+  document.getElementById('entry-title').value = '';
+  document.getElementById('entry-content').value = '';
+  document.getElementById('entry-mood').value = '';
+  document.getElementById('entry-tags').value = '';
+}
+
+// Save journal entry (create or update)
+async function saveJournalEntry() {
+  const title = document.getElementById('entry-title').value.trim();
+  const content = document.getElementById('entry-content').value.trim();
+  const mood = document.getElementById('entry-mood').value;
+  const tags = document.getElementById('entry-tags').value.trim();
+
+  if (!content) {
+    alert('Please write something in your journal entry before saving.');
+    return;
+  }
+
+  try {
+    const method = currentEditingEntry ? 'PUT' : 'POST';
+    const url = currentEditingEntry 
+      ? `/api/journal/entries/${currentEditingEntry}` 
+      : '/api/journal/entries';
+
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ title, content, mood, tags }),
+    });
+
+    const data = await response.json();
+    
+    if (response.ok) {
+      // Refresh entries list
+      await loadJournalEntries();
+      cancelJournalEntry();
+      showSuccessMessage(currentEditingEntry ? 'Entry updated successfully! ✨' : 'Entry saved successfully! ✨');
+    } else {
+      throw new Error(data.message || 'Failed to save entry');
+    }
+  } catch (error) {
+    console.error('Error saving journal entry:', error);
+    alert('Failed to save journal entry. Please try again.');
+  }
+}
+
+// Edit existing journal entry
+async function editJournalEntry(entryId) {
+  try {
+    const response = await fetch(`/api/journal/entries/${entryId}`);
+    const entry = await response.json();
+    
+    if (response.ok) {
+      currentEditingEntry = entryId;
+      document.getElementById('entry-title').value = entry.title || '';
+      document.getElementById('entry-content').value = entry.content;
+      document.getElementById('entry-mood').value = entry.mood || '';
+      document.getElementById('entry-tags').value = entry.tags || '';
+      showJournalEntryForm();
+      document.getElementById('journal-entry-form').querySelector('h3').textContent = '✏️ Edit Entry';
+    }
+  } catch (error) {
+    console.error('Error loading entry for editing:', error);
+    alert('Failed to load entry for editing.');
+  }
+}
+
+// Delete journal entry
+async function deleteJournalEntry(entryId) {
+  if (!confirm('Are you sure you want to delete this journal entry? This cannot be undone.')) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/journal/entries/${entryId}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      await loadJournalEntries();
+      showSuccessMessage('Entry deleted successfully! 🗑️');
+    } else {
+      throw new Error('Failed to delete entry');
+    }
+  } catch (error) {
+    console.error('Error deleting journal entry:', error);
+    alert('Failed to delete journal entry. Please try again.');
+  }
+}
+
+// View full entry in a modal-like view
+function viewFullEntry(entryId) {
+  const entry = journalEntries.find(e => e.id === entryId);
+  if (!entry) return;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'journal-modal-overlay';
+  overlay.innerHTML = `
+    <div class="journal-modal">
+      <div class="journal-modal-header">
+        <h3>${entry.title || 'Untitled Entry'}</h3>
+        <button onclick="closeJournalModal()" class="btn-close">❌</button>
+      </div>
+      <div class="journal-modal-meta">
+        <span class="journal-modal-date">${formatDate(entry.createdAt)}</span>
+        ${entry.mood ? `<span class="journal-modal-mood">${getMoodEmoji(entry.mood)} ${entry.mood}</span>` : ''}
+      </div>
+      <div class="journal-modal-content">
+        ${entry.content.replace(/\n/g, '<br>')}
+      </div>
+      ${entry.tags ? `<div class="journal-modal-tags">${formatTags(entry.tags)}</div>` : ''}
+      <div class="journal-modal-actions">
+        <button onclick="editJournalEntry('${entry.id}'); closeJournalModal();" class="btn-primary">✏️ Edit</button>
+        <button onclick="deleteJournalEntry('${entry.id}'); closeJournalModal();" class="btn-delete">🗑️ Delete</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeJournalModal();
+  });
+}
+
+// Close journal modal
+function closeJournalModal() {
+  const modal = document.querySelector('.journal-modal-overlay');
+  if (modal) {
+    modal.remove();
+  }
+}
+
+// Download all journal entries
+async function downloadJournalEntries() {
+  try {
+    const response = await fetch('/api/journal/download');
+    const data = await response.json();
+    
+    if (response.ok) {
+      // Create downloadable content
+      const content = `SoulArt Temple - Sacred Reflections Journal
+Export Date: ${new Date(data.exportDate).toLocaleString()}
+Total Entries: ${data.totalEntries}
+
+${'='.repeat(60)}
+
+${data.entries.map(entry => `
+ENTRY: ${entry.title}
+Date: ${new Date(entry.createdAt).toLocaleString()}
+Mood: ${entry.mood}
+Tags: ${entry.tags}
+
+${entry.content}
+
+${'─'.repeat(40)}
+`).join('\n')}
+
+End of Journal Export
+Generated by SoulArt Temple
+`;
+
+      // Create and download file
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `soulart-journal-${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showSuccessMessage('Journal downloaded successfully! 📥');
+    } else {
+      throw new Error(data.message || 'Failed to download journal');
+    }
+  } catch (error) {
+    console.error('Error downloading journal:', error);
+    alert('Failed to download journal. Please try again.');
+  }
+}
+
+// Helper functions
+function updateEntryCount(count) {
+  const entryCountElement = document.querySelector('.entry-count');
+  if (entryCountElement) {
+    entryCountElement.textContent = `${count} entr${count === 1 ? 'y' : 'ies'} (${200 - count} remaining)`;
+  }
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+function getMoodEmoji(mood) {
+  const moodEmojis = {
+    grateful: '🙏',
+    peaceful: '🕊️',
+    reflective: '🤔',
+    inspired: '✨',
+    curious: '🔍',
+    challenged: '💪',
+    emotional: '💗',
+    joyful: '😊'
+  };
+  return moodEmojis[mood] || '💭';
+}
+
+function formatTags(tagsString) {
+  if (!tagsString) return '';
+  return tagsString.split(',').map(tag => 
+    `<span class="journal-tag">${tag.trim()}</span>`
+  ).join('');
+}
+
+function showSuccessMessage(message) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'success-message';
+  messageDiv.textContent = message;
+  messageDiv.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #8ED6B7;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    font-weight: bold;
+  `;
+  
+  document.body.appendChild(messageDiv);
+  
+  setTimeout(() => {
+    messageDiv.remove();
+  }, 3000);
 }

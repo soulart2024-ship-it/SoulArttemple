@@ -35,6 +35,10 @@ const users = pgTable("users", {
   stripeSubscriptionId: varchar("stripe_subscription_id"),
   // Usage tracking for emotion decoder
   emotionDecoderUsage: integer("emotion_decoder_usage").default(0),
+  // Usage tracking for allergy identifier
+  allergyIdentifierUsage: integer("allergy_identifier_usage").default(0),
+  // Usage tracking for belief decoder
+  beliefDecoderUsage: integer("belief_decoder_usage").default(0),
   isSubscribed: boolean("is_subscribed").default(false),
   subscriptionStatus: varchar("subscription_status"), // active, canceled, past_due, etc.
   createdAt: timestamp("created_at").defaultNow(),
@@ -45,14 +49,29 @@ const users = pgTable("users", {
 const usageLog = pgTable("usage_log", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").references(() => users.id).notNull(),
-  action: varchar("action").notNull(), // 'emotion_decoder_use'
+  action: varchar("action").notNull(), // 'emotion_decoder_use', 'allergy_identifier_use', 'belief_decoder_use'
   timestamp: timestamp("timestamp").defaultNow(),
   emotionProcessed: varchar("emotion_processed"), // which emotion was processed
+  allergenProcessed: varchar("allergen_processed"), // which allergen was processed
+  beliefProcessed: varchar("belief_processed"), // which belief was processed
   metadata: jsonb("metadata"), // additional data like healing step completed
+});
+
+// Journal entries table for Sacred Reflections
+const journalEntries = pgTable("journal_entries", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  title: varchar("title"), // optional title for the entry
+  content: varchar("content").notNull(), // the journal entry text
+  mood: varchar("mood"), // optional mood tracking
+  tags: varchar("tags"), // comma-separated tags
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 module.exports = {
   sessions,
   users,
-  usageLog
+  usageLog,
+  journalEntries
 };

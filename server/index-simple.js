@@ -9,7 +9,7 @@ const { Strategy } = require("openid-client/passport");
 const Stripe = require("stripe");
 const { drizzle } = require("drizzle-orm/postgres-js");
 const postgres = require("postgres");
-const { users, usageLog, sessions } = require("../shared/schema-js.js");
+const { users, usageLog, sessions, journalEntries } = require("../shared/schema-js.js");
 const { eq, and, gte, desc, sql } = require("drizzle-orm");
 
 const app = express();
@@ -249,6 +249,110 @@ class DatabaseStorage {
     
     // Non-subscribers get 3 free uses
     return { canUse: usageCount < 3, usageCount, isSubscribed: false };
+  }
+
+  // Journal management methods
+  async createJournalEntry(userId, title, content, mood, tags) {
+    // Check if user has reached 200 entry limit
+    const entryCount = await this.getJournalEntryCount(userId);
+    
+    if (entryCount >= 200) {
+      // Delete oldest 20 entries to make room
+      await this.deleteOldestJournalEntries(userId, 20);
+    }
+
+    // Create new entry
+    const [entry] = await db.insert(journalEntries).values({
+      userId,
+      title: title || null,
+      content,
+      mood: mood || null,
+      tags: tags || null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }).returning();
+    
+    return entry;
+  }
+
+  async getJournalEntries(userId, limit = 50, offset = 0) {
+    return await db
+      .select()
+      .from(journalEntries)
+      .where(eq(journalEntries.userId, userId))
+      .orderBy(desc(journalEntries.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getJournalEntry(entryId, userId) {
+    const [entry] = await db
+      .select()
+      .from(journalEntries)
+      .where(and(
+        eq(journalEntries.id, entryId),
+        eq(journalEntries.userId, userId)
+      ));
+    return entry;
+  }
+
+  async updateJournalEntry(entryId, userId, updates) {
+    const [entry] = await db
+      .update(journalEntries)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(and(
+        eq(journalEntries.id, entryId),
+        eq(journalEntries.userId, userId)
+      ))
+      .returning();
+    return entry;
+  }
+
+  async deleteJournalEntry(entryId, userId) {
+    await db
+      .delete(journalEntries)
+      .where(and(
+        eq(journalEntries.id, entryId),
+        eq(journalEntries.userId, userId)
+      ));
+  }
+
+  async getJournalEntryCount(userId) {
+    const [result] = await db
+      .select({ count: sql`count(*)` })
+      .from(journalEntries)
+      .where(eq(journalEntries.userId, userId));
+    return parseInt(result.count) || 0;
+  }
+
+  async deleteOldestJournalEntries(userId, count) {
+    const oldestEntries = await db
+      .select({ id: journalEntries.id })
+      .from(journalEntries)
+      .where(eq(journalEntries.userId, userId))
+      .orderBy(journalEntries.createdAt)
+      .limit(count);
+    
+    if (oldestEntries.length > 0) {
+      const entryIds = oldestEntries.map(entry => entry.id);
+      await db
+        .delete(journalEntries)
+        .where(and(
+          eq(journalEntries.userId, userId),
+          sql`id = ANY(${entryIds})`
+        ));
+    }
+  }
+
+  async getAllJournalEntriesForDownload(userId) {
+    return await db
+      .select()
+      .from(journalEntries)
+      .where(eq(journalEntries.userId, userId))
+      .orderBy(desc(journalEntries.createdAt));
   }
 }
 
@@ -506,6 +610,124 @@ app.get('/api/usage/stats', isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error("Error fetching usage stats:", error);
     res.status(500).json({ message: "Failed to fetch usage stats" });
+  }
+});
+
+// Journal entry routes
+app.post('/api/journal/entries', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { title, content, mood, tags } = req.body;
+    
+    if (!content || content.trim().length === 0) {
+      return res.status(400).json({ message: "Journal entry content is required" });
+    }
+
+    const entry = await storage.createJournalEntry(userId, title, content, mood, tags);
+    res.json(entry);
+  } catch (error) {
+    console.error("Error creating journal entry:", error);
+    res.status(500).json({ message: "Failed to create journal entry" });
+  }
+});
+
+app.get('/api/journal/entries', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const limit = parseInt(req.query.limit) || 50;
+    const offset = parseInt(req.query.offset) || 0;
+    
+    const entries = await storage.getJournalEntries(userId, limit, offset);
+    const totalCount = await storage.getJournalEntryCount(userId);
+    
+    res.json({ entries, totalCount, limit, offset });
+  } catch (error) {
+    console.error("Error fetching journal entries:", error);
+    res.status(500).json({ message: "Failed to fetch journal entries" });
+  }
+});
+
+app.get('/api/journal/entries/:entryId', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { entryId } = req.params;
+    
+    const entry = await storage.getJournalEntry(entryId, userId);
+    if (!entry) {
+      return res.status(404).json({ message: "Journal entry not found" });
+    }
+    
+    res.json(entry);
+  } catch (error) {
+    console.error("Error fetching journal entry:", error);
+    res.status(500).json({ message: "Failed to fetch journal entry" });
+  }
+});
+
+app.put('/api/journal/entries/:entryId', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { entryId } = req.params;
+    const { title, content, mood, tags } = req.body;
+    
+    if (!content || content.trim().length === 0) {
+      return res.status(400).json({ message: "Journal entry content is required" });
+    }
+
+    const entry = await storage.updateJournalEntry(entryId, userId, { title, content, mood, tags });
+    if (!entry) {
+      return res.status(404).json({ message: "Journal entry not found" });
+    }
+    
+    res.json(entry);
+  } catch (error) {
+    console.error("Error updating journal entry:", error);
+    res.status(500).json({ message: "Failed to update journal entry" });
+  }
+});
+
+app.delete('/api/journal/entries/:entryId', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { entryId } = req.params;
+    
+    const entry = await storage.getJournalEntry(entryId, userId);
+    if (!entry) {
+      return res.status(404).json({ message: "Journal entry not found" });
+    }
+    
+    await storage.deleteJournalEntry(entryId, userId);
+    res.json({ message: "Journal entry deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting journal entry:", error);
+    res.status(500).json({ message: "Failed to delete journal entry" });
+  }
+});
+
+app.get('/api/journal/download', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const entries = await storage.getAllJournalEntriesForDownload(userId);
+    
+    // Format entries for download
+    const downloadContent = entries.map(entry => ({
+      id: entry.id,
+      title: entry.title || 'Untitled Entry',
+      content: entry.content,
+      mood: entry.mood || 'Not specified',
+      tags: entry.tags || 'No tags',
+      createdAt: entry.createdAt.toISOString(),
+      updatedAt: entry.updatedAt.toISOString(),
+    }));
+    
+    res.json({
+      totalEntries: entries.length,
+      exportDate: new Date().toISOString(),
+      entries: downloadContent
+    });
+  } catch (error) {
+    console.error("Error preparing journal download:", error);
+    res.status(500).json({ message: "Failed to prepare journal download" });
   }
 });
 
