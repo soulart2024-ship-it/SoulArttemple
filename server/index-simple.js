@@ -174,6 +174,82 @@ class DatabaseStorage {
       ))
       .orderBy(desc(usageLog.timestamp));
   }
+
+  // Usage tracking for allergy identifier
+  async recordAllergyIdentifierUse(userId, allergen) {
+    // Record in usage log
+    await db.insert(usageLog).values({
+      userId,
+      action: 'allergy_identifier_use',
+      allergenProcessed: allergen,
+      timestamp: new Date(),
+    });
+
+    // Increment user usage counter
+    await db
+      .update(users)
+      .set({
+        allergyIdentifierUsage: sql`allergy_identifier_usage + 1`,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId));
+  }
+
+  async canUseAllergyIdentifier(userId) {
+    const user = await this.getUser(userId);
+    if (!user) {
+      return { canUse: false, usageCount: 0, isSubscribed: false };
+    }
+
+    const usageCount = user.allergyIdentifierUsage || 0;
+    const isSubscribed = user.isSubscribed || false;
+    
+    // Subscribers have unlimited access
+    if (isSubscribed && user.subscriptionStatus === 'active') {
+      return { canUse: true, usageCount, isSubscribed: true };
+    }
+    
+    // Non-subscribers get 3 free uses
+    return { canUse: usageCount < 3, usageCount, isSubscribed: false };
+  }
+
+  // Usage tracking for belief decoder
+  async recordBeliefDecoderUse(userId, belief) {
+    // Record in usage log
+    await db.insert(usageLog).values({
+      userId,
+      action: 'belief_decoder_use',
+      beliefProcessed: belief,
+      timestamp: new Date(),
+    });
+
+    // Increment user usage counter
+    await db
+      .update(users)
+      .set({
+        beliefDecoderUsage: sql`belief_decoder_usage + 1`,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId));
+  }
+
+  async canUseBeliefDecoder(userId) {
+    const user = await this.getUser(userId);
+    if (!user) {
+      return { canUse: false, usageCount: 0, isSubscribed: false };
+    }
+
+    const usageCount = user.beliefDecoderUsage || 0;
+    const isSubscribed = user.isSubscribed || false;
+    
+    // Subscribers have unlimited access
+    if (isSubscribed && user.subscriptionStatus === 'active') {
+      return { canUse: true, usageCount, isSubscribed: true };
+    }
+    
+    // Non-subscribers get 3 free uses
+    return { canUse: usageCount < 3, usageCount, isSubscribed: false };
+  }
 }
 
 const storage = new DatabaseStorage();
