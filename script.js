@@ -102,52 +102,133 @@ function navigate(page) {
         <button onclick="navigate('home')">Return to Home</button>
       `;
     } else if (page === 'emotion-decoder') {
-      main.innerHTML = `
-        <h2>Trapped Emotion Release Tiles</h2>
-        <p>Use muscle testing (Kinesiology) to identify which trapped emotion is ready for release today.</p>
-        
-        <div style="text-align: center; margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px;">
-          <h3 style="color: #8F5AFF; margin-bottom: 15px;">Kinesiology Muscle Testing Guide</h3>
-          <p style="font-style: italic; color: #666; margin-bottom: 10px;">
-            Test each row systematically - your body knows which emotions need healing
-          </p>
-          <p style="font-size: 14px; color: #8F5AFF;">
-            Once you identify the row, muscle test each emotion in that row to find the specific one
-          </p>
-        </div>
+      // Check authentication and usage first
+      checkEmotionDecoderAccess().then(accessInfo => {
+        if (accessInfo.needsAuth) {
+          main.innerHTML = `
+            <h2>Trapped Emotion Release Tiles</h2>
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px; margin: 20px 0;">
+              <h3 style="color: #8F5AFF; margin-bottom: 15px;">Sign In Required</h3>
+              <p style="margin-bottom: 20px; color: #666;">
+                Please sign in to access the Emotion Decoder and track your healing journey.
+              </p>
+              <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                Sign In to Continue
+              </button>
+            </div>
+          `;
+          return;
+        }
 
-        <div id="emotion-tiles-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-          <!-- Column 1: Rows 1-3 -->
-          <div id="column-1" style="background: linear-gradient(135deg, #8ED6B710, transparent); padding: 20px; border-radius: 15px;">
-            <h3 style="text-align: center; color: #8ED6B7; margin-bottom: 20px; font-size: 18px;">
-              Foundation & Heart Rows
-            </h3>
-            <div id="rows-1-3"></div>
+        if (accessInfo.needsSubscription) {
+          main.innerHTML = `
+            <h2>Trapped Emotion Release Tiles</h2>
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF914D20, #EAD3FF20); border-radius: 15px; margin: 20px 0;">
+              <h3 style="color: #FF914D; margin-bottom: 15px;">Upgrade to Unlimited Access</h3>
+              <p style="margin-bottom: 10px; color: #666;">
+                You've used all 3 free emotion healing sessions.
+              </p>
+              <p style="margin-bottom: 20px; color: #666;">
+                Upgrade to unlimited access for just <strong>$3.99/month</strong>
+              </p>
+              <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #8F5AFF;">
+                <h4 style="color: #8F5AFF; margin-bottom: 15px;">Unlimited Membership Includes:</h4>
+                <ul style="text-align: left; color: #666; max-width: 300px; margin: 0 auto;">
+                  <li>Unlimited emotion decoder sessions</li>
+                  <li>Complete 5-step healing process</li>
+                  <li>Usage analytics and progress tracking</li>
+                  <li>Priority access to new features</li>
+                </ul>
+              </div>
+              <button onclick="subscribeToUnlimited()" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
+                Subscribe for $3.99/month
+              </button>
+              <button onclick="navigate('home')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                Return Home
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        // Normal access - show the decoder
+        main.innerHTML = `
+          <h2>Trapped Emotion Release Tiles</h2>
+          <p>Use muscle testing (Kinesiology) to identify which trapped emotion is ready for release today.</p>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0; padding: 15px; background: linear-gradient(135deg, #8ED6B720, #EAD3FF20); border-radius: 10px;">
+            <div style="text-align: left;">
+              <h4 style="color: #8F5AFF; margin: 0;">Your Usage</h4>
+              <p style="margin: 5px 0; color: #666;">${accessInfo.isSubscribed ? 'Unlimited Access' : `${accessInfo.usageCount}/3 free sessions used`}</p>
+            </div>
+            <div style="text-align: right;">
+              ${accessInfo.isSubscribed ? 
+                '<span style="background: #8ED6B7; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold;">PREMIUM</span>' :
+                `<span style="color: #FF914D; font-size: 14px;">${3 - accessInfo.usageCount} sessions remaining</span>`
+              }
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px;">
+            <h3 style="color: #8F5AFF; margin-bottom: 15px;">Kinesiology Muscle Testing Guide</h3>
+            <p style="font-style: italic; color: #666; margin-bottom: 10px;">
+              Test each row systematically - your body knows which emotions need healing
+            </p>
+            <p style="font-size: 14px; color: #8F5AFF;">
+              Once you identify the row, muscle test each emotion in that row to find the specific one
+            </p>
           </div>
 
-          <!-- Column 2: Rows 4-6 -->  
-          <div id="column-2" style="background: linear-gradient(135deg, #EAD3FF10, transparent); padding: 20px; border-radius: 15px;">
-            <h3 style="text-align: center; color: #8F5AFF; margin-bottom: 20px; font-size: 18px;">
-              Expression & Wisdom Rows
-            </h3>
-            <div id="rows-4-6"></div>
+          <div id="emotion-tiles-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+            <!-- Column 1: Rows 1-3 -->
+            <div id="column-1" style="background: linear-gradient(135deg, #8ED6B710, transparent); padding: 20px; border-radius: 15px;">
+              <h3 style="text-align: center; color: #8ED6B7; margin-bottom: 20px; font-size: 18px;">
+                Foundation & Heart Rows
+              </h3>
+              <div id="rows-1-3"></div>
+            </div>
+
+            <!-- Column 2: Rows 4-6 -->  
+            <div id="column-2" style="background: linear-gradient(135deg, #EAD3FF10, transparent); padding: 20px; border-radius: 15px;">
+              <h3 style="text-align: center; color: #8F5AFF; margin-bottom: 20px; font-size: 18px;">
+                Expression & Wisdom Rows
+              </h3>
+              <div id="rows-4-6"></div>
+            </div>
           </div>
-        </div>
-        
-        <div id="emotion-results" style="margin-top: 20px;">
-          <div style="text-align: center; color: #8F5AFF; font-style: italic;">
-            Click on a trapped emotion tile above to begin your healing journey
+          
+          <div id="emotion-results" style="margin-top: 20px;">
+            <div style="text-align: center; color: #8F5AFF; font-style: italic;">
+              Click on a trapped emotion tile above to begin your healing journey
+            </div>
           </div>
-        </div>
-        
-        <div id="healing-process" style="margin-top: 30px; display: none;">
-          <!-- Healing process will be inserted here -->
-        </div>
-      `;
-      // Load emotion data and render tiles
-      loadEmotionData().then(() => {
-        renderEmotionTiles();
+          
+          <div id="healing-process" style="margin-top: 30px; display: none;">
+            <!-- Healing process will be inserted here -->
+          </div>
+        `;
+        // Load emotion data and render tiles
+        loadEmotionData().then(() => {
+          renderEmotionTiles();
+        });
+      }).catch(error => {
+        console.error('Error checking access:', error);
+        main.innerHTML = `
+          <h2>Trapped Emotion Release Tiles</h2>
+          <div style="text-align: center; padding: 40px; background: #FFE6E6; border-radius: 15px; margin: 20px 0;">
+            <h3 style="color: #FF6B6B; margin-bottom: 15px;">Connection Error</h3>
+            <p style="margin-bottom: 20px; color: #666;">
+              Unable to connect to the server. Please try again.
+            </p>
+            <button onclick="navigate('home')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+              Return Home
+            </button>
+          </div>
+        `;
       });
+    } else if (page === 'membership') {
+      // Check authentication and load membership dashboard
+      checkAuthAndLoadMembership();
     }
 
     main.style.opacity = 1;
@@ -345,7 +426,7 @@ function setupTileEventListeners() {
     });
     
     // Add click handler
-    tile.addEventListener('click', () => {
+    tile.addEventListener('click', async () => {
       const emotionData = {
         emotion: tile.getAttribute('data-emotion'),
         frequency: parseInt(tile.getAttribute('data-frequency')),
@@ -353,6 +434,14 @@ function setupTileEventListeners() {
         soulArtColor: tile.getAttribute('data-soul-art-color'),
         additionalSupport: tile.getAttribute('data-additional-support')
       };
+      
+      // Record usage before starting the healing process
+      try {
+        await recordEmotionDecoderUsage(emotionData.emotion);
+      } catch (error) {
+        console.error('Failed to record usage:', error);
+        // Continue with the process even if recording fails
+      }
       startHealingProcess(emotionData);
     });
   });
@@ -635,4 +724,285 @@ function selectVibeWord(word) {
       selectedBtn.style.fontWeight = 'bold';
     }
   }
+}
+
+// Function to check emotion decoder access and usage
+async function checkEmotionDecoderAccess() {
+  try {
+    const response = await fetch('/api/emotion-decoder/can-use');
+    
+    if (response.status === 401) {
+      return { needsAuth: true, canUse: false, usageCount: 0, isSubscribed: false };
+    }
+    
+    if (!response.ok) {
+      throw new Error('Failed to check access');
+    }
+    
+    const data = await response.json();
+    return {
+      needsAuth: false,
+      needsSubscription: !data.canUse,
+      canUse: data.canUse,
+      usageCount: data.usageCount,
+      isSubscribed: data.isSubscribed
+    };
+  } catch (error) {
+    console.error('Error checking access:', error);
+    throw error;
+  }
+}
+
+// Function to record emotion decoder usage
+async function recordEmotionDecoderUsage(emotion) {
+  try {
+    const response = await fetch('/api/emotion-decoder/use', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ emotion })
+    });
+    
+    if (response.status === 403) {
+      const data = await response.json();
+      if (data.needsSubscription) {
+        // Redirect to subscription page
+        navigate('emotion-decoder');
+        return;
+      }
+    }
+    
+    if (!response.ok) {
+      throw new Error('Failed to record usage');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error recording usage:', error);
+    throw error;
+  }
+}
+
+// Function to subscribe to unlimited access
+async function subscribeToUnlimited() {
+  try {
+    // Show loading state
+    const button = event.target;
+    const originalText = button.textContent;
+    button.textContent = 'Processing...';
+    button.disabled = true;
+    
+    const response = await fetch('/api/get-or-create-subscription', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error?.message || 'Failed to create subscription');
+    }
+    
+    const { clientSecret, subscriptionId } = await response.json();
+    
+    if (clientSecret) {
+      // Initialize Stripe and handle payment
+      if (typeof Stripe === 'undefined') {
+        // Load Stripe if not already loaded
+        const script = document.createElement('script');
+        script.src = 'https://js.stripe.com/v3/';
+        script.onload = () => initializeStripePayment(clientSecret);
+        document.head.appendChild(script);
+      } else {
+        initializeStripePayment(clientSecret);
+      }
+    } else {
+      // Subscription already active
+      alert('Your subscription is already active!');
+      navigate('emotion-decoder');
+    }
+  } catch (error) {
+    console.error('Subscription error:', error);
+    alert('Failed to process subscription. Please try again.');
+    
+    // Reset button
+    const button = event.target;
+    button.textContent = 'Subscribe for $3.99/month';
+    button.disabled = false;
+  }
+}
+
+// Function to initialize Stripe payment
+function initializeStripePayment(clientSecret) {
+  // This is a simplified version - in a real app you'd want a proper checkout flow
+  const stripe = Stripe(process.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_...');
+  
+  // For now, just redirect to a simple success page
+  // In a full implementation, you'd create a proper checkout form
+  stripe.confirmPayment({
+    clientSecret,
+    confirmParams: {
+      return_url: `${window.location.origin}/?payment=success`,
+    },
+  }).then(function(result) {
+    if (result.error) {
+      alert('Payment failed: ' + result.error.message);
+    } else {
+      // Payment succeeded
+      navigate('emotion-decoder');
+    }
+  });
+}
+
+// Function to check authentication and load membership dashboard
+async function checkAuthAndLoadMembership() {
+  const main = document.querySelector('main');
+  
+  try {
+    const response = await fetch('/api/auth/user');
+    
+    if (response.status === 401) {
+      // Not authenticated
+      main.innerHTML = `
+        <h2>Membership Dashboard</h2>
+        <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px; margin: 20px 0;">
+          <h3 style="color: #8F5AFF; margin-bottom: 15px;">Sign In Required</h3>
+          <p style="margin-bottom: 20px; color: #666;">
+            Please sign in to access your membership dashboard and track your healing journey.
+          </p>
+          <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+            Sign In to Continue
+          </button>
+        </div>
+      `;
+      return;
+    }
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+    
+    const user = await response.json();
+    
+    // Fetch usage statistics
+    const usageResponse = await fetch('/api/usage/stats');
+    let usageStats = { usage: 0, isSubscribed: false, history: [] };
+    
+    if (usageResponse.ok) {
+      usageStats = await usageResponse.json();
+    }
+    
+    // Render membership dashboard
+    main.innerHTML = `
+      <h2>Membership Dashboard</h2>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+        <!-- User Profile Card -->
+        <div style="background: linear-gradient(135deg, #8ED6B720, #EAD3FF20); padding: 25px; border-radius: 15px;">
+          <h3 style="color: #8F5AFF; margin-bottom: 15px;">Welcome, ${user.firstName || 'Seeker'}!</h3>
+          <div style="margin-bottom: 10px;">
+            <strong>Email:</strong> ${user.email}
+          </div>
+          <div style="margin-bottom: 10px;">
+            <strong>Member Since:</strong> ${new Date(user.createdAt).toLocaleDateString()}
+          </div>
+          <div style="margin-bottom: 15px;">
+            <strong>Status:</strong> 
+            <span style="background: ${usageStats.isSubscribed ? '#8ED6B7' : '#FF914D'}; color: white; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: bold;">
+              ${usageStats.isSubscribed ? 'PREMIUM MEMBER' : 'FREE MEMBER'}
+            </span>
+          </div>
+          <button onclick="window.location.href='/api/logout'" style="background: transparent; color: #8F5AFF; padding: 10px 20px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 14px;">
+            Sign Out
+          </button>
+        </div>
+        
+        <!-- Usage Statistics Card -->
+        <div style="background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); padding: 25px; border-radius: 15px;">
+          <h3 style="color: #8F5AFF; margin-bottom: 15px;">Your Healing Journey</h3>
+          <div style="margin-bottom: 10px;">
+            <strong>Total Sessions:</strong> ${usageStats.usage}
+          </div>
+          <div style="margin-bottom: 10px;">
+            <strong>This Month:</strong> ${usageStats.history ? usageStats.history.length : 0}
+          </div>
+          ${usageStats.isSubscribed ? 
+            '<div style="color: #8ED6B7; font-weight: bold;">✓ Unlimited Access Active</div>' :
+            `<div style="margin-bottom: 15px;">
+              <strong>Free Sessions:</strong> ${Math.max(0, 3 - usageStats.usage)}/3 remaining
+            </div>`
+          }
+          ${!usageStats.isSubscribed ? 
+            `<button onclick="subscribeToUnlimited()" style="background: #8F5AFF; color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px;">
+              Upgrade to Premium - $3.99/month
+            </button>` : 
+            `<button onclick="manageBilling()" style="background: transparent; color: #8F5AFF; padding: 10px 20px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px;">
+              Manage Billing
+            </button>`
+          }
+        </div>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div style="background: white; padding: 25px; border-radius: 15px; border: 2px solid #8F5AFF20; margin: 20px 0;">
+        <h3 style="color: #8F5AFF; margin-bottom: 20px;">Quick Actions</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+          <button onclick="navigate('emotion-decoder')" style="background: linear-gradient(135deg, #8F5AFF, #B785FF); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
+            <div style="font-weight: bold; margin-bottom: 5px;">🎯 Emotion Decoder</div>
+            <div style="font-size: 12px; opacity: 0.9;">Release trapped emotions</div>
+          </button>
+          <button onclick="navigate('journal')" style="background: linear-gradient(135deg, #8ED6B7, #B0E5D1); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
+            <div style="font-weight: bold; margin-bottom: 5px;">📖 Journal</div>
+            <div style="font-size: 12px; opacity: 0.9;">Track your progress</div>
+          </button>
+          <button onclick="navigate('card')" style="background: linear-gradient(135deg, #FF914D, #FFAD70); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
+            <div style="font-weight: bold; margin-bottom: 5px;">🌟 Soul Card</div>
+            <div style="font-size: 12px; opacity: 0.9;">Discover your essence</div>
+          </button>
+        </div>
+      </div>
+      
+      ${usageStats.history && usageStats.history.length > 0 ? `
+      <!-- Recent Activity -->
+      <div style="background: white; padding: 25px; border-radius: 15px; border: 2px solid #8F5AFF20; margin: 20px 0;">
+        <h3 style="color: #8F5AFF; margin-bottom: 20px;">Recent Healing Sessions</h3>
+        <div style="max-height: 300px; overflow-y: auto;">
+          ${usageStats.history.slice(0, 10).map(session => `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+              <div>
+                <strong>${session.emotionProcessed || 'Emotion Release'}</strong>
+                <div style="font-size: 12px; color: #666;">${session.action.replace('_', ' ').toUpperCase()}</div>
+              </div>
+              <div style="font-size: 12px; color: #8F5AFF;">
+                ${new Date(session.timestamp).toLocaleDateString()}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ` : ''}
+    `;
+    
+  } catch (error) {
+    console.error('Error loading membership dashboard:', error);
+    main.innerHTML = `
+      <h2>Membership Dashboard</h2>
+      <div style="text-align: center; padding: 40px; background: #FFE6E6; border-radius: 15px; margin: 20px 0;">
+        <h3 style="color: #FF6B6B; margin-bottom: 15px;">Connection Error</h3>
+        <p style="margin-bottom: 20px; color: #666;">
+          Unable to load your membership dashboard. Please try again.
+        </p>
+        <button onclick="navigate('home')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+          Return Home
+        </button>
+      </div>
+    `;
+  }
+}
+
+// Function to manage billing (placeholder for now)
+function manageBilling() {
+  alert('Billing management feature coming soon! For now, contact support for billing changes.');
 }
