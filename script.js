@@ -110,9 +110,20 @@ function navigate(page) {
                  onkeyup="searchEmotions()">
         </div>
         
+        <div style="margin: 20px 0; background: linear-gradient(135deg, #fef9f4, #EAD3FF20); 
+                    padding: 20px; border-radius: 12px; border: 2px solid #EAD3FF;">
+          <h3 style="margin: 0 0 15px 0; text-align: center; color: #8F5AFF;">
+            ✨ Emotion Frequency & Chakra Map ✨
+          </h3>
+          <p style="text-align: center; font-size: 0.9em; margin-bottom: 15px; color: #8F5AFF;">
+            Click on any point to explore that emotion
+          </p>
+          <canvas id="emotionChart" style="max-height: 400px; margin: 0 auto; display: block;"></canvas>
+        </div>
+        
         <div id="emotion-results" style="margin-top: 20px;">
           <div style="text-align: center; color: var(--chakra-third-eye); font-style: italic;">
-            Enter an emotion above to discover its sacred healing pathway
+            Enter an emotion above or click a point on the chart to discover its sacred healing pathway
           </div>
         </div>
         
