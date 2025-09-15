@@ -1,6 +1,31 @@
+// Dropdown menu functionality
+function toggleDropdown(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  
+  const dropdown = document.getElementById('membership-dropdown');
+  dropdown.classList.toggle('active');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+  const dropdown = document.getElementById('membership-dropdown');
+  const dropdownToggle = event.target.closest('.dropdown-toggle');
+  
+  if (!dropdownToggle && dropdown && dropdown.classList.contains('active')) {
+    dropdown.classList.remove('active');
+  }
+});
+
 function navigate(page) {
   const main = document.getElementById('main-content');
   main.style.opacity = 0;
+  
+  // Close dropdown when navigating
+  const dropdown = document.getElementById('membership-dropdown');
+  if (dropdown) {
+    dropdown.classList.remove('active');
+  }
   
   // Navigation cleanup - no chart to destroy with tile layout
 

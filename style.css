@@ -103,7 +103,8 @@ nav a:hover {
   color: var(--color-secondary);
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown:hover .dropdown-content,
+.dropdown.active .dropdown-content {
   display: block;
 }
 

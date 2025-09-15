@@ -20,9 +20,9 @@
     <a href="#" onclick="navigate('therapy')">Self Therapy</a>
     <a href="#" onclick="navigate('soulart-cards')">SoulArt Cards</a>
     <a href="#" onclick="navigate('journal')">Journal</a>
-    <div class="dropdown">
-      <a href="#" class="dropdown-toggle">Membership ▼</a>
-      <div class="dropdown-content">
+    <div class="dropdown" id="membership-dropdown">
+      <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)">Membership ▼</a>
+      <div class="dropdown-content" id="dropdown-content">
         <a href="#" onclick="navigate('emotion-decoder')">Emotion Decoder</a>
         <a href="#" onclick="navigate('allergy-identifier')">Allergy Identifier</a>
         <a href="#" onclick="navigate('belief-identifier')">Belief Identifier</a>
