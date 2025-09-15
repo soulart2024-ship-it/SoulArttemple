@@ -59,7 +59,7 @@ function navigate(page) {
     } else if (page === 'snapshot') {
       main.innerHTML = `
         <h2>Your Soul Frequency Snapshot</h2>
-        <p>You are beginning with: <strong>Be Courage</strong> 🔥</p>
+        <p>You are beginning with: <strong>Be Courage</strong></p>
         <p>Your sacred 7-step journey will now begin. Download your snapshot and begin Journal Book 1.</p>
         <button onclick="navigate('journal')">Start My Journal</button>
       `;
@@ -81,7 +81,7 @@ function navigate(page) {
       `;
     }else if (page === 'thankyou') {
       main.innerHTML = `
-        <h2>Thank You, Beloved ✨</h2>
+        <h2>Thank You, Beloved</h2>
         <p>Your sacred message has been received by Soraya.</p>
         <p>
           Within 72 hours, you’ll receive a personalized 
@@ -89,11 +89,11 @@ function navigate(page) {
           This includes:
         </p>
         <ul>
-          <li>🌟 Your unique vibrational frequency</li>
-          <li>💬 Affirmation & soul guidance note</li>
-          <li>🎨 A chakra colour or focus</li>
-          <li>🖋️ Your next SoulArt step</li>
-          <li>📜 A printable Frequency Certificate</li>
+          <li>Your unique vibrational frequency</li>
+          <li>Affirmation & soul guidance note</li>
+          <li>A chakra colour or focus</li>
+          <li>Your next SoulArt step</li>
+          <li>A printable Frequency Certificate</li>
         </ul>
         <p style="margin-top: 20px;">
           This is your beginning, not your ending.  
@@ -103,11 +103,11 @@ function navigate(page) {
       `;
     } else if (page === 'emotion-decoder') {
       main.innerHTML = `
-        <h2>🔮 Trapped Emotion Release Tiles</h2>
+        <h2>Trapped Emotion Release Tiles</h2>
         <p>Use muscle testing (Kinesiology) to identify which trapped emotion is ready for release today.</p>
         
         <div style="text-align: center; margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px;">
-          <h3 style="color: #8F5AFF; margin-bottom: 15px;">🔮 Kinesiology Muscle Testing Guide 🔮</h3>
+          <h3 style="color: #8F5AFF; margin-bottom: 15px;">Kinesiology Muscle Testing Guide</h3>
           <p style="font-style: italic; color: #666; margin-bottom: 10px;">
             Test each row systematically - your body knows which emotions need healing
           </p>
@@ -120,7 +120,7 @@ function navigate(page) {
           <!-- Column 1: Rows 1-3 -->
           <div id="column-1" style="background: linear-gradient(135deg, #8ED6B710, transparent); padding: 20px; border-radius: 15px;">
             <h3 style="text-align: center; color: #8ED6B7; margin-bottom: 20px; font-size: 18px;">
-              ✨ Foundation & Heart Rows ✨
+              Foundation & Heart Rows
             </h3>
             <div id="rows-1-3"></div>
           </div>
@@ -128,7 +128,7 @@ function navigate(page) {
           <!-- Column 2: Rows 4-6 -->  
           <div id="column-2" style="background: linear-gradient(135deg, #EAD3FF10, transparent); padding: 20px; border-radius: 15px;">
             <h3 style="text-align: center; color: #8F5AFF; margin-bottom: 20px; font-size: 18px;">
-              🔥 Expression & Wisdom Rows 🔥
+              Expression & Wisdom Rows
             </h3>
             <div id="rows-4-6"></div>
           </div>
@@ -295,7 +295,7 @@ function createRowTile(rowKey, emotions) {
   
   rowDiv.innerHTML = `
     <h4 style="color: ${theme.color}; margin: 0 0 8px 0; font-size: 16px;">
-      🔮 ${rowKey}: ${theme.title}
+      ${rowKey}: ${theme.title}
     </h4>
     <p style="font-size: 12px; color: #666; margin: 5px 0 15px 0; font-style: italic;">
       ${theme.description}
@@ -382,7 +382,7 @@ function startHealingProcess(emotionData) {
                 padding: 30px; border-radius: 15px; border: 3px solid ${chakraColor};">
       
       <h2 style="text-align: center; color: #8F5AFF; margin-bottom: 30px;">
-        🔮 Trapped Emotion Release Process 🔮
+        Trapped Emotion Release Process
       </h2>
       
       <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 25px; 
@@ -397,7 +397,7 @@ function startHealingProcess(emotionData) {
       
       <!-- Step 1: Intention Setting -->
       <div id="step-1" class="healing-step">
-        <h3 style="color: #8F5AFF;">Step 1: Set Your Intention 🎯</h3>
+        <h3 style="color: #8F5AFF;">Step 1: Set Your Intention</h3>
         <p>Place your hand on your heart and speak this intention aloud:</p>
         <div style="background: #EAD3FF20; padding: 15px; border-radius: 8px; font-style: italic; 
                     text-align: center; margin: 15px 0;">
@@ -407,17 +407,17 @@ function startHealingProcess(emotionData) {
         <button onclick="nextHealingStep(2)" style="background: ${chakraColor}; color: white; 
                        padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; 
                        font-size: 16px; margin-top: 15px;">
-          ✨ Intention Set - Continue ✨
+          Intention Set - Continue
         </button>
       </div>
       
       <!-- Step 2: Magnet Release -->
       <div id="step-2" class="healing-step" style="display: none;">
-        <h3 style="color: #8F5AFF;">Step 2: Central Meridian Release 🧲</h3>
+        <h3 style="color: #8F5AFF;">Step 2: Central Meridian Release</h3>
         
         <div style="background: #EAD3FF20; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: center;">
           <p style="font-weight: bold; color: #8F5AFF; margin-bottom: 15px;">
-            📹 Watch the Meridian Release Swipe Video for proper technique
+            Watch the Meridian Release Swipe Video for proper technique
           </p>
           <video controls style="max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px;">
             <source src="Meridian release swipe Use a magnet for enhancement If no magnet, use tips of fingers.mp4" type="video/mp4">
@@ -440,30 +440,53 @@ function startHealingProcess(emotionData) {
               "With each swipe, I release ${emotionData.emotion} from my being."
             </p>
             <p style="font-size: 12px; color: #8F5AFF;">
-              💡 Follow the exact technique shown in the Meridian release swipe video
+              Follow the exact technique shown in the Meridian release swipe video
             </p>
           </div>
           <div style="text-align: center; background: #f0f0f0; padding: 20px; border-radius: 10px;">
-            <div style="font-size: 60px;">👤</div>
+            <div style="font-size: 20px; font-weight: bold; color: #8F5AFF;">PERSON</div>
             <div style="color: #8F5AFF; font-weight: bold;">Central Meridian</div>
-            <div style="font-size: 30px;">⬇️🧲⬇️</div>
+            <div style="font-size: 16px; color: #8F5AFF;">MAGNET SWIPE DOWN</div>
             <div style="font-size: 12px; color: #666;">Top of head to chin</div>
           </div>
         </div>
         <button onclick="nextHealingStep(3)" style="background: ${chakraColor}; color: white; 
                        padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; 
                        font-size: 16px; margin-top: 15px;">
-          🧲 Release Complete - Continue 🧲
+          Release Complete - Continue
         </button>
       </div>
       
       <!-- Step 3: High Vibration Replacement -->
       <div id="step-3" class="healing-step" style="display: none;">
-        <h3 style="color: #8F5AFF;">Step 3: Replace with High Vibration ✨</h3>
+        <h3 style="color: #8F5AFF;">Step 3: Replace with High Vibration</h3>
         <p>Choose a high vibration word to replace the released emotion:</p>
-        <input type="text" id="high-vibe-word" placeholder="e.g., Love, Peace, Joy, Courage..." 
-               style="padding: 12px; width: 300px; border: 2px solid ${chakraColor}; 
-                      border-radius: 8px; margin: 15px 0; display: block;">
+        <div style="margin: 15px 0; padding: 15px; background: white; border-radius: 10px; border: 2px solid ${chakraColor};">
+          <p style="font-weight: bold; margin-bottom: 10px; color: ${chakraColor};">Select from these high vibration words or enter your own:</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; margin-bottom: 15px;">
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Love')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Love</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Peace')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Peace</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Joy')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Joy</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Gratitude')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Gratitude</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Courage')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Courage</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Compassion')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Compassion</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Trust')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Trust</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Acceptance')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Acceptance</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Abundance')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Abundance</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Clarity')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Clarity</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Freedom')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Freedom</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Wholeness')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Wholeness</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Serenity')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Serenity</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Wisdom')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Wisdom</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Harmony')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Harmony</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Balance')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Balance</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Empowerment')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Empowerment</button>
+            <button type="button" class="vibe-word" onclick="selectVibeWord('Healing')" style="padding: 6px 12px; border: 1px solid ${chakraColor}; background: white; border-radius: 6px; cursor: pointer; font-size: 12px;">Healing</button>
+          </div>
+          <input type="text" id="high-vibe-word" placeholder="Or enter your own high vibration word..." 
+                 style="padding: 12px; width: 100%; border: 1px solid ${chakraColor}; 
+                        border-radius: 6px; font-size: 14px;">
+        </div>
         <p>Now swipe the magnet 3 times again, saying:</p>
         <div style="background: #EAD3FF20; padding: 15px; border-radius: 8px; font-style: italic; 
                     text-align: center; margin: 15px 0;">
@@ -473,13 +496,13 @@ function startHealingProcess(emotionData) {
         <button onclick="nextHealingStep(4)" style="background: ${chakraColor}; color: white; 
                        padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; 
                        font-size: 16px; margin-top: 15px;">
-          ✨ Replacement Complete - Continue ✨
+          Replacement Complete - Continue
         </button>
       </div>
       
       <!-- Step 4: Chakra Color Healing -->
       <div id="step-4" class="healing-step" style="display: none;">
-        <h3 style="color: #8F5AFF;">Step 4: Chakra Color Healing 🌈</h3>
+        <h3 style="color: #8F5AFF;">Step 4: Chakra Color Healing</h3>
         <div style="background: linear-gradient(135deg, ${chakraColor}20, transparent); 
                     padding: 20px; border-radius: 10px; margin: 15px 0;">
           <p><strong>Visualize ${emotionData.soulArtColor} light filling your ${emotionData.chakraBodyArea}</strong></p>
@@ -494,13 +517,13 @@ function startHealingProcess(emotionData) {
         <button onclick="nextHealingStep(5)" style="background: ${chakraColor}; color: white; 
                        padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; 
                        font-size: 16px; margin-top: 15px;">
-          🌈 Color Healing Complete - Continue 🌈
+          Color Healing Complete - Continue
         </button>
       </div>
       
       <!-- Step 5: Shadow Work Sealing -->
       <div id="step-5" class="healing-step" style="display: none;">
-        <h3 style="color: #8F5AFF;">Step 5: Seal Your Shadow Work 🔐</h3>
+        <h3 style="color: #8F5AFF;">Step 5: Seal Your Shadow Work</h3>
         <div style="background: #EAD3FF20; padding: 20px; border-radius: 10px;">
           <p><strong>Additional Support:</strong> ${emotionData.additionalSupport}</p>
           <p><strong>Color to wear/work with:</strong> ${emotionData.soulArtColor}</p>
@@ -515,7 +538,7 @@ function startHealingProcess(emotionData) {
         <button onclick="completeHealing()" style="background: linear-gradient(135deg, ${chakraColor}, #8F5AFF); 
                        color: white; padding: 15px 30px; border: none; border-radius: 8px; 
                        cursor: pointer; font-size: 18px; margin-top: 20px; font-weight: bold;">
-          🌟 Complete Healing Journey 🌟
+          Complete Healing Journey
         </button>
       </div>
     </div>
@@ -554,7 +577,7 @@ function completeHealing() {
     <div style="background: linear-gradient(135deg, #8ED6B7, #EAD3FF); 
                 padding: 40px; border-radius: 15px; text-align: center;">
       <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-        🌟 Healing Complete! 🌟
+        Healing Complete!
       </h2>
       <p style="font-size: 18px; color: white; margin: 20px 0;">
         You have successfully released your trapped emotion and filled the space with high vibration energy.
@@ -565,7 +588,7 @@ function completeHealing() {
       <button onclick="returnToChart()" style="background: white; color: #8F5AFF; 
                      padding: 15px 30px; border: none; border-radius: 8px; 
                      cursor: pointer; font-size: 16px; margin-top: 20px; font-weight: bold;">
-        🔮 Return to Emotion Tiles 🔮
+        Return to Emotion Tiles
       </button>
     </div>
   `;
@@ -586,4 +609,30 @@ function returnToChart() {
   
   // Return to emotion decoder page
   navigate('emotion-decoder');
+}
+
+// Function to select a high vibration word
+function selectVibeWord(word) {
+  const input = document.getElementById('high-vibe-word');
+  if (input) {
+    input.value = word;
+    input.style.backgroundColor = '#EAD3FF20';
+    input.style.borderColor = '#8F5AFF';
+    
+    // Highlight selected button
+    document.querySelectorAll('.vibe-word').forEach(btn => {
+      btn.style.backgroundColor = 'white';
+      btn.style.fontWeight = 'normal';
+      btn.style.color = '#8F5AFF';
+    });
+    
+    // Find and highlight the clicked button
+    const selectedBtn = Array.from(document.querySelectorAll('.vibe-word'))
+      .find(btn => btn.textContent === word);
+    if (selectedBtn) {
+      selectedBtn.style.backgroundColor = '#8F5AFF';
+      selectedBtn.style.color = 'white';
+      selectedBtn.style.fontWeight = 'bold';
+    }
+  }
 }
