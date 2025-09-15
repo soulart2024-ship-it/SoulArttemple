@@ -2757,8 +2757,23 @@ let cardSpreadActive = false;
 // SOULART CARDS FUNCTIONS
 // ========================================
 
+function hideAllSections() {
+  // Hide any existing sections that might be displayed
+  const sections = ['emotion-decoder-container', 'allergy-identifier-container', 'belief-decoder-container', 'soulart-cards'];
+  sections.forEach(sectionId => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.style.display = 'none';
+    }
+  });
+}
+
 function showSoulArtCards() {
   hideAllSections();
+  
+  // Reset main content opacity and clear it
+  const main = document.getElementById('main-content');
+  main.style.opacity = '1';
   const soulArtSection = document.getElementById('soulart-cards');
   if (!soulArtSection) {
     createSoulArtCardsSection();
