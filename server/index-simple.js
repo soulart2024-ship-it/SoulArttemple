@@ -408,11 +408,11 @@ app.post('/api/get-or-create-subscription', isAuthenticated, async (req, res) =>
       customer: customer.id,
       items: [{
         price_data: {
-          currency: 'usd',
+          currency: 'gbp',
           product_data: {
             name: 'SoulArt Temple Unlimited Access',
           },
-          unit_amount: 399, // $3.99 in cents
+          unit_amount: 399, // £3.99 in pence
           recurring: {
             interval: 'month',
           },

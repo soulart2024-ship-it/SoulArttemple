@@ -129,7 +129,7 @@ function navigate(page) {
                 You've used all 3 free emotion healing sessions.
               </p>
               <p style="margin-bottom: 20px; color: #666;">
-                Upgrade to unlimited access for just <strong>$3.99/month</strong>
+                Upgrade to unlimited access for just <strong>£3.99/month</strong>
               </p>
               <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #8F5AFF;">
                 <h4 style="color: #8F5AFF; margin-bottom: 15px;">Unlimited Membership Includes:</h4>
@@ -141,7 +141,7 @@ function navigate(page) {
                 </ul>
               </div>
               <button onclick="subscribeToUnlimited()" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
-                Subscribe for $3.99/month
+                Subscribe for £3.99/month
               </button>
               <button onclick="navigate('home')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
                 Return Home
@@ -863,7 +863,7 @@ async function initializeStripePayment(clientSecret) {
           </div>
           <div style="text-align: center; margin-top: 20px;">
             <button id="submit-payment" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
-              Subscribe for $3.99/month
+              Subscribe for £3.99/month
             </button>
             <button onclick="this.closest('div[style*=fixed]').remove()" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
               Cancel
@@ -911,7 +911,7 @@ async function initializeStripePayment(clientSecret) {
       if (result.error) {
         cardErrors.textContent = result.error.message;
         submitButton.disabled = false;
-        submitButton.textContent = 'Subscribe for $3.99/month';
+        submitButton.textContent = 'Subscribe for £3.99/month';
       } else {
         // Payment succeeded
         paymentContainer.remove();
@@ -1006,7 +1006,7 @@ async function checkAuthAndLoadMembership() {
           }
           ${!usageStats.isSubscribed ? 
             `<button onclick="subscribeToUnlimited()" style="background: #8F5AFF; color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px;">
-              Upgrade to Premium - $3.99/month
+              Upgrade to Premium - £3.99/month
             </button>` : 
             `<button onclick="manageBilling()" style="background: transparent; color: #8F5AFF; padding: 10px 20px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px;">
               Manage Billing
