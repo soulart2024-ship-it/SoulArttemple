@@ -2353,399 +2353,399 @@ function showSuccessMessage(message) {
 const soulArtCards = [
   {
     id: 1,
-    title: "Divine Connection",
-    message: "You are deeply connected to the infinite source of love and wisdom within you.",
-    guidance: "Take time today to quiet your mind and listen to your inner voice. Trust the guidance that emerges.",
-    affirmation: "I am divinely guided and supported in all that I do.",
+    title: "Crown Radiance",
+    message: "Your divine connection shines brilliantly, illuminating your highest wisdom and spiritual purpose.",
+    guidance: "Connect with your crown chakra through meditation. Your spiritual gifts are ready to be shared with the world.",
+    affirmation: "I radiate divine light and wisdom through my crown chakra.",
     element: "Spirit",
-    color: "#C9A24F"
+    color: "linear-gradient(135deg, #8A2BE2, #FFFFFF, #FFD700)"
   },
   {
     id: 2,
-    title: "Healing Waters",
-    message: "Emotional healing flows through you like a gentle, cleansing stream.",
-    guidance: "Allow yourself to feel deeply. Your emotions are messengers guiding you toward wholeness.",
-    affirmation: "I embrace my emotions as sacred teachers on my healing journey.",
-    element: "Water",
-    color: "#8ED6B7"
+    title: "Vision Stream",
+    message: "Your inner vision flows with crystal clarity, revealing profound truths and spiritual insights.",
+    guidance: "Trust your third eye chakra and the visions that come to you in meditation and dreams.",
+    affirmation: "I see clearly through my spiritual vision and trust my inner knowing.",
+    element: "Spirit",
+    color: "linear-gradient(135deg, #191970, #00FFFF)"
   },
   {
     id: 3,
-    title: "Sacred Boundaries",
-    message: "Your energy is precious. Honor it by creating healthy boundaries with love.",
-    guidance: "Say no to what drains you and yes to what nourishes your soul.",
-    affirmation: "I set boundaries that honor my energy and support my highest good.",
-    element: "Earth",
-    color: "#E9D8A6"
+    title: "Truth Ripple",
+    message: "Your authentic truth ripples outward, creating waves of positive change in the world.",
+    guidance: "Speak your truth with clarity and compassion. Your voice has the power to heal.",
+    affirmation: "I speak my truth with love and watch it ripple out to heal the world.",
+    element: "Air",
+    color: "linear-gradient(135deg, #87CEEB, #008080)"
   },
   {
     id: 4,
-    title: "Inner Fire",
-    message: "Your passion and creative life force are ready to ignite and inspire.",
-    guidance: "Don't dim your light for others. Let your authentic self shine brightly.",
-    affirmation: "I embrace my inner fire and let my authentic light shine.",
-    element: "Fire",
-    color: "#F76C6C"
+    title: "Heart Resonance",
+    message: "Your heart vibrates with unconditional love, resonating with the hearts of all beings.",
+    guidance: "Lead with your heart in all decisions. Love is always the answer.",
+    affirmation: "My heart resonates with pure love and compassion for all life.",
+    element: "Love",
+    color: "linear-gradient(135deg, #50C878, #F8BBD9)"
   },
   {
     id: 5,
-    title: "Breath of Freedom",
-    message: "Release what no longer serves you and breathe in fresh possibilities.",
-    guidance: "Take three deep breaths and let go of old patterns that limit your growth.",
-    affirmation: "I release the old with gratitude and welcome new possibilities.",
-    element: "Air",
-    color: "#85C9F2"
+    title: "Miracle Bloom",
+    message: "Miracles are blooming all around you as you align with your highest potential.",
+    guidance: "Stay open to unexpected blessings and magical synchronicities unfolding in your life.",
+    affirmation: "I am a magnet for miracles and watch them bloom in every area of my life.",
+    element: "Earth",
+    color: "linear-gradient(135deg, #FFD700, #32CD32)"
   },
   {
     id: 6,
-    title: "Heart Wisdom",
-    message: "Your heart holds ancient wisdom. Trust its guidance above all else.",
-    guidance: "When faced with decisions, place your hand on your heart and listen.",
-    affirmation: "I trust the wisdom of my heart to guide me toward love.",
-    element: "Love",
-    color: "#FF9AAF"
+    title: "Solar Glow",
+    message: "Your inner sun radiates warmth, confidence, and personal power throughout your being.",
+    guidance: "Connect with your solar plexus chakra and embrace your authentic power with grace.",
+    affirmation: "I glow with inner confidence and radiate warmth to all I encounter.",
+    element: "Fire",
+    color: "linear-gradient(135deg, #FFBF00, #FFB347)"
   },
   {
     id: 7,
-    title: "Ancestral Healing",
-    message: "You are healing patterns for yourself and generations before and after you.",
-    guidance: "Honor your lineage by breaking cycles that no longer serve your family line.",
-    affirmation: "I heal ancestral patterns with love and create positive change for all generations.",
+    title: "Root Resonance",
+    message: "You are deeply grounded and connected to the earth's stabilizing energy and wisdom.",
+    guidance: "Ground yourself in nature. Your foundation is strong and your roots run deep.",
+    affirmation: "I am grounded, stable, and deeply connected to Mother Earth's wisdom.",
     element: "Earth",
-    color: "#8B7355"
+    color: "linear-gradient(135deg, #DC143C, #8B4513)"
   },
   {
     id: 8,
-    title: "Quantum Leap",
-    message: "You are ready to make a significant shift in consciousness and reality.",
-    guidance: "Trust that you can leap into a new version of yourself with grace and ease.",
-    affirmation: "I embrace transformation and step boldly into my highest potential.",
+    title: "Aura Cleanse",
+    message: "Your energy field is being purified and aligned with your highest vibration.",
+    guidance: "Visualize bright light cleansing your aura. Release any energy that isn't yours.",
+    affirmation: "My aura is cleansed, protected, and vibrating at its highest frequency.",
     element: "Spirit",
-    color: "#B19CD9"
+    color: "linear-gradient(135deg, #00FFFF, #E6E6FA)"
   },
   {
     id: 9,
-    title: "Sacred Pause",
-    message: "Sometimes the most powerful action is to pause, breathe, and simply be.",
-    guidance: "Give yourself permission to rest. Your being is as valuable as your doing.",
-    affirmation: "I honor my need for rest and trust in divine timing.",
-    element: "Air",
-    color: "#D4B5A0"
+    title: "Soothing Base",
+    message: "You are creating a calm, nurturing foundation for yourself and others around you.",
+    guidance: "Be the peaceful presence that others can lean on. Your stability supports healing.",
+    affirmation: "I am a soothing presence, creating peace and stability wherever I go.",
+    element: "Earth",
+    color: "linear-gradient(135deg, #90EE90, #F0F8FF)"
   },
   {
     id: 10,
-    title: "Creative Flow",
-    message: "You are a channel for divine creativity. Let inspiration move through you.",
-    guidance: "Create without judgment. Let your hands, voice, or movement express your soul.",
-    affirmation: "I am a clear channel for divine creativity and inspiration.",
-    element: "Water",
-    color: "#FFB347"
+    title: "Nature Pulse",
+    message: "You are synchronized with nature's rhythms and the pulse of universal life force.",
+    guidance: "Spend time in nature to align with the earth's natural cycles and healing energy.",
+    affirmation: "I pulse with the rhythm of nature and feel deeply connected to all life.",
+    element: "Earth",
+    color: "linear-gradient(135deg, #40E0D0, #32CD32)"
   },
   {
     id: 11,
-    title: "Truth Speaker",
-    message: "Your authentic voice is needed in this world. Speak your truth with courage.",
-    guidance: "Honor your truth, even if your voice shakes. The world needs your unique message.",
-    affirmation: "I speak my truth with love, courage, and authenticity.",
-    element: "Air",
-    color: "#4ECDC4"
+    title: "Aurora Promise",
+    message: "Like the aurora borealis, you bring otherworldly beauty and magic to this realm.",
+    guidance: "Trust in the promises the universe has made to you. Your dreams are manifestation.",
+    affirmation: "I trust the divine promises unfolding in my life like the beautiful aurora.",
+    element: "Spirit",
+    color: "linear-gradient(135deg, #FFCCCB, #FFD700)"
   },
   {
     id: 12,
-    title: "Shadow Integration",
-    message: "Embrace all parts of yourself. Your shadow holds gifts waiting to be reclaimed.",
-    guidance: "Look with compassion at what you've rejected in yourself. Find the gift within.",
-    affirmation: "I embrace all aspects of myself with love and understanding.",
-    element: "Spirit",
-    color: "#6B6B6B"
+    title: "Serenity Springs",
+    message: "Deep wells of peace and tranquility spring forth from your centered heart.",
+    guidance: "Find your inner oasis of calm. From this peaceful center, all healing flows.",
+    affirmation: "I am a spring of serenity, bringing peace to myself and all I meet.",
+    element: "Water",
+    color: "linear-gradient(135deg, #B0E0E6, #98FB98)"
   },
   {
     id: 13,
-    title: "Divine Feminine",
-    message: "The nurturing, intuitive, and receptive aspects of your being are awakening.",
-    guidance: "Honor your intuition, embrace your sensitivity, and trust your inner knowing.",
-    affirmation: "I honor and embody the divine feminine energy within me.",
-    element: "Water",
-    color: "#DDA0DD"
+    title: "Joyburst",
+    message: "Explosive joy and vibrant energy burst forth from your radiant being.",
+    guidance: "Let your joy be contagious. Your happiness lifts the vibration of everyone around you.",
+    affirmation: "I burst with joy and share my radiant happiness with the world.",
+    element: "Fire",
+    color: "linear-gradient(135deg, #FFFF00, #FF00FF)"
   },
   {
     id: 14,
-    title: "Divine Masculine",
-    message: "Your focused, protective, and action-oriented energy is ready to manifest.",
-    guidance: "Channel your inner strength to protect what you love and create what you desire.",
-    affirmation: "I embody healthy masculine energy in service of love and creation.",
-    element: "Fire",
-    color: "#CD853F"
+    title: "Clarity Flare",
+    message: "Crystal clear insight flares up, illuminating the truth of any situation.",
+    guidance: "Trust your first instinct. Your inner clarity cuts through confusion like a laser.",
+    affirmation: "I see with crystal clarity and trust my inner wisdom completely.",
+    element: "Air",
+    color: "linear-gradient(135deg, #00FFFF, #C0C0C0)"
   },
   {
     id: 15,
-    title: "Soul Family",
-    message: "You are being called into deeper connection with your spiritual family.",
-    guidance: "Trust the magnetic pull toward certain people. Soul family recognizes soul family.",
-    affirmation: "I attract and recognize my soul family with ease and joy.",
-    element: "Love",
-    color: "#98D8C8"
+    title: "Compassion Wave",
+    message: "Waves of divine compassion flow through you, healing yourself and others.",
+    guidance: "Lead with compassion in all situations. Your loving presence is a healing balm.",
+    affirmation: "I am a wave of compassion, bringing healing love wherever I flow.",
+    element: "Water",
+    color: "linear-gradient(135deg, #DDA0DD, #F5DEB3)"
   },
   {
     id: 16,
-    title: "Mystic Vision",
-    message: "Your third eye is opening. Trust the visions and insights you receive.",
-    guidance: "Pay attention to symbols, synchronicities, and the messages behind your dreams.",
-    affirmation: "I trust my inner vision and the spiritual insights I receive.",
-    element: "Spirit",
-    color: "#9370DB"
+    title: "Empower Core",
+    message: "Your personal power radiates from your core, empowering yourself and inspiring others.",
+    guidance: "Connect with your solar plexus and embrace your authentic power without apology.",
+    affirmation: "I am empowered from my core and use my power to uplift and inspire.",
+    element: "Fire",
+    color: "linear-gradient(135deg, #FFA500, #FFBF00)"
   },
   {
     id: 17,
-    title: "Earthly Angel",
-    message: "You are an angel in human form, here to spread light and healing.",
-    guidance: "Remember your divine nature while honoring your human experience.",
-    affirmation: "I am a divine being having a human experience, here to serve love.",
+    title: "Inner Sanctum",
+    message: "You have access to a sacred inner sanctuary where peace and wisdom reside.",
+    guidance: "Retreat into your inner sanctum when you need guidance, peace, or spiritual connection.",
+    affirmation: "I have a sacred inner sanctuary where I find peace, wisdom, and divine connection.",
     element: "Spirit",
-    color: "#F0F8FF"
+    color: "linear-gradient(135deg, #191970, #228B22)"
   },
   {
     id: 18,
-    title: "Phoenix Rising",
-    message: "You are rising from the ashes of your old self into magnificent transformation.",
-    guidance: "Trust the process of death and rebirth happening in your life right now.",
-    affirmation: "I rise from every challenge stronger, wiser, and more radiant.",
-    element: "Fire",
-    color: "#FF6347"
+    title: "Gratitude Glow",
+    message: "Your heart glows with gratitude, magnetizing more blessings into your life.",
+    guidance: "Practice daily gratitude and watch your world transform with abundant blessings.",
+    affirmation: "I glow with gratitude and attract endless blessings into my life.",
+    element: "Love",
+    color: "linear-gradient(135deg, #DAA520, #CD853F)"
   },
   {
     id: 19,
-    title: "Ocean Depths",
-    message: "Dive deep into your subconscious. Treasures await in your inner depths.",
-    guidance: "What you seek is not on the surface. Go deeper into meditation and self-reflection.",
-    affirmation: "I fearlessly explore the depths of my being and discover hidden treasures.",
+    title: "Flowstate",
+    message: "You are in perfect flow with the universe, effortlessly manifesting your desires.",
+    guidance: "Trust the flow of life and allow yourself to move with natural ease and grace.",
+    affirmation: "I am in perfect flow with life and manifest with effortless ease.",
     element: "Water",
-    color: "#006994"
+    color: "linear-gradient(135deg, #40E0D0, #32CD32)"
   },
   {
     id: 20,
-    title: "Mountain Strength",
-    message: "You possess an unshakeable inner strength that cannot be moved by outer storms.",
-    guidance: "Ground yourself in your center. You are more resilient than you realize.",
-    affirmation: "I am grounded, strong, and unshakeable in my truth.",
-    element: "Earth",
-    color: "#8B4513"
+    title: "Unity Halo",
+    message: "A halo of unity consciousness surrounds you, connecting you with all of creation.",
+    guidance: "See the divine spark in everyone you meet. We are all connected as one.",
+    affirmation: "I radiate unity consciousness and see the divine in all beings.",
+    element: "Spirit",
+    color: "linear-gradient(135deg, #FFFFFF, #FF69B4, #40E0D0)"
   },
   {
     id: 21,
-    title: "Star Seed",
-    message: "You carry the wisdom of the stars and are here to help Earth ascend.",
-    guidance: "Remember your cosmic origins and the larger purpose of your incarnation here.",
-    affirmation: "I remember my stellar origins and fulfill my cosmic mission on Earth.",
+    title: "Starlit Sanctuary",
+    message: "You create sacred spaces filled with celestial light and divine protection.",
+    guidance: "Build sanctuaries of peace and light wherever you go. You are a keeper of sacred space.",
+    affirmation: "I am a starlit sanctuary, creating sacred space filled with divine light.",
     element: "Spirit",
-    color: "#191970"
+    color: "linear-gradient(135deg, #191970, #C0C0C0)"
   },
   {
     id: 22,
-    title: "Rainbow Bridge",
-    message: "You are a bridge between worlds, helping others cross from fear to love.",
-    guidance: "Your role as a healer and guide is more important than you know.",
-    affirmation: "I am a bridge of light, helping others move from darkness to illumination.",
-    element: "Spirit",
-    color: "#FF69B4"
+    title: "Emergent Phoenix",
+    message: "You are emerging from transformation like a phoenix, reborn with greater wisdom and power.",
+    guidance: "Trust your rebirth process. You are rising stronger and more magnificent than before.",
+    affirmation: "I rise like a phoenix, transformed and empowered by my journey.",
+    element: "Fire",
+    color: "linear-gradient(135deg, #DC143C, #FFD700, #FF4500)"
   },
   {
     id: 23,
-    title: "Golden Hour",
-    message: "This is your time to shine. Everything you've learned has prepared you for now.",
-    guidance: "Step fully into your power. The world is ready for what you have to offer.",
-    affirmation: "This is my time to shine and share my gifts with the world.",
-    element: "Fire",
-    color: "#FFD700"
+    title: "Echo of Grace",
+    message: "Your presence carries an echo of divine grace that touches everyone you meet.",
+    guidance: "Move through the world with gentle grace. Your loving presence is a gift.",
+    affirmation: "I carry divine grace within me and share it gently with the world.",
+    element: "Love",
+    color: "linear-gradient(135deg, #FFE4E1, #FFF8DC)"
   },
   {
     id: 24,
-    title: "Sacred Solitude",
-    message: "In solitude, you remember who you truly are beyond all roles and relationships.",
-    guidance: "Spend time alone with yourself. In the silence, your authentic self emerges.",
-    affirmation: "I cherish sacred time alone and connect deeply with my authentic self.",
+    title: "Quantum Leap",
+    message: "You are ready to make a quantum leap in consciousness and reality creation.",
+    guidance: "Trust your ability to shift dimensions and create miraculous changes in your life.",
+    affirmation: "I make quantum leaps in consciousness and create my reality with ease.",
     element: "Spirit",
-    color: "#E6E6FA"
+    color: "linear-gradient(135deg, #00FFFF, #FF00FF)"
   },
   {
     id: 25,
-    title: "Abundant Harvest",
-    message: "Your seeds of intention are ready to bloom into beautiful manifestations.",
-    guidance: "Celebrate what you've already created while staying open to receiving more.",
-    affirmation: "I celebrate my creations and remain open to abundant blessings.",
+    title: "Golden Equinox",
+    message: "You are finding perfect balance between light and shadow, bringing harmony to all aspects of life.",
+    guidance: "Embrace both your light and shadow with equal love. Balance creates wholeness.",
+    affirmation: "I am in perfect balance, harmonizing all aspects of my being.",
     element: "Earth",
-    color: "#32CD32"
+    color: "linear-gradient(135deg, #FFD700, #A0522D)"
   },
   {
     id: 26,
-    title: "Mirror of Truth",
-    message: "Others are reflecting aspects of yourself back to you. What do you see?",
-    guidance: "What triggers you in others points to unhealed aspects within yourself.",
-    affirmation: "I see others as mirrors and use their reflections for my growth.",
-    element: "Spirit",
-    color: "#C0C0C0"
+    title: "Soul Tide",
+    message: "The tide of your soul's calling is rising, bringing clarity about your life's purpose.",
+    guidance: "Trust the ebb and flow of your soul's journey. Let it guide you to your highest calling.",
+    affirmation: "I flow with my soul's tide and trust its guidance toward my purpose.",
+    element: "Water",
+    color: "linear-gradient(135deg, #40E0D0, #FF7F50)"
   },
   {
     id: 27,
-    title: "Violet Flame",
-    message: "The violet flame of transformation is burning away what no longer serves you.",
-    guidance: "Visualize violet light surrounding you, transmuting all lower energies.",
-    affirmation: "I call upon the violet flame to transform all that is ready to be released.",
-    element: "Fire",
-    color: "#8A2BE2"
+    title: "Crystal Beacon",
+    message: "You are a crystal clear beacon of light, guiding others home to their truth.",
+    guidance: "Let your clarity and authenticity be a beacon for those seeking their way.",
+    affirmation: "I am a crystal beacon of truth, guiding others with my authentic light.",
+    element: "Spirit",
+    color: "linear-gradient(135deg, #87CEEB, #FFFFFF)"
   },
   {
     id: 28,
-    title: "Crystal Clear",
-    message: "Your intuition is crystal clear. Trust the first insights that come to you.",
-    guidance: "Don't overthink. Your first instinct usually contains the most truth.",
-    affirmation: "My intuition is clear and I trust the first guidance I receive.",
-    element: "Spirit",
-    color: "#E0FFFF"
+    title: "Ancestral Root",
+    message: "You are connected to your ancestral wisdom and are healing generations through your growth.",
+    guidance: "Honor your lineage while healing old patterns. You are the bridge between past and future.",
+    affirmation: "I honor my ancestors while healing generational patterns with love.",
+    element: "Earth",
+    color: "linear-gradient(135deg, #8B4513, #228B22)"
   },
   {
     id: 29,
-    title: "Thunder Medicine",
-    message: "Powerful changes are thundering toward you. Prepare for a breakthrough.",
-    guidance: "Don't fear the storm. It's clearing the path for something magnificent.",
-    affirmation: "I welcome powerful changes and trust they bring me blessings.",
-    element: "Air",
-    color: "#4B0082"
+    title: "Luminous Kindling",
+    message: "You kindle the luminous fire of inspiration and passion in yourself and others.",
+    guidance: "Share your inner fire to light the way for others. Your inspiration is contagious.",
+    affirmation: "I kindle luminous inspiration and share my inner fire with the world.",
+    element: "Fire",
+    color: "linear-gradient(135deg, #FFBF00, #FF69B4)"
   },
   {
     id: 30,
-    title: "Flower Power",
-    message: "You are blooming into the fullest expression of your beautiful soul.",
-    guidance: "Like a flower, you don't force your blooming. Trust your natural timing.",
-    affirmation: "I bloom naturally and beautifully in perfect divine timing.",
-    element: "Earth",
-    color: "#FFB6C1"
+    title: "Elysian Currents",
+    message: "Divine currents of bliss and perfect harmony flow through your being.",
+    guidance: "Surrender to the flow of divine grace. Let it carry you to your highest good.",
+    affirmation: "I flow with elysian currents of divine bliss and perfect harmony.",
+    element: "Water",
+    color: "linear-gradient(135deg, #B0E0E6, #DDA0DD)"
   },
   {
     id: 31,
-    title: "Cosmic Dance",
-    message: "You are dancing with the universe in perfect synchronicity.",
-    guidance: "Move with life's rhythms rather than fighting against them.",
-    affirmation: "I dance with life's rhythms and find joy in the cosmic flow.",
+    title: "Prismatic Dawn",
+    message: "A new dawn is breaking, revealing the full spectrum of your magnificent potential.",
+    guidance: "Embrace all colors of your being. Your diversity is your strength and beauty.",
+    affirmation: "I embrace my full spectrum and shine with prismatic beauty.",
     element: "Spirit",
-    color: "#9932CC"
+    color: "linear-gradient(135deg, #FFB6C1, #87CEEB, #FFD700)"
   },
   {
     id: 32,
-    title: "Ancient Wisdom",
-    message: "You carry ancient wisdom in your soul. Trust what you already know.",
-    guidance: "The answers you seek are already within you. Get quiet and remember.",
-    affirmation: "I trust the ancient wisdom that lives within my soul.",
-    element: "Spirit",
-    color: "#800000"
+    title: "Silent Horizon",
+    message: "In the vast silence of the horizon, profound wisdom and peace await your discovery.",
+    guidance: "Find peace in silence and stillness. Your answers emerge in the quiet spaces.",
+    affirmation: "I find profound wisdom in the silent horizon of my inner peace.",
+    element: "Air",
+    color: "linear-gradient(135deg, #F5DEB3, #DDA0DD)"
   },
   {
     id: 33,
-    title: "Love Frequency",
-    message: "You are being attuned to the highest frequency of unconditional love.",
-    guidance: "Choose love in every situation, especially when it feels difficult.",
-    affirmation: "I vibrate at the frequency of pure, unconditional love.",
-    element: "Love",
-    color: "#FF1493"
+    title: "Celestial Ascend",
+    message: "You are ascending to higher levels of consciousness and spiritual awareness.",
+    guidance: "Trust your spiritual evolution. You are rising to meet your highest self.",
+    affirmation: "I ascend to higher consciousness with grace and divine support.",
+    element: "Spirit",
+    color: "linear-gradient(135deg, #6A0DAD, #00BFFF, #C0C0C0)"
   },
   {
     id: 34,
-    title: "Sacred Geometry",
-    message: "Your life is aligning with divine patterns and sacred designs.",
-    guidance: "Trust that there's a perfect pattern unfolding, even when you can't see it.",
-    affirmation: "My life unfolds according to divine patterns and sacred geometry.",
-    element: "Spirit",
-    color: "#00CED1"
+    title: "Infinite Heart",
+    message: "Your heart contains infinite love, capable of healing yourself and the entire world.",
+    guidance: "Lead with love in all situations. Your heart knows the way to healing and peace.",
+    affirmation: "My heart contains infinite love that heals and transforms everything.",
+    element: "Love",
+    color: "linear-gradient(135deg, #50C878, #FFFFFF, #FFD700)"
   },
   {
     id: 35,
-    title: "Midnight Sun",
-    message: "Even in your darkest moments, your inner light continues to shine.",
-    guidance: "Remember your light, especially when you feel lost in darkness.",
-    affirmation: "My inner light shines brightly, illuminating even the darkest moments.",
+    title: "Sacred Flame",
+    message: "A sacred flame burns within you, igniting passion, purpose, and divine inspiration.",
+    guidance: "Tend your inner sacred flame. Let it guide you toward your highest purpose.",
+    affirmation: "I carry a sacred flame that ignites my passion and divine purpose.",
     element: "Fire",
-    color: "#FFE4B5"
+    color: "linear-gradient(135deg, #FFD700, #FF4500)"
   },
   {
     id: 36,
-    title: "Spirit Animal",
-    message: "Your spirit animal is calling you to embody its sacred medicine.",
-    guidance: "What animal have you been drawn to lately? What qualities does it embody?",
-    affirmation: "I embody the sacred medicine of my spirit animal guides.",
-    element: "Earth",
-    color: "#D2691E"
+    title: "Divine Cascade",
+    message: "Divine blessings cascade into your life like a beautiful waterfall of grace.",
+    guidance: "Open to receive the abundant blessings flowing toward you from the universe.",
+    affirmation: "I receive the divine cascade of blessings flowing into my life.",
+    element: "Water",
+    color: "linear-gradient(135deg, #87CEEB, #FFFFFF)"
   },
   {
     id: 37,
-    title: "Time Weaver",
-    message: "You have the power to heal past wounds and create a luminous future.",
-    guidance: "Send love to your past self and hold a vision of your highest future.",
-    affirmation: "I heal my past and weave a beautiful future with threads of love.",
+    title: "Radiant Essence",
+    message: "Your radiant essence illuminates everything and everyone around you with pure love.",
+    guidance: "Let your true essence shine freely. Your authentic radiance is a gift to the world.",
+    affirmation: "I radiate my pure essence and illuminate the world with love.",
     element: "Spirit",
-    color: "#6495ED"
+    color: "linear-gradient(135deg, #FFD700, #FF69B4)"
   },
   {
     id: 38,
-    title: "Temple Keeper",
-    message: "Your body is a sacred temple. Honor it with love and reverence.",
-    guidance: "Treat your body as the sacred vessel that houses your beautiful soul.",
-    affirmation: "I honor my body as a sacred temple and care for it with love.",
-    element: "Earth",
-    color: "#DEB887"
+    title: "Mystic Portal",
+    message: "You are a living portal between dimensions, bridging earth and heaven.",
+    guidance: "Trust your ability to access higher realms of consciousness and wisdom.",
+    affirmation: "I am a mystic portal, bridging earth and heaven with divine grace.",
+    element: "Spirit",
+    color: "linear-gradient(135deg, #9370DB, #00CED1)"
   },
   {
     id: 39,
-    title: "Sound Healing",
-    message: "Your voice carries healing frequencies. Use it to heal yourself and others.",
-    guidance: "Hum, sing, or tone. Let healing sounds flow through you without judgment.",
-    affirmation: "My voice carries healing frequencies that benefit all who hear it.",
-    element: "Air",
-    color: "#40E0D0"
+    title: "Eternal Spring",
+    message: "Within you flows an eternal spring of renewal, hope, and fresh beginnings.",
+    guidance: "No matter what has passed, you always have the power to begin again.",
+    affirmation: "I carry eternal spring within me, forever renewed and hopeful.",
+    element: "Water",
+    color: "linear-gradient(135deg, #98FB98, #87CEEB)"
   },
   {
     id: 40,
-    title: "Energy Alchemist",
-    message: "You have the power to transform any energy into love through your consciousness.",
-    guidance: "Practice transmuting challenging energies by breathing love into them.",
-    affirmation: "I am an alchemist, transforming all energies into love and light.",
+    title: "Cosmic Weave",
+    message: "You are beautifully woven into the cosmic tapestry, perfectly placed for your purpose.",
+    guidance: "Trust your place in the grand design. Every thread of your life has meaning.",
+    affirmation: "I am perfectly woven into the cosmic tapestry of life and purpose.",
     element: "Spirit",
-    color: "#9400D3"
+    color: "linear-gradient(135deg, #191970, #FFD700, #FF69B4)"
   },
   {
     id: 41,
-    title: "Moon Cycles",
-    message: "Align with lunar rhythms to amplify your manifestation and release work.",
-    guidance: "New moon for planting seeds, full moon for celebrating and releasing.",
-    affirmation: "I align with natural cycles and honor the wisdom of the moon.",
-    element: "Water",
-    color: "#C0C0C0"
+    title: "Luminous Path",
+    message: "Your luminous path is clearly illuminated, guiding you toward your highest destiny.",
+    guidance: "Trust the path that lights up for you. Your soul knows the way forward.",
+    affirmation: "I follow my luminous path with confidence and divine guidance.",
+    element: "Spirit",
+    color: "linear-gradient(135deg, #FFD700, #FFFFFF)"
   },
   {
     id: 42,
-    title: "Sacred Union",
-    message: "The divine masculine and feminine within you are coming into perfect balance.",
-    guidance: "Honor both your action-oriented and receptive qualities equally.",
-    affirmation: "I embody the sacred union of divine masculine and feminine energy.",
+    title: "Harmony Sphere",
+    message: "You emanate perfect harmony, creating spheres of peace and balance wherever you go.",
+    guidance: "Be the harmonizing presence in any situation. Your balance brings healing.",
+    affirmation: "I emanate harmony and create spheres of peace and balance around me.",
     element: "Spirit",
-    color: "#DA70D6"
+    color: "linear-gradient(135deg, #DDA0DD, #98FB98)"
   },
   {
     id: 43,
-    title: "Crystal Light",
-    message: "You are a crystal being, here to anchor higher frequencies on Earth.",
-    guidance: "Imagine your entire being made of light. You are transmitting love constantly.",
-    affirmation: "I am a crystal being of light, anchoring higher frequencies on Earth.",
+    title: "Soul Symphony",
+    message: "Your soul plays a unique note in the grand symphony of universal consciousness.",
+    guidance: "Honor your unique contribution to the world. Your note is essential to the whole.",
+    affirmation: "I play my unique soul note in the grand symphony of universal love.",
     element: "Spirit",
-    color: "#F8F8FF"
+    color: "linear-gradient(135deg, #9370DB, #FFD700, #FF69B4)"
   },
   {
     id: 44,
-    title: "Infinite Possibility",
-    message: "You exist in a field of infinite possibility. Anything is possible for you.",
-    guidance: "Release limiting beliefs and open to the miraculous potential of your life.",
-    affirmation: "I live in infinite possibility and welcome miracles into my life.",
+    title: "Infinite Potential",
+    message: "You contain infinite potential waiting to unfold into magnificent reality.",
+    guidance: "Trust in your unlimited potential. Everything you need is already within you.",
+    affirmation: "I embody infinite potential and manifest my dreams into beautiful reality.",
     element: "Spirit",
-    color: "#FFFACD"
+    color: "linear-gradient(135deg, #FFFACD, #FFD700, #FF69B4)"
   }
 ];
 
