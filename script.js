@@ -138,8 +138,23 @@ function navigate(page) {
   }, 200);
 }
 
-// Global variable to store emotion data
+// Global variables to store emotion data and chart
 let emotionData = [];
+let emotionChart = null;
+
+// Define chakra order and colors
+const CHAKRA_CONFIG = {
+  order: ['Root', 'Sacral', 'Solar Plexus', 'Heart', 'Throat', 'Third Eye', 'Crown'],
+  colors: {
+    'Root': '#B22222',
+    'Sacral': '#FF914D', 
+    'Solar Plexus': '#FFD700',
+    'Heart': '#8ED6B7',
+    'Throat': '#4FB2D6',
+    'Third Eye': '#8F5AFF',
+    'Crown': '#EAD3FF'
+  }
+};
 
 // Function to load and parse emotion data from CSV
 async function loadEmotionData() {
@@ -158,7 +173,7 @@ async function loadEmotionData() {
         if (values.length >= 6) {
           emotionData.push({
             emotion: values[0],
-            frequency: values[1],
+            frequency: parseInt(values[1]) || 0,
             chakra: values[2],
             bodyArea: values[3],
             colour: values[4],
@@ -167,6 +182,10 @@ async function loadEmotionData() {
         }
       }
     }
+    
+    // After loading data, render the chart
+    setTimeout(renderEmotionChart, 100);
+    
   } catch (error) {
     console.error('Error loading emotion data:', error);
   }
@@ -225,16 +244,115 @@ function searchEmotions() {
   resultsDiv.innerHTML = resultsHTML;
 }
 
-// Function to get chakra colors
+// Function to render the emotion chart
+function renderEmotionChart() {
+  const canvas = document.getElementById('emotionChart');
+  if (!canvas || emotionData.length === 0) return;
+  
+  // Destroy existing chart if it exists
+  if (emotionChart) {
+    emotionChart.destroy();
+  }
+  
+  // Prepare data for chart - group by chakra
+  const datasets = CHAKRA_CONFIG.order.map((chakra, index) => {
+    const chakraEmotions = emotionData.filter(emotion => emotion.chakra === chakra);
+    
+    return {
+      label: chakra,
+      data: chakraEmotions.map(emotion => ({
+        x: emotion.frequency,
+        y: index + Math.random() * 0.3 - 0.15, // Small jitter to avoid overlap
+        emotion: emotion.emotion,
+        chakra: emotion.chakra,
+        bodyArea: emotion.bodyArea,
+        releaseMethod: emotion.releaseMethod
+      })),
+      backgroundColor: CHAKRA_CONFIG.colors[chakra] + '80', // Semi-transparent
+      borderColor: CHAKRA_CONFIG.colors[chakra],
+      borderWidth: 2,
+      pointRadius: 8,
+      pointHoverRadius: 12
+    };
+  });
+  
+  const ctx = canvas.getContext('2d');
+  emotionChart = new Chart(ctx, {
+    type: 'scatter',
+    data: { datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: {
+          display: false
+        },
+        legend: {
+          display: true,
+          position: 'right',
+          labels: {
+            usePointStyle: true,
+            font: { size: 12 }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            title: function(tooltipItems) {
+              const point = tooltipItems[0];
+              return point.raw.emotion;
+            },
+            label: function(tooltipItem) {
+              const point = tooltipItem.raw;
+              return [
+                `Chakra: ${point.chakra}`,
+                `Frequency: ${point.x}`,
+                `Body Area: ${point.bodyArea}`
+              ];
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Frequency Level',
+            font: { size: 14, weight: 'bold' }
+          },
+          min: 0,
+          max: 200
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Chakra',
+            font: { size: 14, weight: 'bold' }
+          },
+          min: -0.5,
+          max: 6.5,
+          ticks: {
+            callback: function(value) {
+              return CHAKRA_CONFIG.order[Math.round(value)] || '';
+            },
+            stepSize: 1
+          }
+        }
+      },
+      onClick: function(event, elements) {
+        if (elements.length > 0) {
+          const point = elements[0];
+          const emotion = point.element.$context.raw.emotion;
+          
+          // Set the search box and trigger search
+          document.getElementById('emotion-search').value = emotion;
+          searchEmotions();
+        }
+      }
+    }
+  });
+}
+
+// Function to get chakra colors (updated for explicit colors)
 function getChakraColor(chakra) {
-  const chakraColors = {
-    'Root': 'var(--chakra-root)',
-    'Sacral': 'var(--chakra-sacral)', 
-    'Solar Plexus': 'var(--chakra-solar)',
-    'Heart': 'var(--chakra-heart)',
-    'Throat': 'var(--chakra-throat)',
-    'Third Eye': 'var(--chakra-third-eye)',
-    'Crown': 'var(--chakra-crown)'
-  };
-  return chakraColors[chakra] || 'var(--chakra-heart)';
+  return CHAKRA_CONFIG.colors[chakra] || CHAKRA_CONFIG.colors['Heart'];
 }
