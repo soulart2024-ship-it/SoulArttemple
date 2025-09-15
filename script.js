@@ -68,11 +68,9 @@ function navigate(page) {
         <h2>Self Therapy with SoulArt</h2>
         <p>Here you will move through the 7-step Harmonic Healing System.</p>
       `;
-    } else if (page === 'card') {
-      main.innerHTML = `
-        <h2>Receive a SoulArt Frequency</h2>
-        <p>Pull a card. Receive the vibration. Feel the shift.</p>
-      `;
+    } else if (page === 'soulart-cards') {
+      showSoulArtCards();
+      return; // Exit early since showSoulArtCards handles the display
     } else if (page === 'journal') {
       main.innerHTML = `
         <div class="journal-container">
@@ -2346,4 +2344,613 @@ function showSuccessMessage(message) {
   setTimeout(() => {
     messageDiv.remove();
   }, 3000);
+}
+
+// ========================================
+// SOULART CARDS - 44 CARD SPIRITUAL DECK
+// ========================================
+
+const soulArtCards = [
+  {
+    id: 1,
+    title: "Divine Connection",
+    message: "You are deeply connected to the infinite source of love and wisdom within you.",
+    guidance: "Take time today to quiet your mind and listen to your inner voice. Trust the guidance that emerges.",
+    affirmation: "I am divinely guided and supported in all that I do.",
+    element: "Spirit",
+    color: "#C9A24F"
+  },
+  {
+    id: 2,
+    title: "Healing Waters",
+    message: "Emotional healing flows through you like a gentle, cleansing stream.",
+    guidance: "Allow yourself to feel deeply. Your emotions are messengers guiding you toward wholeness.",
+    affirmation: "I embrace my emotions as sacred teachers on my healing journey.",
+    element: "Water",
+    color: "#8ED6B7"
+  },
+  {
+    id: 3,
+    title: "Sacred Boundaries",
+    message: "Your energy is precious. Honor it by creating healthy boundaries with love.",
+    guidance: "Say no to what drains you and yes to what nourishes your soul.",
+    affirmation: "I set boundaries that honor my energy and support my highest good.",
+    element: "Earth",
+    color: "#E9D8A6"
+  },
+  {
+    id: 4,
+    title: "Inner Fire",
+    message: "Your passion and creative life force are ready to ignite and inspire.",
+    guidance: "Don't dim your light for others. Let your authentic self shine brightly.",
+    affirmation: "I embrace my inner fire and let my authentic light shine.",
+    element: "Fire",
+    color: "#F76C6C"
+  },
+  {
+    id: 5,
+    title: "Breath of Freedom",
+    message: "Release what no longer serves you and breathe in fresh possibilities.",
+    guidance: "Take three deep breaths and let go of old patterns that limit your growth.",
+    affirmation: "I release the old with gratitude and welcome new possibilities.",
+    element: "Air",
+    color: "#85C9F2"
+  },
+  {
+    id: 6,
+    title: "Heart Wisdom",
+    message: "Your heart holds ancient wisdom. Trust its guidance above all else.",
+    guidance: "When faced with decisions, place your hand on your heart and listen.",
+    affirmation: "I trust the wisdom of my heart to guide me toward love.",
+    element: "Love",
+    color: "#FF9AAF"
+  },
+  {
+    id: 7,
+    title: "Ancestral Healing",
+    message: "You are healing patterns for yourself and generations before and after you.",
+    guidance: "Honor your lineage by breaking cycles that no longer serve your family line.",
+    affirmation: "I heal ancestral patterns with love and create positive change for all generations.",
+    element: "Earth",
+    color: "#8B7355"
+  },
+  {
+    id: 8,
+    title: "Quantum Leap",
+    message: "You are ready to make a significant shift in consciousness and reality.",
+    guidance: "Trust that you can leap into a new version of yourself with grace and ease.",
+    affirmation: "I embrace transformation and step boldly into my highest potential.",
+    element: "Spirit",
+    color: "#B19CD9"
+  },
+  {
+    id: 9,
+    title: "Sacred Pause",
+    message: "Sometimes the most powerful action is to pause, breathe, and simply be.",
+    guidance: "Give yourself permission to rest. Your being is as valuable as your doing.",
+    affirmation: "I honor my need for rest and trust in divine timing.",
+    element: "Air",
+    color: "#D4B5A0"
+  },
+  {
+    id: 10,
+    title: "Creative Flow",
+    message: "You are a channel for divine creativity. Let inspiration move through you.",
+    guidance: "Create without judgment. Let your hands, voice, or movement express your soul.",
+    affirmation: "I am a clear channel for divine creativity and inspiration.",
+    element: "Water",
+    color: "#FFB347"
+  },
+  {
+    id: 11,
+    title: "Truth Speaker",
+    message: "Your authentic voice is needed in this world. Speak your truth with courage.",
+    guidance: "Honor your truth, even if your voice shakes. The world needs your unique message.",
+    affirmation: "I speak my truth with love, courage, and authenticity.",
+    element: "Air",
+    color: "#4ECDC4"
+  },
+  {
+    id: 12,
+    title: "Shadow Integration",
+    message: "Embrace all parts of yourself. Your shadow holds gifts waiting to be reclaimed.",
+    guidance: "Look with compassion at what you've rejected in yourself. Find the gift within.",
+    affirmation: "I embrace all aspects of myself with love and understanding.",
+    element: "Spirit",
+    color: "#6B6B6B"
+  },
+  {
+    id: 13,
+    title: "Divine Feminine",
+    message: "The nurturing, intuitive, and receptive aspects of your being are awakening.",
+    guidance: "Honor your intuition, embrace your sensitivity, and trust your inner knowing.",
+    affirmation: "I honor and embody the divine feminine energy within me.",
+    element: "Water",
+    color: "#DDA0DD"
+  },
+  {
+    id: 14,
+    title: "Divine Masculine",
+    message: "Your focused, protective, and action-oriented energy is ready to manifest.",
+    guidance: "Channel your inner strength to protect what you love and create what you desire.",
+    affirmation: "I embody healthy masculine energy in service of love and creation.",
+    element: "Fire",
+    color: "#CD853F"
+  },
+  {
+    id: 15,
+    title: "Soul Family",
+    message: "You are being called into deeper connection with your spiritual family.",
+    guidance: "Trust the magnetic pull toward certain people. Soul family recognizes soul family.",
+    affirmation: "I attract and recognize my soul family with ease and joy.",
+    element: "Love",
+    color: "#98D8C8"
+  },
+  {
+    id: 16,
+    title: "Mystic Vision",
+    message: "Your third eye is opening. Trust the visions and insights you receive.",
+    guidance: "Pay attention to symbols, synchronicities, and the messages behind your dreams.",
+    affirmation: "I trust my inner vision and the spiritual insights I receive.",
+    element: "Spirit",
+    color: "#9370DB"
+  },
+  {
+    id: 17,
+    title: "Earthly Angel",
+    message: "You are an angel in human form, here to spread light and healing.",
+    guidance: "Remember your divine nature while honoring your human experience.",
+    affirmation: "I am a divine being having a human experience, here to serve love.",
+    element: "Spirit",
+    color: "#F0F8FF"
+  },
+  {
+    id: 18,
+    title: "Phoenix Rising",
+    message: "You are rising from the ashes of your old self into magnificent transformation.",
+    guidance: "Trust the process of death and rebirth happening in your life right now.",
+    affirmation: "I rise from every challenge stronger, wiser, and more radiant.",
+    element: "Fire",
+    color: "#FF6347"
+  },
+  {
+    id: 19,
+    title: "Ocean Depths",
+    message: "Dive deep into your subconscious. Treasures await in your inner depths.",
+    guidance: "What you seek is not on the surface. Go deeper into meditation and self-reflection.",
+    affirmation: "I fearlessly explore the depths of my being and discover hidden treasures.",
+    element: "Water",
+    color: "#006994"
+  },
+  {
+    id: 20,
+    title: "Mountain Strength",
+    message: "You possess an unshakeable inner strength that cannot be moved by outer storms.",
+    guidance: "Ground yourself in your center. You are more resilient than you realize.",
+    affirmation: "I am grounded, strong, and unshakeable in my truth.",
+    element: "Earth",
+    color: "#8B4513"
+  },
+  {
+    id: 21,
+    title: "Star Seed",
+    message: "You carry the wisdom of the stars and are here to help Earth ascend.",
+    guidance: "Remember your cosmic origins and the larger purpose of your incarnation here.",
+    affirmation: "I remember my stellar origins and fulfill my cosmic mission on Earth.",
+    element: "Spirit",
+    color: "#191970"
+  },
+  {
+    id: 22,
+    title: "Rainbow Bridge",
+    message: "You are a bridge between worlds, helping others cross from fear to love.",
+    guidance: "Your role as a healer and guide is more important than you know.",
+    affirmation: "I am a bridge of light, helping others move from darkness to illumination.",
+    element: "Spirit",
+    color: "#FF69B4"
+  },
+  {
+    id: 23,
+    title: "Golden Hour",
+    message: "This is your time to shine. Everything you've learned has prepared you for now.",
+    guidance: "Step fully into your power. The world is ready for what you have to offer.",
+    affirmation: "This is my time to shine and share my gifts with the world.",
+    element: "Fire",
+    color: "#FFD700"
+  },
+  {
+    id: 24,
+    title: "Sacred Solitude",
+    message: "In solitude, you remember who you truly are beyond all roles and relationships.",
+    guidance: "Spend time alone with yourself. In the silence, your authentic self emerges.",
+    affirmation: "I cherish sacred time alone and connect deeply with my authentic self.",
+    element: "Spirit",
+    color: "#E6E6FA"
+  },
+  {
+    id: 25,
+    title: "Abundant Harvest",
+    message: "Your seeds of intention are ready to bloom into beautiful manifestations.",
+    guidance: "Celebrate what you've already created while staying open to receiving more.",
+    affirmation: "I celebrate my creations and remain open to abundant blessings.",
+    element: "Earth",
+    color: "#32CD32"
+  },
+  {
+    id: 26,
+    title: "Mirror of Truth",
+    message: "Others are reflecting aspects of yourself back to you. What do you see?",
+    guidance: "What triggers you in others points to unhealed aspects within yourself.",
+    affirmation: "I see others as mirrors and use their reflections for my growth.",
+    element: "Spirit",
+    color: "#C0C0C0"
+  },
+  {
+    id: 27,
+    title: "Violet Flame",
+    message: "The violet flame of transformation is burning away what no longer serves you.",
+    guidance: "Visualize violet light surrounding you, transmuting all lower energies.",
+    affirmation: "I call upon the violet flame to transform all that is ready to be released.",
+    element: "Fire",
+    color: "#8A2BE2"
+  },
+  {
+    id: 28,
+    title: "Crystal Clear",
+    message: "Your intuition is crystal clear. Trust the first insights that come to you.",
+    guidance: "Don't overthink. Your first instinct usually contains the most truth.",
+    affirmation: "My intuition is clear and I trust the first guidance I receive.",
+    element: "Spirit",
+    color: "#E0FFFF"
+  },
+  {
+    id: 29,
+    title: "Thunder Medicine",
+    message: "Powerful changes are thundering toward you. Prepare for a breakthrough.",
+    guidance: "Don't fear the storm. It's clearing the path for something magnificent.",
+    affirmation: "I welcome powerful changes and trust they bring me blessings.",
+    element: "Air",
+    color: "#4B0082"
+  },
+  {
+    id: 30,
+    title: "Flower Power",
+    message: "You are blooming into the fullest expression of your beautiful soul.",
+    guidance: "Like a flower, you don't force your blooming. Trust your natural timing.",
+    affirmation: "I bloom naturally and beautifully in perfect divine timing.",
+    element: "Earth",
+    color: "#FFB6C1"
+  },
+  {
+    id: 31,
+    title: "Cosmic Dance",
+    message: "You are dancing with the universe in perfect synchronicity.",
+    guidance: "Move with life's rhythms rather than fighting against them.",
+    affirmation: "I dance with life's rhythms and find joy in the cosmic flow.",
+    element: "Spirit",
+    color: "#9932CC"
+  },
+  {
+    id: 32,
+    title: "Ancient Wisdom",
+    message: "You carry ancient wisdom in your soul. Trust what you already know.",
+    guidance: "The answers you seek are already within you. Get quiet and remember.",
+    affirmation: "I trust the ancient wisdom that lives within my soul.",
+    element: "Spirit",
+    color: "#800000"
+  },
+  {
+    id: 33,
+    title: "Love Frequency",
+    message: "You are being attuned to the highest frequency of unconditional love.",
+    guidance: "Choose love in every situation, especially when it feels difficult.",
+    affirmation: "I vibrate at the frequency of pure, unconditional love.",
+    element: "Love",
+    color: "#FF1493"
+  },
+  {
+    id: 34,
+    title: "Sacred Geometry",
+    message: "Your life is aligning with divine patterns and sacred designs.",
+    guidance: "Trust that there's a perfect pattern unfolding, even when you can't see it.",
+    affirmation: "My life unfolds according to divine patterns and sacred geometry.",
+    element: "Spirit",
+    color: "#00CED1"
+  },
+  {
+    id: 35,
+    title: "Midnight Sun",
+    message: "Even in your darkest moments, your inner light continues to shine.",
+    guidance: "Remember your light, especially when you feel lost in darkness.",
+    affirmation: "My inner light shines brightly, illuminating even the darkest moments.",
+    element: "Fire",
+    color: "#FFE4B5"
+  },
+  {
+    id: 36,
+    title: "Spirit Animal",
+    message: "Your spirit animal is calling you to embody its sacred medicine.",
+    guidance: "What animal have you been drawn to lately? What qualities does it embody?",
+    affirmation: "I embody the sacred medicine of my spirit animal guides.",
+    element: "Earth",
+    color: "#D2691E"
+  },
+  {
+    id: 37,
+    title: "Time Weaver",
+    message: "You have the power to heal past wounds and create a luminous future.",
+    guidance: "Send love to your past self and hold a vision of your highest future.",
+    affirmation: "I heal my past and weave a beautiful future with threads of love.",
+    element: "Spirit",
+    color: "#6495ED"
+  },
+  {
+    id: 38,
+    title: "Temple Keeper",
+    message: "Your body is a sacred temple. Honor it with love and reverence.",
+    guidance: "Treat your body as the sacred vessel that houses your beautiful soul.",
+    affirmation: "I honor my body as a sacred temple and care for it with love.",
+    element: "Earth",
+    color: "#DEB887"
+  },
+  {
+    id: 39,
+    title: "Sound Healing",
+    message: "Your voice carries healing frequencies. Use it to heal yourself and others.",
+    guidance: "Hum, sing, or tone. Let healing sounds flow through you without judgment.",
+    affirmation: "My voice carries healing frequencies that benefit all who hear it.",
+    element: "Air",
+    color: "#40E0D0"
+  },
+  {
+    id: 40,
+    title: "Energy Alchemist",
+    message: "You have the power to transform any energy into love through your consciousness.",
+    guidance: "Practice transmuting challenging energies by breathing love into them.",
+    affirmation: "I am an alchemist, transforming all energies into love and light.",
+    element: "Spirit",
+    color: "#9400D3"
+  },
+  {
+    id: 41,
+    title: "Moon Cycles",
+    message: "Align with lunar rhythms to amplify your manifestation and release work.",
+    guidance: "New moon for planting seeds, full moon for celebrating and releasing.",
+    affirmation: "I align with natural cycles and honor the wisdom of the moon.",
+    element: "Water",
+    color: "#C0C0C0"
+  },
+  {
+    id: 42,
+    title: "Sacred Union",
+    message: "The divine masculine and feminine within you are coming into perfect balance.",
+    guidance: "Honor both your action-oriented and receptive qualities equally.",
+    affirmation: "I embody the sacred union of divine masculine and feminine energy.",
+    element: "Spirit",
+    color: "#DA70D6"
+  },
+  {
+    id: 43,
+    title: "Crystal Light",
+    message: "You are a crystal being, here to anchor higher frequencies on Earth.",
+    guidance: "Imagine your entire being made of light. You are transmitting love constantly.",
+    affirmation: "I am a crystal being of light, anchoring higher frequencies on Earth.",
+    element: "Spirit",
+    color: "#F8F8FF"
+  },
+  {
+    id: 44,
+    title: "Infinite Possibility",
+    message: "You exist in a field of infinite possibility. Anything is possible for you.",
+    guidance: "Release limiting beliefs and open to the miraculous potential of your life.",
+    affirmation: "I live in infinite possibility and welcome miracles into my life.",
+    element: "Spirit",
+    color: "#FFFACD"
+  }
+];
+
+// Current selected card(s) for display
+let selectedCards = [];
+let cardSpreadActive = false;
+
+// ========================================
+// SOULART CARDS FUNCTIONS
+// ========================================
+
+function showSoulArtCards() {
+  hideAllSections();
+  const soulArtSection = document.getElementById('soulart-cards');
+  if (!soulArtSection) {
+    createSoulArtCardsSection();
+    return;
+  }
+  soulArtSection.style.display = 'block';
+  soulArtSection.style.opacity = '1';
+  
+  renderCardDeck();
+}
+
+function createSoulArtCardsSection() {
+  const main = document.querySelector('main');
+  const soulArtSection = document.createElement('section');
+  soulArtSection.id = 'soulart-cards';
+  soulArtSection.style.display = 'block';
+  soulArtSection.innerHTML = `
+    <div class="cards-container">
+      <h2>SoulArt Oracle Cards</h2>
+      <p class="cards-subtitle">
+        Connect with your inner wisdom through this sacred 44-card deck. 
+        Let your intuition guide you to the messages your soul needs to hear today.
+      </p>
+      
+      <div class="card-reading-options">
+        <button class="btn-primary" onclick="drawSingleCard()">Draw Single Card</button>
+        <button class="btn-secondary" onclick="drawThreeCards()">Three Card Spread</button>
+        <button class="btn-cancel" onclick="resetDeck()" id="reset-btn" style="display: none;">Reset Deck</button>
+      </div>
+      
+      <div id="card-spread" class="card-spread">
+        <!-- Card spread will be rendered here -->
+      </div>
+      
+      <div id="selected-card-display" class="selected-card-display">
+        <!-- Selected card details will be shown here -->
+      </div>
+    </div>
+  `;
+  
+  main.appendChild(soulArtSection);
+  renderCardDeck();
+}
+
+function renderCardDeck() {
+  const spreadContainer = document.getElementById('card-spread');
+  if (!spreadContainer) return;
+  
+  if (selectedCards.length === 0) {
+    spreadContainer.innerHTML = `
+      <div class="deck-display">
+        <div class="card-deck">
+          <div class="card-back" onclick="drawSingleCard()">
+            <div class="card-back-design">
+              <div class="card-symbol">✨</div>
+              <div class="card-back-text">SoulArt Oracle</div>
+              <div class="card-number">44 Cards</div>
+            </div>
+          </div>
+        </div>
+        <p class="deck-instruction">Click the deck above or choose a reading option to begin your spiritual guidance session.</p>
+      </div>
+    `;
+  } else {
+    displaySelectedCards();
+  }
+}
+
+function drawSingleCard() {
+  selectedCards = [];
+  const randomCard = soulArtCards[Math.floor(Math.random() * soulArtCards.length)];
+  selectedCards = [randomCard];
+  
+  displaySelectedCards();
+  document.getElementById('reset-btn').style.display = 'inline-block';
+}
+
+function drawThreeCards() {
+  selectedCards = [];
+  const shuffledCards = [...soulArtCards].sort(() => Math.random() - 0.5);
+  selectedCards = shuffledCards.slice(0, 3);
+  
+  displaySelectedCards();
+  document.getElementById('reset-btn').style.display = 'inline-block';
+}
+
+function displaySelectedCards() {
+  const spreadContainer = document.getElementById('card-spread');
+  
+  if (selectedCards.length === 1) {
+    spreadContainer.innerHTML = `
+      <div class="single-card-spread">
+        <div class="oracle-card" data-card-id="${selectedCards[0].id}">
+          <div class="card-front">
+            <div class="card-header" style="background: ${selectedCards[0].color};">
+              <h3>${selectedCards[0].title}</h3>
+              <div class="card-element">${selectedCards[0].element}</div>
+            </div>
+            <div class="card-content">
+              <div class="card-message">${selectedCards[0].message}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (selectedCards.length === 3) {
+    spreadContainer.innerHTML = `
+      <div class="three-card-spread">
+        <div class="spread-labels">
+          <div class="spread-label">Past/Release</div>
+          <div class="spread-label">Present/Focus</div>
+          <div class="spread-label">Future/Embrace</div>
+        </div>
+        <div class="three-cards">
+          ${selectedCards.map((card, index) => `
+            <div class="oracle-card" data-card-id="${card.id}">
+              <div class="card-front">
+                <div class="card-header" style="background: ${card.color};">
+                  <h4>${card.title}</h4>
+                  <div class="card-element">${card.element}</div>
+                </div>
+                <div class="card-content">
+                  <div class="card-message">${card.message}</div>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+  
+  // Add click handlers to cards for detailed view
+  document.querySelectorAll('.oracle-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const cardId = parseInt(this.dataset.cardId);
+      showCardDetails(cardId);
+    });
+  });
+}
+
+function showCardDetails(cardId) {
+  const card = soulArtCards.find(c => c.id === cardId);
+  if (!card) return;
+  
+  const displayContainer = document.getElementById('selected-card-display');
+  displayContainer.innerHTML = `
+    <div class="card-details-modal">
+      <div class="card-details">
+        <div class="card-details-header" style="background: ${card.color};">
+          <h2>${card.title}</h2>
+          <div class="card-element-badge">${card.element} Energy</div>
+        </div>
+        
+        <div class="card-details-content">
+          <div class="card-section">
+            <h4>Message</h4>
+            <p class="card-detail-text">${card.message}</p>
+          </div>
+          
+          <div class="card-section">
+            <h4>Guidance</h4>
+            <p class="card-detail-text">${card.guidance}</p>
+          </div>
+          
+          <div class="card-section">
+            <h4>Affirmation</h4>
+            <p class="card-affirmation">"${card.affirmation}"</p>
+          </div>
+        </div>
+        
+        <div class="card-details-actions">
+          <button class="btn-secondary" onclick="closeCardDetails()">Close</button>
+          <button class="btn-primary" onclick="drawSingleCard()">Draw Another Card</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  displayContainer.style.display = 'block';
+  displayContainer.scrollIntoView({ behavior: 'smooth' });
+}
+
+function closeCardDetails() {
+  const displayContainer = document.getElementById('selected-card-display');
+  displayContainer.style.display = 'none';
+  displayContainer.innerHTML = '';
+}
+
+function resetDeck() {
+  selectedCards = [];
+  renderCardDeck();
+  closeCardDetails();
+  document.getElementById('reset-btn').style.display = 'none';
 }
