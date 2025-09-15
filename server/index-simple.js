@@ -345,6 +345,82 @@ app.post('/api/emotion-decoder/use', isAuthenticated, async (req, res) => {
   }
 });
 
+// Allergy identifier routes
+app.get('/api/allergy-identifier/can-use', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const usage = await storage.canUseAllergyIdentifier(userId);
+    res.json(usage);
+  } catch (error) {
+    console.error("Error checking usage:", error);
+    res.status(500).json({ message: "Failed to check usage" });
+  }
+});
+
+app.post('/api/allergy-identifier/use', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { allergen } = req.body;
+    
+    // Check if user can use the identifier
+    const canUse = await storage.canUseAllergyIdentifier(userId);
+    if (!canUse.canUse) {
+      return res.status(403).json({ 
+        message: "Usage limit reached. Please subscribe for unlimited access.",
+        needsSubscription: true 
+      });
+    }
+
+    // Record the usage
+    await storage.recordAllergyIdentifierUse(userId, allergen);
+    
+    // Return updated usage info
+    const updatedUsage = await storage.canUseAllergyIdentifier(userId);
+    res.json(updatedUsage);
+  } catch (error) {
+    console.error("Error recording usage:", error);
+    res.status(500).json({ message: "Failed to record usage" });
+  }
+});
+
+// Belief decoder routes
+app.get('/api/belief-decoder/can-use', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const usage = await storage.canUseBeliefDecoder(userId);
+    res.json(usage);
+  } catch (error) {
+    console.error("Error checking usage:", error);
+    res.status(500).json({ message: "Failed to check usage" });
+  }
+});
+
+app.post('/api/belief-decoder/use', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { belief } = req.body;
+    
+    // Check if user can use the decoder
+    const canUse = await storage.canUseBeliefDecoder(userId);
+    if (!canUse.canUse) {
+      return res.status(403).json({ 
+        message: "Usage limit reached. Please subscribe for unlimited access.",
+        needsSubscription: true 
+      });
+    }
+
+    // Record the usage
+    await storage.recordBeliefDecoderUse(userId, belief);
+    
+    // Return updated usage info
+    const updatedUsage = await storage.canUseBeliefDecoder(userId);
+    res.json(updatedUsage);
+  } catch (error) {
+    console.error("Error recording usage:", error);
+    res.status(500).json({ message: "Failed to record usage" });
+  }
+});
+
 app.get('/api/usage/stats', isAuthenticated, async (req, res) => {
   try {
     const userId = req.user.claims.sub;

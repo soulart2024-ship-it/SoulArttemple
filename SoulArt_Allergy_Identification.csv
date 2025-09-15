@@ -1,0 +1,31 @@
+Row,Allergen,Category,Body_System,Color,Healing_Support
+Row 1,Wheat/Gluten,Food Intolerance,Digestive System,Golden Yellow,Digestive enzyme support + gut healing
+Row 1,Dairy/Lactose,Food Intolerance,Digestive System,Creamy White,Probiotic restoration + calcium balance
+Row 1,Eggs,Food Intolerance,Digestive System,Sunny Yellow,Liver detox support + protein alternatives
+Row 1,Soy,Food Intolerance,Digestive System,Earthy Brown,Hormonal balance + digestive cleanse
+Row 1,Tree Nuts,Food Intolerance,Digestive System,Rich Brown,Anti-inflammatory support + mineral balance
+Row 2,Pollen/Hay Fever,Environmental,Respiratory System,Bright Green,Respiratory support + immune modulation
+Row 2,Dust Mites,Environmental,Respiratory System,Grey White,Air purification + respiratory strengthening
+Row 2,Pet Dander,Environmental,Respiratory System,Soft Brown,Immune balance + respiratory healing
+Row 2,Mold/Fungi,Environmental,Respiratory System,Dark Green,Detoxification + respiratory cleanse
+Row 2,Chemical Fragrances,Environmental,Respiratory System,Clear Blue,Chemical detox + liver support
+Row 3,Shellfish,Food Allergy,Immune System,Ocean Blue,Immune modulation + anti-inflammatory
+Row 3,Fish,Food Allergy,Immune System,Silver Blue,Omega balance + immune support
+Row 3,Peanuts,Food Allergy,Immune System,Tan Brown,Immune reset + anti-inflammatory
+Row 3,Citrus Fruits,Food Allergy,Immune System,Bright Orange,Histamine balance + vitamin C support
+Row 3,Tomatoes,Food Allergy,Immune System,Rich Red,Nightshade sensitivity + alkalizing support
+Row 4,Nickel,Metal Sensitivity,Skin System,Metallic Silver,Heavy metal detox + skin healing
+Row 4,Latex,Material Sensitivity,Skin System,Pale Yellow,Immune modulation + skin barrier repair
+Row 4,Wool,Material Sensitivity,Skin System,Natural Beige,Skin sensitivity support + barrier healing
+Row 4,Synthetic Fabrics,Material Sensitivity,Skin System,Artificial Blue,Chemical sensitivity + skin detox
+Row 4,Cosmetic Ingredients,Material Sensitivity,Skin System,Pink Rose,Skin purification + natural alternatives
+Row 5,Seasonal Changes,Environmental Pattern,Nervous System,Shifting Rainbow,Adaptogenic support + nervous system balance
+Row 5,Temperature Extremes,Environmental Pattern,Nervous System,Cooling Blue/Warming Red,Thermal regulation + circulation support
+Row 5,Barometric Pressure,Environmental Pattern,Nervous System,Storm Grey,Nervous system stability + grounding
+Row 5,Electromagnetic Fields,Environmental Pattern,Nervous System,Electric Violet,EMF protection + nervous system shielding
+Row 5,Stress/Emotional Triggers,Environmental Pattern,Nervous System,Swirling Colors,Stress resilience + emotional balance
+Row 6,Food Additives/Preservatives,Chemical Sensitivity,Liver System,Chemical Yellow,Liver detox + clean nutrition support
+Row 6,Food Coloring/Dyes,Chemical Sensitivity,Liver System,Artificial Rainbow,Liver cleanse + natural alternatives
+Row 6,Artificial Sweeteners,Chemical Sensitivity,Liver System,Sweet Pink,Liver support + natural sweetener transition
+Row 6,MSG/Flavor Enhancers,Chemical Sensitivity,Liver System,Enhanced Orange,Nervous system calm + liver cleanse
+Row 6,Pesticide Residues,Chemical Sensitivity,Liver System,Toxic Green,Heavy detoxification + organic transition

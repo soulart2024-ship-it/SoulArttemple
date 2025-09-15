@@ -101,6 +101,182 @@ function navigate(page) {
         </p>
         <button onclick="navigate('home')">Return to Home</button>
       `;
+    } else if (page === 'allergy-identifier') {
+      // Check authentication and usage first
+      checkAllergyIdentifierAccess().then(accessInfo => {
+        if (accessInfo.needsAuth) {
+          main.innerHTML = `
+            <h2>Allergy Identification System</h2>
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px; margin: 20px 0;">
+              <h3 style="color: #8F5AFF; margin-bottom: 15px;">Sign In Required</h3>
+              <p style="margin-bottom: 20px; color: #666;">
+                Please sign in to access the Allergy Identifier and track your healing journey.
+              </p>
+              <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                Sign In to Continue
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        if (accessInfo.needsSubscription) {
+          main.innerHTML = `
+            <h2>Allergy Identification System</h2>
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF914D20, #EAD3FF20); border-radius: 15px; margin: 20px 0;">
+              <h3 style="color: #FF914D; margin-bottom: 15px;">Upgrade to Unlimited Access</h3>
+              <p style="margin-bottom: 10px; color: #666;">
+                You've used all 3 free allergy identification sessions.
+              </p>
+              <p style="margin-bottom: 20px; color: #666;">
+                Upgrade to unlimited access for just <strong>£3.99/month</strong>
+              </p>
+              <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #8F5AFF;">
+                <h4 style="color: #8F5AFF; margin-bottom: 15px;">Unlimited Membership Includes:</h4>
+                <ul style="text-align: left; color: #666; max-width: 300px; margin: 0 auto;">
+                  <li>Unlimited allergy identifier sessions</li>
+                  <li>Complete healing protocols</li>
+                  <li>Usage analytics and progress tracking</li>
+                  <li>Priority access to new features</li>
+                </ul>
+              </div>
+              <button onclick="subscribeToUnlimited()" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
+                Subscribe for £3.99/month
+              </button>
+              <button onclick="navigate('home')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                Return Home
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        // Show the allergy identifier interface
+        main.innerHTML = `
+        <h2>Allergy Identification System</h2>
+        <div style="background: linear-gradient(135deg, #8ED6B7, #85C9F2); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+          <p style="color: white; margin: 0; font-weight: bold;">
+            ${accessInfo.isSubscribed ? 
+              'Unlimited Access Active' : 
+              `${accessInfo.usageCount}/3 Free Sessions Used`
+            }
+          </p>
+        </div>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+          Use your intuition and kinesiology muscle testing to identify allergens. Click on tiles that create a stress response in your body.
+        </p>
+        
+        <div id="allergy-tiles-container">
+          <!-- Allergy tiles will be inserted here -->
+        </div>
+          
+        <div id="healing-process" style="margin-top: 30px; display: none;">
+          <!-- Healing process will be inserted here -->
+        </div>
+      `;
+        // Load allergy data and render tiles
+        loadAllergyData().then(() => {
+          renderAllergyTiles();
+        });
+      }).catch(error => {
+        console.error('Error checking access:', error);
+        main.innerHTML = `
+          <h2>Allergy Identification System</h2>
+          <div style="text-align: center; padding: 40px; background: #FF914D20; border-radius: 15px; margin: 20px 0;">
+            <p style="color: #FF914D;">Error checking access. Please try again.</p>
+            <button onclick="navigate('home')">Return Home</button>
+          </div>
+        `;
+      });
+
+    } else if (page === 'belief-decoder') {
+      // Check authentication and usage first
+      checkBeliefDecoderAccess().then(accessInfo => {
+        if (accessInfo.needsAuth) {
+          main.innerHTML = `
+            <h2>Belief Decoder System</h2>
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px; margin: 20px 0;">
+              <h3 style="color: #8F5AFF; margin-bottom: 15px;">Sign In Required</h3>
+              <p style="margin-bottom: 20px; color: #666;">
+                Please sign in to access the Belief Decoder and transform limiting beliefs.
+              </p>
+              <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                Sign In to Continue
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        if (accessInfo.needsSubscription) {
+          main.innerHTML = `
+            <h2>Belief Decoder System</h2>
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF914D20, #EAD3FF20); border-radius: 15px; margin: 20px 0;">
+              <h3 style="color: #FF914D; margin-bottom: 15px;">Upgrade to Unlimited Access</h3>
+              <p style="margin-bottom: 10px; color: #666;">
+                You've used all 3 free belief decoding sessions.
+              </p>
+              <p style="margin-bottom: 20px; color: #666;">
+                Upgrade to unlimited access for just <strong>£3.99/month</strong>
+              </p>
+              <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #8F5AFF;">
+                <h4 style="color: #8F5AFF; margin-bottom: 15px;">Unlimited Membership Includes:</h4>
+                <ul style="text-align: left; color: #666; max-width: 300px; margin: 0 auto;">
+                  <li>Unlimited belief decoder sessions</li>
+                  <li>Complete healing protocols</li>
+                  <li>Usage analytics and progress tracking</li>
+                  <li>Priority access to new features</li>
+                </ul>
+              </div>
+              <button onclick="subscribeToUnlimited()" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
+                Subscribe for £3.99/month
+              </button>
+              <button onclick="navigate('home')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                Return Home
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        // Show the belief decoder interface
+        main.innerHTML = `
+        <h2>Belief Decoder System</h2>
+        <div style="background: linear-gradient(135deg, #8ED6B7, #85C9F2); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+          <p style="color: white; margin: 0; font-weight: bold;">
+            ${accessInfo.isSubscribed ? 
+              'Unlimited Access Active' : 
+              `${accessInfo.usageCount}/3 Free Sessions Used`
+            }
+          </p>
+        </div>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+          Use your intuition and kinesiology muscle testing to identify limiting beliefs. Click on beliefs that create a stress response in your body.
+        </p>
+        
+        <div id="belief-tiles-container">
+          <!-- Belief tiles will be inserted here -->
+        </div>
+          
+        <div id="healing-process" style="margin-top: 30px; display: none;">
+          <!-- Healing process will be inserted here -->
+        </div>
+      `;
+        // Load belief data and render tiles
+        loadBeliefData().then(() => {
+          renderBeliefTiles();
+        });
+      }).catch(error => {
+        console.error('Error checking access:', error);
+        main.innerHTML = `
+          <h2>Belief Decoder System</h2>
+          <div style="text-align: center; padding: 40px; background: #FF914D20; border-radius: 15px; margin: 20px 0;">
+            <p style="color: #FF914D;">Error checking access. Please try again.</p>
+            <button onclick="navigate('home')">Return Home</button>
+          </div>
+        `;
+      });
+
     } else if (page === 'emotion-decoder') {
       // Check authentication and usage first
       checkEmotionDecoderAccess().then(accessInfo => {
@@ -235,8 +411,10 @@ function navigate(page) {
   }, 200);
 }
 
-// Global variables to store emotion data
+// Global variables to store data
 let emotionData = [];
+let allergyData = [];
+let beliefData = [];
 
 // Define chakra order and colors
 const CHAKRA_CONFIG = {
@@ -284,6 +462,576 @@ async function loadEmotionData() {
   } catch (error) {
     console.error('Error loading emotion data:', error);
   }
+}
+
+// Function to load and parse allergy data from CSV
+async function loadAllergyData() {
+  try {
+    const response = await fetch('SoulArt_Allergy_Identification.csv');
+    const csvText = await response.text();
+    
+    // Parse CSV data
+    const lines = csvText.split('\n');
+    const headers = lines[0].split(',');
+    
+    allergyData = [];
+    for (let i = 1; i < lines.length; i++) {
+      if (lines[i].trim()) {
+        const values = lines[i].split(',');
+        if (values.length >= 6) {
+          allergyData.push({
+            row: values[0].trim(),
+            allergen: values[1].trim(),
+            category: values[2].trim(),
+            bodySystem: values[3].trim(),
+            color: values[4].trim(),
+            healingSupport: values[5].trim()
+          });
+        }
+      }
+    }
+    
+    // Data loaded successfully for tile rendering
+    
+  } catch (error) {
+    console.error('Error loading allergy data:', error);
+  }
+}
+
+// Function to load and parse belief data from CSV
+async function loadBeliefData() {
+  try {
+    const response = await fetch('SoulArt_Belief_Decoder.csv');
+    const csvText = await response.text();
+    
+    // Parse CSV data
+    const lines = csvText.split('\n');
+    const headers = lines[0].split(',');
+    
+    beliefData = [];
+    for (let i = 1; i < lines.length; i++) {
+      if (lines[i].trim()) {
+        const values = lines[i].split(',');
+        if (values.length >= 7) {
+          beliefData.push({
+            row: values[0].trim(),
+            belief: values[1].trim(),
+            category: values[2].trim(),
+            vibrationalLevel: values[3].trim(),
+            chakraArea: values[4].trim(),
+            color: values[5].trim(),
+            healingSupport: values[6].trim()
+          });
+        }
+      }
+    }
+    
+    // Data loaded successfully for tile rendering
+    
+  } catch (error) {
+    console.error('Error loading belief data:', error);
+  }
+}
+
+// Function to render allergy tiles in organized layout
+function renderAllergyTiles() {
+  if (!allergyData || allergyData.length === 0) return;
+  
+  // Group allergies by row
+  const rows = {
+    'Row 1': [],
+    'Row 2': [], 
+    'Row 3': [],
+    'Row 4': [],
+    'Row 5': [],
+    'Row 6': []
+  };
+  
+  // Organize allergies into rows
+  allergyData.forEach(allergy => {
+    const rowKey = allergy.row;
+    if (rows[rowKey]) {
+      rows[rowKey].push(allergy);
+    }
+  });
+  
+  const container = document.getElementById('allergy-tiles-container');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  // Create two-column layout
+  container.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;';
+  
+  // Column 1: Rows 1-3
+  const column1 = document.createElement('div');
+  column1.style.cssText = 'background: linear-gradient(135deg, #8ED6B710, transparent); padding: 20px; border-radius: 15px;';
+  column1.innerHTML = '<h3 style="text-align: center; color: #8ED6B7; margin-bottom: 20px; font-size: 18px;">Food & Environmental Allergies</h3>';
+  
+  // Column 2: Rows 4-6  
+  const column2 = document.createElement('div');
+  column2.style.cssText = 'background: linear-gradient(135deg, #EAD3FF10, transparent); padding: 20px; border-radius: 15px;';
+  column2.innerHTML = '<h3 style="text-align: center; color: #8F5AFF; margin-bottom: 20px; font-size: 18px;">Sensitivities & Patterns</h3>';
+  
+  // Render Column 1 (Rows 1-3)
+  ['Row 1', 'Row 2', 'Row 3'].forEach(rowKey => {
+    if (rows[rowKey].length > 0) {
+      column1.appendChild(createAllergyRowTile(rowKey, rows[rowKey]));
+    }
+  });
+  
+  // Render Column 2 (Rows 4-6)
+  ['Row 4', 'Row 5', 'Row 6'].forEach(rowKey => {
+    if (rows[rowKey].length > 0) {
+      column2.appendChild(createAllergyRowTile(rowKey, rows[rowKey]));
+    }
+  });
+  
+  container.appendChild(column1);
+  container.appendChild(column2);
+  
+  // Setup event listeners
+  setTimeout(setupAllergyTileEventListeners, 100);
+}
+
+// Function to create an allergy row tile
+function createAllergyRowTile(rowKey, allergies) {
+  const rowDiv = document.createElement('div');
+  const rowNumber = rowKey.split(' ')[1];
+  
+  // Define row themes and colors
+  const rowThemes = {
+    '1': { title: 'Common Food Intolerances', color: '#E74C3C', description: 'Digestive system impacts' },
+    '2': { title: 'Environmental Allergens', color: '#F39C12', description: 'Respiratory system triggers' },
+    '3': { title: 'Food Allergies', color: '#27AE60', description: 'Immune system reactions' },
+    '4': { title: 'Material Sensitivities', color: '#E67E22', description: 'Skin system responses' },
+    '5': { title: 'Environmental Patterns', color: '#3498DB', description: 'Nervous system triggers' },
+    '6': { title: 'Chemical Sensitivities', color: '#9B59B6', description: 'Liver system impacts' }
+  };
+  
+  const theme = rowThemes[rowNumber] || { title: `Row ${rowNumber}`, color: '#8F5AFF', description: 'Various allergens' };
+  
+  rowDiv.style.cssText = `
+    margin: 15px 0; 
+    padding: 20px; 
+    background: linear-gradient(135deg, ${theme.color}15, transparent);
+    border-radius: 12px; 
+    border-left: 5px solid ${theme.color};
+    cursor: pointer;
+    transition: all 0.3s ease;
+  `;
+  
+  rowDiv.addEventListener('mouseenter', () => {
+    rowDiv.style.transform = 'translateY(-2px)';
+    rowDiv.style.boxShadow = `0 8px 25px ${theme.color}30`;
+  });
+  
+  rowDiv.addEventListener('mouseleave', () => {
+    rowDiv.style.transform = 'translateY(0)';
+    rowDiv.style.boxShadow = 'none';
+  });
+  
+  rowDiv.innerHTML = `
+    <h4 style="color: ${theme.color}; margin: 0 0 8px 0; font-size: 16px;">
+      ${rowKey}: ${theme.title}
+    </h4>
+    <p style="font-size: 12px; color: #666; margin: 5px 0 15px 0; font-style: italic;">
+      ${theme.description}
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px;">
+      ${allergies.map((allergy, index) => `
+        <div class="allergy-tile" 
+             style="background: white; padding: 8px; border-radius: 6px; text-align: center; 
+                    border: 1px solid ${theme.color}40; cursor: pointer; transition: all 0.2s ease;"
+             data-allergen="${allergy.allergen}"
+             data-color="${allergy.color}"
+             data-category="${allergy.category}"
+             data-body-system="${allergy.bodySystem}"
+             data-healing-support="${allergy.healingSupport}">
+          <div style="font-size: 12px; font-weight: bold; color: ${theme.color}; margin-bottom: 4px;">
+            ${allergy.allergen}
+          </div>
+          <div style="font-size: 10px; color: #888;">
+            ${allergy.category}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  
+  return rowDiv;
+}
+
+// Function to setup allergy tile event listeners
+function setupAllergyTileEventListeners() {
+  const allergyTiles = document.querySelectorAll('.allergy-tile');
+  
+  allergyTiles.forEach(tile => {
+    tile.addEventListener('click', function() {
+      handleAllergySelection(this);
+    });
+    
+    tile.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.05)';
+      this.style.background = '#f8f9fa';
+    });
+    
+    tile.addEventListener('mouseleave', function() {
+      this.style.transform = 'scale(1)';
+      this.style.background = 'white';
+    });
+  });
+}
+
+// Function to handle allergy selection
+function handleAllergySelection(tile) {
+  const allergen = tile.dataset.allergen;
+  const color = tile.dataset.color;
+  const category = tile.dataset.category;
+  const bodySystem = tile.dataset.bodySystem;
+  const healingSupport = tile.dataset.healingSupport;
+  
+  // Record usage
+  recordAllergyIdentifierUsage(allergen).then(() => {
+    showAllergyHealing({
+      allergen,
+      color,
+      category,
+      bodySystem,
+      healingSupport
+    });
+  }).catch(error => {
+    console.error('Error recording usage:', error);
+    // Still show healing even if recording fails
+    showAllergyHealing({
+      allergen,
+      color,
+      category,
+      bodySystem,
+      healingSupport
+    });
+  });
+}
+
+// Function to show allergy healing process
+function showAllergyHealing(allergyInfo) {
+  const healingDiv = document.getElementById('healing-process');
+  if (!healingDiv) return;
+  
+  healingDiv.style.display = 'block';
+  healingDiv.innerHTML = `
+    <div style="background: linear-gradient(135deg, #8ED6B720, #EAD3FF20); padding: 30px; border-radius: 15px; margin: 20px 0;">
+      <h3 style="color: #8F5AFF; text-align: center; margin-bottom: 20px;">🌿 Allergy Healing Protocol</h3>
+      
+      <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #8ED6B7; margin-bottom: 20px;">
+        <h4 style="color: #8ED6B7; margin-bottom: 15px;">✨ Identified Allergen</h4>
+        <div style="font-size: 18px; font-weight: bold; color: #8F5AFF; margin-bottom: 10px;">
+          ${allergyInfo.allergen}
+        </div>
+        <div style="margin-bottom: 10px;">
+          <strong>Category:</strong> ${allergyInfo.category}
+        </div>
+        <div style="margin-bottom: 10px;">
+          <strong>Body System:</strong> ${allergyInfo.bodySystem}
+        </div>
+        <div style="margin-bottom: 10px;">
+          <strong>SoulArt Color:</strong> <span style="color: ${allergyInfo.color}; font-weight: bold;">${allergyInfo.color}</span>
+        </div>
+      </div>
+      
+      <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #FF914D; margin-bottom: 20px;">
+        <h4 style="color: #FF914D; margin-bottom: 15px;">🎯 5-Step Healing Process</h4>
+        <div style="margin-bottom: 15px;">
+          <strong>Step 1:</strong> Place your hand over the affected body area (${allergyInfo.bodySystem})
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Step 2:</strong> Breathe deeply while visualizing ${allergyInfo.color} healing light
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Step 3:</strong> Say aloud: "I release all sensitivity to ${allergyInfo.allergen}"
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Step 4:</strong> Visualize your ${allergyInfo.bodySystem} in perfect harmony
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Step 5:</strong> Feel gratitude for your body's healing wisdom
+        </div>
+      </div>
+      
+      <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #8F5AFF;">
+        <h4 style="color: #8F5AFF; margin-bottom: 15px;">💫 Additional Healing Support</h4>
+        <p style="font-style: italic; color: #666; line-height: 1.6;">
+          ${allergyInfo.healingSupport}
+        </p>
+      </div>
+      
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="navigate('allergy-identifier')" style="background: #8ED6B7; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
+          Process Another Allergen
+        </button>
+        <button onclick="navigate('membership')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
+          View Dashboard
+        </button>
+      </div>
+    </div>
+  `;
+  
+  // Scroll to healing process
+  healingDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Function to render belief tiles in organized layout
+function renderBeliefTiles() {
+  if (!beliefData || beliefData.length === 0) return;
+  
+  // Group beliefs by row
+  const rows = {
+    'Row 1': [],
+    'Row 2': [], 
+    'Row 3': [],
+    'Row 4': [],
+    'Row 5': [],
+    'Row 6': []
+  };
+  
+  // Organize beliefs into rows
+  beliefData.forEach(belief => {
+    const rowKey = belief.row;
+    if (rows[rowKey]) {
+      rows[rowKey].push(belief);
+    }
+  });
+  
+  const container = document.getElementById('belief-tiles-container');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  // Create two-column layout
+  container.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;';
+  
+  // Column 1: Rows 1-3
+  const column1 = document.createElement('div');
+  column1.style.cssText = 'background: linear-gradient(135deg, #8ED6B710, transparent); padding: 20px; border-radius: 15px;';
+  column1.innerHTML = '<h3 style="text-align: center; color: #8ED6B7; margin-bottom: 20px; font-size: 18px;">Core Beliefs & Relationships</h3>';
+  
+  // Column 2: Rows 4-6  
+  const column2 = document.createElement('div');
+  column2.style.cssText = 'background: linear-gradient(135deg, #EAD3FF10, transparent); padding: 20px; border-radius: 15px;';
+  column2.innerHTML = '<h3 style="text-align: center; color: #8F5AFF; margin-bottom: 20px; font-size: 18px;">Growth & Safety Beliefs</h3>';
+  
+  // Render Column 1 (Rows 1-3)
+  ['Row 1', 'Row 2', 'Row 3'].forEach(rowKey => {
+    if (rows[rowKey].length > 0) {
+      column1.appendChild(createBeliefRowTile(rowKey, rows[rowKey]));
+    }
+  });
+  
+  // Render Column 2 (Rows 4-6)
+  ['Row 4', 'Row 5', 'Row 6'].forEach(rowKey => {
+    if (rows[rowKey].length > 0) {
+      column2.appendChild(createBeliefRowTile(rowKey, rows[rowKey]));
+    }
+  });
+  
+  container.appendChild(column1);
+  container.appendChild(column2);
+  
+  // Setup event listeners
+  setTimeout(setupBeliefTileEventListeners, 100);
+}
+
+// Function to create a belief row tile
+function createBeliefRowTile(rowKey, beliefs) {
+  const rowDiv = document.createElement('div');
+  const rowNumber = rowKey.split(' ')[1];
+  
+  // Define row themes and colors
+  const rowThemes = {
+    '1': { title: 'Self-Worth Beliefs', color: '#E74C3C', description: 'Core identity & value beliefs' },
+    '2': { title: 'Abundance Beliefs', color: '#F39C12', description: 'Money & success limitations' },
+    '3': { title: 'Relationship Beliefs', color: '#27AE60', description: 'Love & connection patterns' },
+    '4': { title: 'Personal Growth Beliefs', color: '#E67E22', description: 'Change & learning blocks' },
+    '5': { title: 'Health Beliefs', color: '#3498DB', description: 'Body & wellness patterns' },
+    '6': { title: 'Safety Beliefs', color: '#9B59B6', description: 'World & life security' }
+  };
+  
+  const theme = rowThemes[rowNumber] || { title: `Row ${rowNumber}`, color: '#8F5AFF', description: 'Various beliefs' };
+  
+  rowDiv.style.cssText = `
+    margin: 15px 0; 
+    padding: 20px; 
+    background: linear-gradient(135deg, ${theme.color}15, transparent);
+    border-radius: 12px; 
+    border-left: 5px solid ${theme.color};
+    cursor: pointer;
+    transition: all 0.3s ease;
+  `;
+  
+  rowDiv.addEventListener('mouseenter', () => {
+    rowDiv.style.transform = 'translateY(-2px)';
+    rowDiv.style.boxShadow = `0 8px 25px ${theme.color}30`;
+  });
+  
+  rowDiv.addEventListener('mouseleave', () => {
+    rowDiv.style.transform = 'translateY(0)';
+    rowDiv.style.boxShadow = 'none';
+  });
+  
+  rowDiv.innerHTML = `
+    <h4 style="color: ${theme.color}; margin: 0 0 8px 0; font-size: 16px;">
+      ${rowKey}: ${theme.title}
+    </h4>
+    <p style="font-size: 12px; color: #666; margin: 5px 0 15px 0; font-style: italic;">
+      ${theme.description}
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px;">
+      ${beliefs.map((belief, index) => `
+        <div class="belief-tile" 
+             style="background: white; padding: 8px; border-radius: 6px; text-align: center; 
+                    border: 1px solid ${theme.color}40; cursor: pointer; transition: all 0.2s ease;"
+             data-belief="${belief.belief}"
+             data-color="${belief.color}"
+             data-category="${belief.category}"
+             data-vibrational-level="${belief.vibrationalLevel}"
+             data-chakra-area="${belief.chakraArea}"
+             data-healing-support="${belief.healingSupport}">
+          <div style="font-size: 11px; font-weight: bold; color: ${theme.color}; margin-bottom: 4px; line-height: 1.2;">
+            ${belief.belief}
+          </div>
+          <div style="font-size: 9px; color: #888;">
+            ${belief.vibrationalLevel}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  
+  return rowDiv;
+}
+
+// Function to setup belief tile event listeners
+function setupBeliefTileEventListeners() {
+  const beliefTiles = document.querySelectorAll('.belief-tile');
+  
+  beliefTiles.forEach(tile => {
+    tile.addEventListener('click', function() {
+      handleBeliefSelection(this);
+    });
+    
+    tile.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.05)';
+      this.style.background = '#f8f9fa';
+    });
+    
+    tile.addEventListener('mouseleave', function() {
+      this.style.transform = 'scale(1)';
+      this.style.background = 'white';
+    });
+  });
+}
+
+// Function to handle belief selection
+function handleBeliefSelection(tile) {
+  const belief = tile.dataset.belief;
+  const color = tile.dataset.color;
+  const category = tile.dataset.category;
+  const vibrationalLevel = tile.dataset.vibrationalLevel;
+  const chakraArea = tile.dataset.chakraArea;
+  const healingSupport = tile.dataset.healingSupport;
+  
+  // Record usage
+  recordBeliefDecoderUsage(belief).then(() => {
+    showBeliefHealing({
+      belief,
+      color,
+      category,
+      vibrationalLevel,
+      chakraArea,
+      healingSupport
+    });
+  }).catch(error => {
+    console.error('Error recording usage:', error);
+    // Still show healing even if recording fails
+    showBeliefHealing({
+      belief,
+      color,
+      category,
+      vibrationalLevel,
+      chakraArea,
+      healingSupport
+    });
+  });
+}
+
+// Function to show belief healing process
+function showBeliefHealing(beliefInfo) {
+  const healingDiv = document.getElementById('healing-process');
+  if (!healingDiv) return;
+  
+  healingDiv.style.display = 'block';
+  healingDiv.innerHTML = `
+    <div style="background: linear-gradient(135deg, #8ED6B720, #EAD3FF20); padding: 30px; border-radius: 15px; margin: 20px 0;">
+      <h3 style="color: #8F5AFF; text-align: center; margin-bottom: 20px;">🌟 Belief Transformation Protocol</h3>
+      
+      <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #8ED6B7; margin-bottom: 20px;">
+        <h4 style="color: #8ED6B7; margin-bottom: 15px;">🎯 Identified Limiting Belief</h4>
+        <div style="font-size: 18px; font-weight: bold; color: #8F5AFF; margin-bottom: 10px;">
+          "${beliefInfo.belief}"
+        </div>
+        <div style="margin-bottom: 10px;">
+          <strong>Category:</strong> ${beliefInfo.category}
+        </div>
+        <div style="margin-bottom: 10px;">
+          <strong>Vibrational Level:</strong> ${beliefInfo.vibrationalLevel}
+        </div>
+        <div style="margin-bottom: 10px;">
+          <strong>Chakra Area:</strong> ${beliefInfo.chakraArea}
+        </div>
+        <div style="margin-bottom: 10px;">
+          <strong>SoulArt Color:</strong> <span style="color: ${beliefInfo.color}; font-weight: bold;">${beliefInfo.color}</span>
+        </div>
+      </div>
+      
+      <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #FF914D; margin-bottom: 20px;">
+        <h4 style="color: #FF914D; margin-bottom: 15px;">✨ 5-Step Belief Transformation</h4>
+        <div style="margin-bottom: 15px;">
+          <strong>Step 1:</strong> Place your hand on your ${beliefInfo.chakraArea} area
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Step 2:</strong> Breathe deeply while visualizing ${beliefInfo.color} transformative light
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Step 3:</strong> Say aloud: "I release the belief that ${beliefInfo.belief.toLowerCase()}"
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Step 4:</strong> Replace with: "I now choose empowering beliefs that serve my highest good"
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Step 5:</strong> Feel gratitude for your new empowering truth
+        </div>
+      </div>
+      
+      <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #8F5AFF;">
+        <h4 style="color: #8F5AFF; margin-bottom: 15px;">💫 Additional Transformation Support</h4>
+        <p style="font-style: italic; color: #666; line-height: 1.6;">
+          ${beliefInfo.healingSupport}
+        </p>
+      </div>
+      
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="navigate('belief-decoder')" style="background: #8ED6B7; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
+          Transform Another Belief
+        </button>
+        <button onclick="navigate('membership')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
+          View Dashboard
+        </button>
+      </div>
+    </div>
+  `;
+  
+  // Scroll to healing process
+  healingDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // Search function removed - replaced with tile-based Kinesiology identification
@@ -784,6 +1532,122 @@ async function recordEmotionDecoderUsage(emotion) {
   }
 }
 
+// Function to check allergy identifier access and usage
+async function checkAllergyIdentifierAccess() {
+  try {
+    const response = await fetch('/api/allergy-identifier/can-use');
+    
+    if (response.status === 401) {
+      return { needsAuth: true, canUse: false, usageCount: 0, isSubscribed: false };
+    }
+    
+    if (!response.ok) {
+      throw new Error('Failed to check access');
+    }
+    
+    const data = await response.json();
+    return {
+      needsAuth: false,
+      needsSubscription: !data.canUse,
+      canUse: data.canUse,
+      usageCount: data.usageCount,
+      isSubscribed: data.isSubscribed
+    };
+  } catch (error) {
+    console.error('Error checking access:', error);
+    throw error;
+  }
+}
+
+// Function to record allergy identifier usage
+async function recordAllergyIdentifierUsage(allergen) {
+  try {
+    const response = await fetch('/api/allergy-identifier/use', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ allergen })
+    });
+    
+    if (response.status === 403) {
+      const data = await response.json();
+      if (data.needsSubscription) {
+        // Redirect to subscription page
+        navigate('allergy-identifier');
+        return;
+      }
+    }
+    
+    if (!response.ok) {
+      throw new Error('Failed to record usage');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error recording usage:', error);
+    throw error;
+  }
+}
+
+// Function to check belief decoder access and usage
+async function checkBeliefDecoderAccess() {
+  try {
+    const response = await fetch('/api/belief-decoder/can-use');
+    
+    if (response.status === 401) {
+      return { needsAuth: true, canUse: false, usageCount: 0, isSubscribed: false };
+    }
+    
+    if (!response.ok) {
+      throw new Error('Failed to check access');
+    }
+    
+    const data = await response.json();
+    return {
+      needsAuth: false,
+      needsSubscription: !data.canUse,
+      canUse: data.canUse,
+      usageCount: data.usageCount,
+      isSubscribed: data.isSubscribed
+    };
+  } catch (error) {
+    console.error('Error checking access:', error);
+    throw error;
+  }
+}
+
+// Function to record belief decoder usage
+async function recordBeliefDecoderUsage(belief) {
+  try {
+    const response = await fetch('/api/belief-decoder/use', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ belief })
+    });
+    
+    if (response.status === 403) {
+      const data = await response.json();
+      if (data.needsSubscription) {
+        // Redirect to subscription page
+        navigate('belief-decoder');
+        return;
+      }
+    }
+    
+    if (!response.ok) {
+      throw new Error('Failed to record usage');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error recording usage:', error);
+    throw error;
+  }
+}
+
 // Function to subscribe to unlimited access
 async function subscribeToUnlimited() {
   try {
@@ -956,9 +1820,16 @@ async function checkAuthAndLoadMembership() {
     
     const user = await response.json();
     
-    // Fetch usage statistics
+    // Fetch usage statistics for all tools
     const usageResponse = await fetch('/api/usage/stats');
-    let usageStats = { usage: 0, isSubscribed: false, history: [] };
+    let usageStats = { 
+      usage: 0, 
+      isSubscribed: false, 
+      history: [],
+      emotionUsage: 0,
+      allergyUsage: 0,
+      beliefUsage: 0
+    };
     
     if (usageResponse.ok) {
       usageStats = await usageResponse.json();
@@ -996,6 +1867,15 @@ async function checkAuthAndLoadMembership() {
             <strong>Total Sessions:</strong> ${usageStats.usage}
           </div>
           <div style="margin-bottom: 10px;">
+            <strong>Emotion Sessions:</strong> ${usageStats.emotionUsage || 0}
+          </div>
+          <div style="margin-bottom: 10px;">
+            <strong>Allergy Sessions:</strong> ${usageStats.allergyUsage || 0}
+          </div>
+          <div style="margin-bottom: 10px;">
+            <strong>Belief Sessions:</strong> ${usageStats.beliefUsage || 0}
+          </div>
+          <div style="margin-bottom: 10px;">
             <strong>This Month:</strong> ${usageStats.history ? usageStats.history.length : 0}
           </div>
           ${usageStats.isSubscribed ? 
@@ -1017,19 +1897,32 @@ async function checkAuthAndLoadMembership() {
       
       <!-- Quick Actions -->
       <div style="background: white; padding: 25px; border-radius: 15px; border: 2px solid #8F5AFF20; margin: 20px 0;">
-        <h3 style="color: #8F5AFF; margin-bottom: 20px;">Quick Actions</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+        <h3 style="color: #8F5AFF; margin-bottom: 20px;">Healing Tools Dashboard</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
           <button onclick="navigate('emotion-decoder')" style="background: linear-gradient(135deg, #8F5AFF, #B785FF); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
             <div style="font-weight: bold; margin-bottom: 5px;">🎯 Emotion Decoder</div>
             <div style="font-size: 12px; opacity: 0.9;">Release trapped emotions</div>
+            <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${usageStats.emotionUsage || 0} sessions completed</div>
           </button>
-          <button onclick="navigate('journal')" style="background: linear-gradient(135deg, #8ED6B7, #B0E5D1); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
+          <button onclick="navigate('allergy-identifier')" style="background: linear-gradient(135deg, #8ED6B7, #B0E5D1); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
+            <div style="font-weight: bold; margin-bottom: 5px;">🌿 Allergy Identifier</div>
+            <div style="font-size: 12px; opacity: 0.9;">Identify & heal allergens</div>
+            <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${usageStats.allergyUsage || 0} sessions completed</div>
+          </button>
+          <button onclick="navigate('belief-decoder')" style="background: linear-gradient(135deg, #FF914D, #FFAD70); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
+            <div style="font-weight: bold; margin-bottom: 5px;">⭐ Belief Decoder</div>
+            <div style="font-size: 12px; opacity: 0.9;">Transform limiting beliefs</div>
+            <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${usageStats.beliefUsage || 0} sessions completed</div>
+          </button>
+          <button onclick="navigate('journal')" style="background: linear-gradient(135deg, #85C9F2, #B3D9FF); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
             <div style="font-weight: bold; margin-bottom: 5px;">📖 Journal</div>
             <div style="font-size: 12px; opacity: 0.9;">Track your progress</div>
+            <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">Sacred reflections</div>
           </button>
-          <button onclick="navigate('card')" style="background: linear-gradient(135deg, #FF914D, #FFAD70); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
+          <button onclick="navigate('card')" style="background: linear-gradient(135deg, #EAD3FF, #F0E5FF); color: #8F5AFF; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
             <div style="font-weight: bold; margin-bottom: 5px;">🌟 Soul Card</div>
             <div style="font-size: 12px; opacity: 0.9;">Discover your essence</div>
+            <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">Daily guidance</div>
           </button>
         </div>
       </div>
