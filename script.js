@@ -99,8 +99,131 @@ function navigate(page) {
         </p>
         <button onclick="navigate('home')">Return to Home</button>
       `;
+    } else if (page === 'emotion-decoder') {
+      main.innerHTML = `
+        <h2>🌈 Sacred Emotion Decoder</h2>
+        <p>Discover the vibrational frequency of your emotions and find your healing path.</p>
+        
+        <div style="margin: 20px 0;">
+          <input type="text" id="emotion-search" placeholder="Search for an emotion..." 
+                 style="padding: 12px; width: 300px; border-radius: 8px; border: 2px solid var(--chakra-heart);" 
+                 onkeyup="searchEmotions()">
+        </div>
+        
+        <div id="emotion-results" style="margin-top: 20px;">
+          <div style="text-align: center; color: var(--chakra-third-eye); font-style: italic;">
+            Enter an emotion above to discover its sacred healing pathway
+          </div>
+        </div>
+        
+        <div style="margin-top: 30px; font-size: 0.9em; color: var(--chakra-third-eye);">
+          <strong>Available emotions:</strong> Abandonment, Anger, Anxiety, Bitterness, Blame, and more...
+        </div>
+      `;
+      loadEmotionData();
     }
 
     main.style.opacity = 1;
   }, 200);
+}
+
+// Global variable to store emotion data
+let emotionData = [];
+
+// Function to load and parse emotion data from CSV
+async function loadEmotionData() {
+  try {
+    const response = await fetch('emotion_decoder_data.csv');
+    const csvText = await response.text();
+    
+    // Parse CSV data
+    const lines = csvText.split('\n');
+    const headers = lines[0].split(',');
+    
+    emotionData = [];
+    for (let i = 1; i < lines.length; i++) {
+      if (lines[i].trim()) {
+        const values = lines[i].split(',');
+        if (values.length >= 6) {
+          emotionData.push({
+            emotion: values[0],
+            frequency: values[1],
+            chakra: values[2],
+            bodyArea: values[3],
+            colour: values[4],
+            releaseMethod: values[5]
+          });
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error loading emotion data:', error);
+  }
+}
+
+// Function to search emotions
+function searchEmotions() {
+  const searchTerm = document.getElementById('emotion-search').value.toLowerCase();
+  const resultsDiv = document.getElementById('emotion-results');
+  
+  if (!searchTerm) {
+    resultsDiv.innerHTML = `
+      <div style="text-align: center; color: var(--chakra-third-eye); font-style: italic;">
+        Enter an emotion above to discover its sacred healing pathway
+      </div>
+    `;
+    return;
+  }
+  
+  // Find matching emotions
+  const matches = emotionData.filter(emotion => 
+    emotion.emotion.toLowerCase().includes(searchTerm)
+  );
+  
+  if (matches.length === 0) {
+    resultsDiv.innerHTML = `
+      <div style="text-align: center; color: var(--chakra-sacral);">
+        No matches found for "${searchTerm}". Try searching for emotions like "anger", "anxiety", or "joy".
+      </div>
+    `;
+    return;
+  }
+  
+  // Display results
+  let resultsHTML = '';
+  matches.forEach(emotion => {
+    const chakraColor = getChakraColor(emotion.chakra);
+    resultsHTML += `
+      <div style="background: linear-gradient(135deg, ${chakraColor}20, transparent); 
+                  border-left: 4px solid ${chakraColor}; 
+                  margin: 15px 0; padding: 20px; border-radius: 8px;">
+        <h3 style="margin: 0 0 10px 0; color: var(--chakra-third-eye);">${emotion.emotion}</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+          <div><strong>Frequency Level:</strong> ${emotion.frequency}</div>
+          <div><strong>Chakra:</strong> ${emotion.chakra}</div>
+          <div><strong>Body Area:</strong> ${emotion.bodyArea}</div>
+          <div><strong>Sacred Color:</strong> <span style="color: ${chakraColor};">●</span> ${emotion.colour}</div>
+        </div>
+        <div style="margin-top: 15px; padding: 10px; background: var(--chakra-crown)30; border-radius: 6px;">
+          <strong>🌿 Healing Method:</strong> ${emotion.releaseMethod}
+        </div>
+      </div>
+    `;
+  });
+  
+  resultsDiv.innerHTML = resultsHTML;
+}
+
+// Function to get chakra colors
+function getChakraColor(chakra) {
+  const chakraColors = {
+    'Root': 'var(--chakra-root)',
+    'Sacral': 'var(--chakra-sacral)', 
+    'Solar Plexus': 'var(--chakra-solar)',
+    'Heart': 'var(--chakra-heart)',
+    'Throat': 'var(--chakra-throat)',
+    'Third Eye': 'var(--chakra-third-eye)',
+    'Crown': 'var(--chakra-crown)'
+  };
+  return chakraColors[chakra] || 'var(--chakra-heart)';
 }
