@@ -1,6 +1,12 @@
 function navigate(page) {
   const main = document.getElementById('main-content');
   main.style.opacity = 0;
+  
+  // Clean up any existing chart before navigation
+  if (emotionChart) {
+    emotionChart.destroy();
+    emotionChart = null;
+  }
 
   setTimeout(() => {
     if (page === 'home') {
@@ -172,12 +178,12 @@ async function loadEmotionData() {
         const values = lines[i].split(',');
         if (values.length >= 6) {
           emotionData.push({
-            emotion: values[0],
+            emotion: values[0].trim(),
             frequency: parseInt(values[1]) || 0,
-            chakra: values[2],
-            bodyArea: values[3],
-            colour: values[4],
-            releaseMethod: values[5]
+            chakra: values[2].trim(),
+            bodyArea: values[3].trim(),
+            colour: values[4].trim(),
+            releaseMethod: values[5].trim()
           });
         }
       }
@@ -211,9 +217,11 @@ function searchEmotions() {
   );
   
   if (matches.length === 0) {
+    const safeSearchTerm = document.createElement('div');
+    safeSearchTerm.textContent = searchTerm;
     resultsDiv.innerHTML = `
       <div style="text-align: center; color: var(--chakra-sacral);">
-        No matches found for "${searchTerm}". Try searching for emotions like "anger", "anxiety", or "joy".
+        No matches found for "${safeSearchTerm.innerHTML}". Try searching for emotions like "anger", "anxiety", or "joy".
       </div>
     `;
     return;
@@ -340,11 +348,11 @@ function renderEmotionChart() {
       },
       onClick: function(event, elements) {
         if (elements.length > 0) {
-          const point = elements[0];
-          const emotion = point.element.$context.raw.emotion;
+          const {datasetIndex, index} = elements[0];
+          const rawData = emotionChart.data.datasets[datasetIndex].data[index];
           
           // Set the search box and trigger search
-          document.getElementById('emotion-search').value = emotion;
+          document.getElementById('emotion-search').value = rawData.emotion;
           searchEmotions();
         }
       }
