@@ -2,11 +2,7 @@ function navigate(page) {
   const main = document.getElementById('main-content');
   main.style.opacity = 0;
   
-  // Clean up any existing chart before navigation
-  if (emotionChart) {
-    emotionChart.destroy();
-    emotionChart = null;
-  }
+  // Navigation cleanup - no chart to destroy with tile layout
 
   setTimeout(() => {
     if (page === 'home') {
@@ -107,29 +103,40 @@ function navigate(page) {
       `;
     } else if (page === 'emotion-decoder') {
       main.innerHTML = `
-        <h2>🔮 Trapped Emotion Release Chart</h2>
-        <p>Identify and release trapped emotions using the sacred SoulArt healing process.</p>
+        <h2>🔮 Trapped Emotion Release Tiles</h2>
+        <p>Use muscle testing (Kinesiology) to identify which trapped emotion is ready for release today.</p>
         
-        <div style="margin: 20px 0;">
-          <input type="text" id="emotion-search" placeholder="Search for a trapped emotion..." 
-                 style="padding: 12px; width: 350px; border-radius: 8px; border: 2px solid #8F5AFF;" 
-                 onkeyup="searchEmotions()">
-        </div>
-        
-        <div style="margin: 20px 0; background: linear-gradient(135deg, #fef9f4, #EAD3FF20); 
-                    padding: 20px; border-radius: 12px; border: 2px solid #8F5AFF;">
-          <h3 style="margin: 0 0 15px 0; text-align: center; color: #8F5AFF;">
-            🌟 Trapped Emotion Identification Chart 🌟
-          </h3>
-          <p style="text-align: center; font-size: 0.9em; margin-bottom: 15px; color: #8F5AFF;">
-            Click on any trapped emotion to begin the healing process
+        <div style="text-align: center; margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px;">
+          <h3 style="color: #8F5AFF; margin-bottom: 15px;">🔮 Kinesiology Muscle Testing Guide 🔮</h3>
+          <p style="font-style: italic; color: #666; margin-bottom: 10px;">
+            Test each row systematically - your body knows which emotions need healing
           </p>
-          <canvas id="emotionChart" style="max-height: 450px; margin: 0 auto; display: block;"></canvas>
+          <p style="font-size: 14px; color: #8F5AFF;">
+            Once you identify the row, muscle test each emotion in that row to find the specific one
+          </p>
+        </div>
+
+        <div id="emotion-tiles-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+          <!-- Column 1: Rows 1-3 -->
+          <div id="column-1" style="background: linear-gradient(135deg, #8ED6B710, transparent); padding: 20px; border-radius: 15px;">
+            <h3 style="text-align: center; color: #8ED6B7; margin-bottom: 20px; font-size: 18px;">
+              ✨ Foundation & Heart Rows ✨
+            </h3>
+            <div id="rows-1-3"></div>
+          </div>
+
+          <!-- Column 2: Rows 4-6 -->  
+          <div id="column-2" style="background: linear-gradient(135deg, #EAD3FF10, transparent); padding: 20px; border-radius: 15px;">
+            <h3 style="text-align: center; color: #8F5AFF; margin-bottom: 20px; font-size: 18px;">
+              🔥 Expression & Wisdom Rows 🔥
+            </h3>
+            <div id="rows-4-6"></div>
+          </div>
         </div>
         
         <div id="emotion-results" style="margin-top: 20px;">
           <div style="text-align: center; color: #8F5AFF; font-style: italic;">
-            Click on a trapped emotion above to begin your healing journey
+            Click on a trapped emotion tile above to begin your healing journey
           </div>
         </div>
         
@@ -137,16 +144,18 @@ function navigate(page) {
           <!-- Healing process will be inserted here -->
         </div>
       `;
-      loadEmotionData();
+      // Load emotion data and render tiles
+      loadEmotionData().then(() => {
+        renderEmotionTiles();
+      });
     }
 
     main.style.opacity = 1;
   }, 200);
 }
 
-// Global variables to store emotion data and chart
+// Global variables to store emotion data
 let emotionData = [];
-let emotionChart = null;
 
 // Define chakra order and colors
 const CHAKRA_CONFIG = {
@@ -189,189 +198,163 @@ async function loadEmotionData() {
       }
     }
     
-    // After loading data, render the chart
-    setTimeout(renderEmotionChart, 100);
+    // Data loaded successfully for tile rendering
     
   } catch (error) {
     console.error('Error loading emotion data:', error);
   }
 }
 
-// Function to search emotions
-function searchEmotions() {
-  const searchTerm = document.getElementById('emotion-search').value.toLowerCase();
-  const resultsDiv = document.getElementById('emotion-results');
+// Search function removed - replaced with tile-based Kinesiology identification
+
+// Function to render emotion tiles in two columns  
+function renderEmotionTiles() {
+  if (!emotionData || emotionData.length === 0) return;
   
-  if (!searchTerm) {
-    resultsDiv.innerHTML = `
-      <div style="text-align: center; color: #8F5AFF; font-style: italic;">
-        Click on a trapped emotion above to begin your healing journey
-      </div>
-    `;
-    return;
-  }
+  // Group emotions by row
+  const rows = {
+    'Row 1': [],
+    'Row 2': [], 
+    'Row 3': [],
+    'Row 4': [],
+    'Row 5': [],
+    'Row 6': []
+  };
   
-  // Find matching emotions
-  const matches = emotionData.filter(emotion => 
-    emotion.emotion.toLowerCase().includes(searchTerm)
-  );
-  
-  if (matches.length === 0) {
-    const safeSearchTerm = document.createElement('div');
-    safeSearchTerm.textContent = searchTerm;
-    resultsDiv.innerHTML = `
-      <div style="text-align: center; color: #FF914D;">
-        No trapped emotions found for "${safeSearchTerm.innerHTML}". Try searching for emotions like "shame", "fear", or "grief".
-      </div>
-    `;
-    return;
-  }
-  
-  // Display search results with healing buttons
-  let resultsHTML = '';
-  matches.forEach(emotion => {
-    const primaryChakra = emotion.chakraBodyArea.split('–')[0].trim();
-    const chakraKey = CHAKRA_CONFIG.order.find(chakra => primaryChakra.includes(chakra)) || 'Heart';
-    const chakraColor = CHAKRA_CONFIG.colors[chakraKey];
-    
-    resultsHTML += `
-      <div style="background: linear-gradient(135deg, ${chakraColor}20, transparent); 
-                  border-left: 4px solid ${chakraColor}; 
-                  margin: 15px 0; padding: 20px; border-radius: 8px; cursor: pointer;"
-           onclick="startHealingProcess({
-             emotion: '${emotion.emotion}',
-             frequency: ${emotion.frequency},
-             chakraBodyArea: '${emotion.chakraBodyArea}',
-             soulArtColor: '${emotion.soulArtColor}',
-             additionalSupport: '${emotion.additionalSupport}'
-           })">
-        <h3 style="margin: 0 0 10px 0; color: #8F5AFF;">🔮 ${emotion.emotion}</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-          <div><strong>Frequency:</strong> ${emotion.frequency} (Hawkins Scale)</div>
-          <div><strong>Location:</strong> ${emotion.chakraBodyArea}</div>
-          <div><strong>SoulArt Color:</strong> ${emotion.soulArtColor}</div>
-        </div>
-        <div style="margin-top: 15px; padding: 10px; background: #EAD3FF30; border-radius: 6px;">
-          <strong>🌿 Additional Support:</strong> ${emotion.additionalSupport}
-        </div>
-        <div style="margin-top: 10px; text-align: center; color: #8F5AFF; font-weight: bold;">
-          ✨ Click to Begin Healing Process ✨
-        </div>
-      </div>
-    `;
+  // Organize emotions into rows
+  emotionData.forEach(emotion => {
+    const rowKey = emotion.row; // This should be 'Row 1', 'Row 2', etc.
+    if (rows[rowKey]) {
+      rows[rowKey].push(emotion);
+    }
   });
   
-  resultsDiv.innerHTML = resultsHTML;
+  // Render Column 1 (Rows 1-3)
+  const column1 = document.getElementById('rows-1-3');
+  const column2 = document.getElementById('rows-4-6');
+  
+  if (column1) {
+    column1.innerHTML = '';
+    ['Row 1', 'Row 2', 'Row 3'].forEach(rowKey => {
+      if (rows[rowKey].length > 0) {
+        column1.appendChild(createRowTile(rowKey, rows[rowKey]));
+      }
+    });
+  }
+  
+  // Render Column 2 (Rows 4-6)
+  if (column2) {
+    column2.innerHTML = '';
+    ['Row 4', 'Row 5', 'Row 6'].forEach(rowKey => {
+      if (rows[rowKey].length > 0) {
+        column2.appendChild(createRowTile(rowKey, rows[rowKey]));
+      }
+    });
+  }
+  
+  // Setup safe event listeners after tiles are rendered
+  setTimeout(setupTileEventListeners, 100);
 }
 
-// Function to render the emotion chart
-function renderEmotionChart() {
-  const canvas = document.getElementById('emotionChart');
-  if (!canvas || emotionData.length === 0) return;
+// Function to create a row tile
+function createRowTile(rowKey, emotions) {
+  const rowDiv = document.createElement('div');
+  const rowNumber = rowKey.split(' ')[1];
   
-  // Destroy existing chart if it exists
-  if (emotionChart) {
-    emotionChart.destroy();
-  }
+  // Determine row theme and colors
+  const rowThemes = {
+    '1': { title: 'Foundation Emotions', color: '#E74C3C', description: 'Root chakra - Shame, guilt, unworthiness' },
+    '2': { title: 'Fear-Based Emotions', color: '#F39C12', description: 'Solar Plexus - Fear, panic, worry' },
+    '3': { title: 'Heart Emotions', color: '#27AE60', description: 'Heart chakra - Grief, loss, loneliness' },
+    '4': { title: 'Anger Emotions', color: '#E67E22', description: 'Liver/Fire - Anger, rage, resentment' },
+    '5': { title: 'Communication Emotions', color: '#3498DB', description: 'Throat/Heart - Rejection, betrayal' },
+    '6': { title: 'Higher Mind Emotions', color: '#9B59B6', description: 'Crown/Third Eye - Doubt, confusion' }
+  };
   
-  // Prepare data for chart - group by row/frequency level
-  const rowGroups = [...new Set(emotionData.map(e => e.row))];
-  const datasets = rowGroups.map((rowGroup, groupIndex) => {
-    const rowEmotions = emotionData.filter(emotion => emotion.row === rowGroup);
-    
-    // Get chakra from first emotion in group for coloring
-    const primaryChakra = rowEmotions[0]?.chakraBodyArea.split('–')[0].trim() || 'Heart';
-    const chakraKey = CHAKRA_CONFIG.order.find(chakra => primaryChakra.includes(chakra)) || 'Heart';
-    
-    return {
-      label: `${rowGroup} (${primaryChakra})`,
-      data: rowEmotions.map((emotion, index) => ({
-        x: emotion.frequency,
-        y: groupIndex + (index * 0.15) - (rowEmotions.length * 0.075), // Spread emotions in group
-        emotion: emotion.emotion,
-        chakraBodyArea: emotion.chakraBodyArea,
-        soulArtColor: emotion.soulArtColor,
-        additionalSupport: emotion.additionalSupport,
-        frequency: emotion.frequency
-      })),
-      backgroundColor: CHAKRA_CONFIG.colors[chakraKey] + '80',
-      borderColor: CHAKRA_CONFIG.colors[chakraKey],
-      borderWidth: 2,
-      pointRadius: 10,
-      pointHoverRadius: 14
-    };
+  const theme = rowThemes[rowNumber] || { title: `Row ${rowNumber}`, color: '#8F5AFF', description: 'Various emotions' };
+  
+  rowDiv.style.cssText = `
+    margin: 15px 0; 
+    padding: 20px; 
+    background: linear-gradient(135deg, ${theme.color}15, transparent);
+    border-radius: 12px; 
+    border-left: 5px solid ${theme.color};
+    cursor: pointer;
+    transition: all 0.3s ease;
+  `;
+  
+  rowDiv.addEventListener('mouseenter', () => {
+    rowDiv.style.transform = 'translateY(-2px)';
+    rowDiv.style.boxShadow = `0 8px 25px ${theme.color}30`;
   });
   
-  const ctx = canvas.getContext('2d');
-  emotionChart = new Chart(ctx, {
-    type: 'scatter',
-    data: { datasets },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        title: {
-          display: false
-        },
-        legend: {
-          display: true,
-          position: 'right',
-          labels: {
-            usePointStyle: true,
-            font: { size: 12 }
-          }
-        },
-        tooltip: {
-          callbacks: {
-            title: function(tooltipItems) {
-              const point = tooltipItems[0];
-              return `Trapped Emotion: ${point.raw.emotion}`;
-            },
-            label: function(tooltipItem) {
-              const point = tooltipItem.raw;
-              return [
-                `Frequency: ${point.frequency} (Hawkins Scale)`,
-                `Location: ${point.chakraBodyArea}`,
-                `SoulArt Color: ${point.soulArtColor}`
-              ];
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Frequency Level',
-            font: { size: 14, weight: 'bold' }
-          },
-          min: 0,
-          max: 200
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Emotion Groups',
-            font: { size: 14, weight: 'bold' }
-          },
-          ticks: {
-            callback: function(value, index) {
-              const rowGroups = [...new Set(emotionData.map(e => e.row))];
-              return rowGroups[Math.round(value)] || '';
-            }
-          }
-        }
-      },
-      onClick: function(event, elements) {
-        if (elements.length > 0) {
-          const {datasetIndex, index} = elements[0];
-          const rawData = emotionChart.data.datasets[datasetIndex].data[index];
-          
-          // Start the healing process for this trapped emotion
-          startHealingProcess(rawData);
-        }
-      }
-    }
+  rowDiv.addEventListener('mouseleave', () => {
+    rowDiv.style.transform = 'translateY(0)';
+    rowDiv.style.boxShadow = 'none';
+  });
+  
+  rowDiv.innerHTML = `
+    <h4 style="color: ${theme.color}; margin: 0 0 8px 0; font-size: 16px;">
+      🔮 ${rowKey}: ${theme.title}
+    </h4>
+    <p style="font-size: 12px; color: #666; margin: 5px 0 15px 0; font-style: italic;">
+      ${theme.description}
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px;">
+      ${emotions.map((emotion, index) => `
+        <div class="emotion-tile" 
+             style="background: white; padding: 8px; border-radius: 6px; text-align: center; 
+                    border: 1px solid ${theme.color}40; cursor: pointer; transition: all 0.2s ease;"
+             data-emotion="${emotion.emotion}"
+             data-frequency="${emotion.frequency}"
+             data-chakra-body-area="${emotion.chakraBodyArea}"
+             data-soul-art-color="${emotion.soulArtColor}"
+             data-additional-support="${emotion.additionalSupport}"
+             data-tile-color="${theme.color}">
+          <div style="font-size: 11px; font-weight: bold; color: ${theme.color};">
+            ${emotion.emotion}
+          </div>
+          <div style="font-size: 9px; color: #888; margin-top: 2px;">
+            ${emotion.frequency} Hz
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="text-align: center; margin-top: 12px; font-size: 11px; color: ${theme.color}; font-weight: bold;">
+      Click any emotion to begin healing
+    </div>
+  `;
+  
+  return rowDiv;
+}
+
+// Function to setup safe event listeners for emotion tiles
+function setupTileEventListeners() {
+  // Add click handlers to all emotion tiles
+  document.querySelectorAll('.emotion-tile').forEach(tile => {
+    // Add hover effects
+    const tileColor = tile.getAttribute('data-tile-color');
+    tile.addEventListener('mouseenter', () => {
+      tile.style.backgroundColor = tileColor + '10';
+      tile.style.borderColor = tileColor;
+    });
+    
+    tile.addEventListener('mouseleave', () => {
+      tile.style.backgroundColor = 'white';
+      tile.style.borderColor = tileColor + '40';
+    });
+    
+    // Add click handler
+    tile.addEventListener('click', () => {
+      const emotionData = {
+        emotion: tile.getAttribute('data-emotion'),
+        frequency: parseInt(tile.getAttribute('data-frequency')),
+        chakraBodyArea: tile.getAttribute('data-chakra-body-area'),
+        soulArtColor: tile.getAttribute('data-soul-art-color'),
+        additionalSupport: tile.getAttribute('data-additional-support')
+      };
+      startHealingProcess(emotionData);
+    });
   });
 }
 
@@ -431,6 +414,20 @@ function startHealingProcess(emotionData) {
       <!-- Step 2: Magnet Release -->
       <div id="step-2" class="healing-step" style="display: none;">
         <h3 style="color: #8F5AFF;">Step 2: Central Meridian Release 🧲</h3>
+        
+        <div style="background: #EAD3FF20; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: center;">
+          <p style="font-weight: bold; color: #8F5AFF; margin-bottom: 15px;">
+            📹 Watch the Meridian Release Swipe Video for proper technique
+          </p>
+          <video controls style="max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px;">
+            <source src="Meridian release swipe Use a magnet for enhancement If no magnet, use tips of fingers.mp4" type="video/mp4">
+            Your browser does not support the video element. Please use the uploaded meridian release swipe video file.
+          </video>
+          <p style="font-size: 12px; color: #666; font-style: italic;">
+            Shows the exact swiping motion and hand placement for optimal energy release
+          </p>
+        </div>
+        
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center;">
           <div>
             <p><strong>Using a magnet, swipe 3 times down your central meridian:</strong></p>
@@ -441,6 +438,9 @@ function startHealingProcess(emotionData) {
             </ol>
             <p style="font-style: italic; color: ${chakraColor};">
               "With each swipe, I release ${emotionData.emotion} from my being."
+            </p>
+            <p style="font-size: 12px; color: #8F5AFF;">
+              💡 Follow the exact technique shown in the Meridian release swipe video
             </p>
           </div>
           <div style="text-align: center; background: #f0f0f0; padding: 20px; border-radius: 10px;">
@@ -565,7 +565,7 @@ function completeHealing() {
       <button onclick="returnToChart()" style="background: white; color: #8F5AFF; 
                      padding: 15px 30px; border: none; border-radius: 8px; 
                      cursor: pointer; font-size: 16px; margin-top: 20px; font-weight: bold;">
-        🔮 Return to Emotion Chart 🔮
+        🔮 Return to Emotion Tiles 🔮
       </button>
     </div>
   `;
@@ -584,6 +584,6 @@ function returnToChart() {
     </div>
   `;
   
-  // Clear search box
-  document.getElementById('emotion-search').value = '';
+  // Return to emotion decoder page
+  navigate('emotion-decoder');
 }
