@@ -682,7 +682,8 @@ function createAllergyRowTile(rowKey, allergies) {
       ${allergies.map((allergy, index) => `
         <div class="allergy-tile" 
              style="background: white; padding: 8px; border-radius: 6px; text-align: center; 
-                    border: 1px solid ${theme.color}40; cursor: pointer; transition: all 0.2s ease;"
+                    border: 1px solid ${theme.color}40; cursor: pointer; transition: all 0.2s ease;
+                    word-wrap: break-word; overflow-wrap: break-word; hyphens: auto;"
              data-allergen="${allergy.allergen}"
              data-color="${allergy.color}"
              data-category="${allergy.category}"
