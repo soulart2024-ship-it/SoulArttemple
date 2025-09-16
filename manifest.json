@@ -1,0 +1,27 @@
+{
+  "name": "SoulArt Temple - Sacred Digital Healing Space",
+  "short_name": "SoulArt Temple",
+  "description": "Your sacred digital space to heal, harmonise, and embody your highest truth through oracle cards, healing tools, and spiritual guidance.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F6F3EC",
+  "theme_color": "#C9A24F",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["health", "lifestyle", "productivity", "meditation"],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

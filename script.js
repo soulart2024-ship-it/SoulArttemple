@@ -1,3 +1,89 @@
+// PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('SoulArt Temple PWA: Service Worker registered successfully', registration.scope);
+        
+        // Listen for updates
+        registration.addEventListener('updatefound', () => {
+          console.log('SoulArt Temple PWA: New version available');
+        });
+      })
+      .catch((error) => {
+        console.log('SoulArt Temple PWA: Service Worker registration failed', error);
+      });
+  });
+
+  // Listen for app updates
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    console.log('SoulArt Temple PWA: App updated, new version active');
+    // Optionally show user a notification about the update
+  });
+}
+
+// PWA Install Prompt Handler
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('SoulArt Temple PWA: Install prompt triggered');
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallButton();
+});
+
+function showInstallButton() {
+  // Create install button dynamically if needed
+  const installBtn = document.createElement('button');
+  installBtn.textContent = '📱 Install SoulArt Temple App';
+  installBtn.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--color-primary);
+    color: var(--color-secondary);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-family: var(--font-body);
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+  `;
+  
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log('SoulArt Temple PWA: Install prompt result:', outcome);
+      deferredPrompt = null;
+      installBtn.remove();
+    }
+  });
+
+  installBtn.addEventListener('mouseenter', () => {
+    installBtn.style.transform = 'scale(1.05)';
+    installBtn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
+  });
+
+  installBtn.addEventListener('mouseleave', () => {
+    installBtn.style.transform = 'scale(1)';
+    installBtn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+  });
+
+  document.body.appendChild(installBtn);
+  
+  // Auto-hide after 10 seconds
+  setTimeout(() => {
+    if (installBtn.parentNode) {
+      installBtn.style.opacity = '0';
+      setTimeout(() => installBtn.remove(), 300);
+    }
+  }, 10000);
+}
+
 // Dropdown menu functionality
 function toggleDropdown(event) {
   event.preventDefault();
