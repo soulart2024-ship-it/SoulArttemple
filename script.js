@@ -550,12 +550,12 @@ function navigate(page) {
         main.innerHTML = `
           <h2>Trapped Emotion Release Tiles</h2>
           <div style="text-align: center; padding: 40px; background: #FFE6E6; border-radius: 15px; margin: 20px 0;">
-            <h3 style="color: #FF6B6B; margin-bottom: 15px;">Connection Error</h3>
+            <h3 style="color: #FF6B6B; margin-bottom: 15px;">Sign In Required</h3>
             <p style="margin-bottom: 20px; color: #666;">
-              Unable to connect to the server. Please try again.
+              Please sign in to access the Emotion Decoder and track your healing journey.
             </p>
-            <button onclick="navigate('home')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
-              Return Home
+            <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+              Sign In to Continue
             </button>
           </div>
         `;
@@ -2112,10 +2112,13 @@ async function checkAuthAndLoadMembership() {
     main.innerHTML = `
       <h2>Membership Dashboard</h2>
       <div style="text-align: center; padding: 40px; background: #FFE6E6; border-radius: 15px; margin: 20px 0;">
-        <h3 style="color: #FF6B6B; margin-bottom: 15px;">Connection Error</h3>
+        <h3 style="color: #FF6B6B; margin-bottom: 15px;">Sign In Required</h3>
         <p style="margin-bottom: 20px; color: #666;">
-          Unable to load your membership dashboard. Please try again.
+          Please sign in to access your membership dashboard and healing tools.
         </p>
+        <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+          Sign In to Continue
+        </button>
         <button onclick="navigate('home')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
           Return Home
         </button>
