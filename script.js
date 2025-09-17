@@ -237,6 +237,8 @@ function navigate(page) {
       `;
       
       loadJournalEntries();
+    } else if (page === 'flowart') {
+      renderFlowArtModule();
     }else if (page === 'thankyou') {
       main.innerHTML = `
         <h2>Thank You, Beloved</h2>
@@ -3220,4 +3222,87 @@ function addTouchSupport(carousel) {
   
   // Set initial cursor
   carousel.style.cursor = 'grab';
+}
+
+// ===== FLOW ART THERAPY MODULE =====
+
+function renderFlowArtModule() {
+  const main = document.getElementById('main-content');
+
+  main.innerHTML = `
+    <div class="flow-art-container">
+      <h2>🎨 Flow Art Therapy</h2>
+      <p class="flow-art-subtitle">Welcome to your fluid creative space. Let the colors move your emotions and bring you into stillness.</p>
+      <p style="font-style: italic; color: var(--chakra-heart); margin-bottom: 30px;">
+        "Through art, we give form to our formless feelings and find peace in creative expression."
+      </p>
+
+      <div class="flow-art-actions" style="margin: 30px 0;">
+        <button onclick="showSampleArt()" class="btn-primary" style="margin-right: 15px;">
+          ✨ View Sample SoulArt Canvas
+        </button>
+        <button onclick="launchArtCreator()" class="btn-secondary">
+          🎨 Create My Flow Art
+        </button>
+      </div>
+
+      <div id="flow-art-area" class="flow-art-display"></div>
+    </div>
+  `;
+}
+
+function showSampleArt() {
+  const container = document.getElementById('flow-art-area');
+  container.innerHTML = `
+    <div style="background: linear-gradient(135deg, var(--chakra-crown), var(--chakra-throat)); padding: 30px; border-radius: 15px; margin-top: 20px; text-align: center;">
+      <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+        <div style="width: 100%; height: 200px; background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FECA57, #FF9FF3); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <p style="color: white; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.3); font-size: 18px;">
+            🌈 Sample Flowing Colors
+          </p>
+        </div>
+      </div>
+      <p style="color: white; font-style: italic; margin: 0;">
+        "Let your emotions speak in color. Each hue carries the vibration of your soul's truth."
+      </p>
+      <button onclick="launchArtCreator()" class="btn-primary" style="margin-top: 20px; background: white; color: var(--chakra-crown);">
+        🎨 Create My Own
+      </button>
+    </div>
+  `;
+}
+
+function launchArtCreator() {
+  const container = document.getElementById('flow-art-area');
+  container.innerHTML = `
+    <div style="background: linear-gradient(135deg, var(--chakra-heart), var(--chakra-sacral)); padding: 40px; border-radius: 15px; margin-top: 20px; text-align: center; color: white;">
+      <h3 style="color: white; margin-bottom: 25px;">🎨 Divine Creation Space Coming Soon</h3>
+      <p style="margin-bottom: 20px; line-height: 1.6;">
+        This sacred feature will soon allow you to paint intuitively on your screen with vibrant chakra-based colors. 
+        Express your inner world through flowing digital brushstrokes.
+      </p>
+      
+      <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 10px; margin: 25px 0;">
+        <h4 style="color: white; margin-bottom: 15px;">✨ Coming Features:</h4>
+        <ul style="text-align: left; color: white; max-width: 300px; margin: 0 auto;">
+          <li>🖌️ Intuitive digital canvas</li>
+          <li>🌈 Chakra-aligned color palette</li>
+          <li>💾 Save your sacred creations</li>
+          <li>🖨️ Print for your altar space</li>
+          <li>📱 Share with your soul tribe</li>
+        </ul>
+      </div>
+      
+      <p style="font-style: italic; margin-bottom: 25px; opacity: 0.9;">
+        "Every color you choose is a prayer, every stroke a healing."
+      </p>
+      
+      <button onclick="navigate('journal')" class="btn-primary" style="background: white; color: var(--chakra-heart); margin-right: 15px;">
+        📝 Journal Your Emotions Instead
+      </button>
+      <button onclick="navigate('soulart-cards')" class="btn-secondary" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white;">
+        🔮 Pull a SoulArt Card
+      </button>
+    </div>
+  `;
 }
