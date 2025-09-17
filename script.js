@@ -1,3 +1,12 @@
+// API Base URL Configuration
+const API_BASE_URL = window.location.origin;
+
+// Helper function for API calls
+function makeApiCall(endpoint, options = {}) {
+  const url = endpoint.startsWith('/') ? `${API_BASE_URL}${endpoint}` : endpoint;
+  return fetch(url, options);
+}
+
 // PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -1627,7 +1636,7 @@ function selectVibeWord(word) {
 // Function to check emotion decoder access and usage
 async function checkEmotionDecoderAccess() {
   try {
-    const response = await fetch('/api/emotion-decoder/can-use');
+    const response = await makeApiCall('/api/emotion-decoder/can-use');
     
     if (response.status === 401) {
       return { needsAuth: true, canUse: false, usageCount: 0, isSubscribed: false };
@@ -1654,7 +1663,7 @@ async function checkEmotionDecoderAccess() {
 // Function to record emotion decoder usage
 async function recordEmotionDecoderUsage(emotion) {
   try {
-    const response = await fetch('/api/emotion-decoder/use', {
+    const response = await makeApiCall('/api/emotion-decoder/use', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1685,7 +1694,7 @@ async function recordEmotionDecoderUsage(emotion) {
 // Function to check allergy identifier access and usage
 async function checkAllergyIdentifierAccess() {
   try {
-    const response = await fetch('/api/allergy-identifier/can-use');
+    const response = await makeApiCall('/api/allergy-identifier/can-use');
     
     if (response.status === 401) {
       return { needsAuth: true, canUse: false, usageCount: 0, isSubscribed: false };
@@ -1712,7 +1721,7 @@ async function checkAllergyIdentifierAccess() {
 // Function to record allergy identifier usage
 async function recordAllergyIdentifierUsage(allergen) {
   try {
-    const response = await fetch('/api/allergy-identifier/use', {
+    const response = await makeApiCall('/api/allergy-identifier/use', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1743,7 +1752,7 @@ async function recordAllergyIdentifierUsage(allergen) {
 // Function to check belief decoder access and usage
 async function checkBeliefDecoderAccess() {
   try {
-    const response = await fetch('/api/belief-decoder/can-use');
+    const response = await makeApiCall('/api/belief-decoder/can-use');
     
     if (response.status === 401) {
       return { needsAuth: true, canUse: false, usageCount: 0, isSubscribed: false };
@@ -1770,7 +1779,7 @@ async function checkBeliefDecoderAccess() {
 // Function to record belief decoder usage
 async function recordBeliefDecoderUsage(belief) {
   try {
-    const response = await fetch('/api/belief-decoder/use', {
+    const response = await makeApiCall('/api/belief-decoder/use', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1807,7 +1816,7 @@ async function subscribeToUnlimited() {
     button.textContent = 'Processing...';
     button.disabled = true;
     
-    const response = await fetch('/api/get-or-create-subscription', {
+    const response = await makeApiCall('/api/get-or-create-subscription', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1945,7 +1954,7 @@ async function checkAuthAndLoadMembership() {
   const main = document.querySelector('main');
   
   try {
-    const response = await fetch('/api/auth/user');
+    const response = await makeApiCall('/api/auth/user');
     
     if (response.status === 401) {
       // Not authenticated
@@ -1971,7 +1980,7 @@ async function checkAuthAndLoadMembership() {
     const user = await response.json();
     
     // Fetch usage statistics for all tools
-    const usageResponse = await fetch('/api/usage/stats');
+    const usageResponse = await makeApiCall('/api/usage/stats');
     let usageStats = { 
       usage: 0, 
       isSubscribed: false, 
@@ -2130,7 +2139,7 @@ let journalEntries = [];
 // Load all journal entries for the user
 async function loadJournalEntries() {
   try {
-    const response = await fetch('/api/journal/entries');
+    const response = await makeApiCall('/api/journal/entries');
     const data = await response.json();
     
     if (response.ok) {
@@ -2233,7 +2242,7 @@ async function saveJournalEntry() {
       ? `/api/journal/entries/${currentEditingEntry}` 
       : '/api/journal/entries';
 
-    const response = await fetch(url, {
+    const response = await makeApiCall(url, {
       method: method,
       headers: {
         'Content-Type': 'application/json',
@@ -2260,7 +2269,7 @@ async function saveJournalEntry() {
 // Edit existing journal entry
 async function editJournalEntry(entryId) {
   try {
-    const response = await fetch(`/api/journal/entries/${entryId}`);
+    const response = await makeApiCall(`/api/journal/entries/${entryId}`);
     const entry = await response.json();
     
     if (response.ok) {
@@ -2285,7 +2294,7 @@ async function deleteJournalEntry(entryId) {
   }
 
   try {
-    const response = await fetch(`/api/journal/entries/${entryId}`, {
+    const response = await makeApiCall(`/api/journal/entries/${entryId}`, {
       method: 'DELETE',
     });
 
@@ -2346,7 +2355,7 @@ function closeJournalModal() {
 // Download all journal entries
 async function downloadJournalEntries() {
   try {
-    const response = await fetch('/api/journal/download');
+    const response = await makeApiCall('/api/journal/download');
     const data = await response.json();
     
     if (response.ok) {
