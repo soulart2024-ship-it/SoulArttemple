@@ -3248,11 +3248,10 @@ function showSampleArt() {
   container.innerHTML = `
     <div style="background: linear-gradient(135deg, var(--chakra-crown), var(--chakra-throat)); padding: 30px; border-radius: 15px; margin-top: 20px; text-align: center;">
       <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-        <div style="width: 100%; height: 200px; background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FECA57, #FF9FF3); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-          <p style="color: white; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.3); font-size: 18px;">
-            Sample Flowing Colors
-          </p>
-        </div>
+        <img src="flow-art-sample.png" alt="Sample Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <p style="color: var(--text-primary); font-weight: bold; font-size: 18px; margin-top: 15px; font-style: italic;">
+          "Be Courage" - Sample SoulArt Flow
+        </p>
       </div>
       <p style="color: white; font-style: italic; margin: 0;">
         "Let your emotions speak in color. Each hue carries the vibration of your soul's truth."
@@ -3266,14 +3265,16 @@ function showSampleArt() {
 
 function launchArtCreator() {
   const container = document.getElementById('flow-art-area');
-  if (!container) {
-    alert('Container not found!');
-    return;
-  }
   container.innerHTML = `
     <div style="background: linear-gradient(135deg, var(--chakra-heart), var(--chakra-sacral)); padding: 40px; border-radius: 15px; margin-top: 20px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.15);">
       <div style="background: rgba(255,255,255,0.95); padding: 30px; border-radius: 12px; color: var(--text-primary);">
-        <h3 style="color: var(--chakra-crown); margin-bottom: 25px; font-size: 1.8em;">Divine Creation Space Coming Soon</h3>
+        
+        <div style="margin-bottom: 30px;">
+          <img src="flow-art-sample.png" alt="Be Courage Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.15);">
+          <h3 style="color: var(--chakra-crown); margin-top: 15px; font-size: 1.8em; font-style: italic;">"Be Courage"</h3>
+        </div>
+        
+        <h3 style="color: var(--chakra-crown); margin-bottom: 25px; font-size: 1.6em;">Divine Creation Space Coming Soon</h3>
         <p style="margin-bottom: 20px; line-height: 1.6; color: var(--text-primary); font-size: 1.1em;">
           This sacred feature will soon allow you to paint intuitively on your screen with vibrant chakra-based colors. 
           Express your inner world through flowing digital brushstrokes.
@@ -3282,11 +3283,11 @@ function launchArtCreator() {
         <div style="background: var(--chakra-crown); color: white; padding: 25px; border-radius: 10px; margin: 25px 0;">
           <h4 style="color: white; margin-bottom: 15px; font-size: 1.3em;">Coming Features:</h4>
           <ul style="text-align: left; color: white; max-width: 300px; margin: 0 auto; font-size: 1.05em;">
-            <li style="margin-bottom: 8px;">✨ Intuitive digital canvas</li>
-            <li style="margin-bottom: 8px;">🌈 Chakra-aligned color palette</li>
-            <li style="margin-bottom: 8px;">💾 Save your sacred creations</li>
-            <li style="margin-bottom: 8px;">🖨️ Print for your altar space</li>
-            <li style="margin-bottom: 8px;">🤝 Share with your soul tribe</li>
+            <li style="margin-bottom: 8px;">Intuitive digital canvas</li>
+            <li style="margin-bottom: 8px;">Chakra-aligned color palette</li>
+            <li style="margin-bottom: 8px;">Save your sacred creations</li>
+            <li style="margin-bottom: 8px;">Print for your altar space</li>
+            <li style="margin-bottom: 8px;">Share with your soul tribe</li>
           </ul>
         </div>
         
