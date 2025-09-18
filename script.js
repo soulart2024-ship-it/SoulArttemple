@@ -46,7 +46,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 function showInstallButton() {
   // Create install button dynamically if needed
   const installBtn = document.createElement('button');
-  installBtn.textContent = '📱 Install SoulArt Temple App';
+  installBtn.textContent = 'Install SoulArt Temple App';
   installBtn.style.cssText = `
     position: fixed;
     bottom: 20px;
@@ -200,35 +200,35 @@ function navigate(page) {
           <p class="journal-subtitle">A space for your spiritual insights and daily reflections</p>
           
           <div class="journal-actions">
-            <button onclick="showJournalEntryForm()" class="btn-primary">✨ New Entry</button>
-            <button onclick="downloadJournalEntries()" class="btn-secondary">📥 Download All Entries</button>
+            <button onclick="showJournalEntryForm()" class="btn-primary">New Entry</button>
+            <button onclick="downloadJournalEntries()" class="btn-secondary">Download All Entries</button>
             <span class="entry-count">Loading entries...</span>
           </div>
 
           <div id="journal-entry-form" class="journal-form" style="display: none;">
-            <h3>✍️ Create New Entry</h3>
+            <h3>Create New Entry</h3>
             <input type="text" id="entry-title" placeholder="Entry title (optional)" class="journal-title-input">
             <textarea id="entry-content" rows="8" placeholder="What is rising in your awareness today? Share your thoughts, feelings, and insights..." class="journal-content-area"></textarea>
             
             <div class="journal-meta">
               <select id="entry-mood" class="journal-mood-select">
                 <option value="">Select mood (optional)</option>
-                <option value="grateful">🙏 Grateful</option>
-                <option value="peaceful">🕊️ Peaceful</option>
-                <option value="reflective">🤔 Reflective</option>
-                <option value="inspired">✨ Inspired</option>
-                <option value="curious">🔍 Curious</option>
-                <option value="challenged">💪 Challenged</option>
-                <option value="emotional">💗 Emotional</option>
-                <option value="joyful">😊 Joyful</option>
+                <option value="grateful">Grateful</option>
+                <option value="peaceful">Peaceful</option>
+                <option value="reflective">Reflective</option>
+                <option value="inspired">Inspired</option>
+                <option value="curious">Curious</option>
+                <option value="challenged">Challenged</option>
+                <option value="emotional">Emotional</option>
+                <option value="joyful">Joyful</option>
               </select>
               
               <input type="text" id="entry-tags" placeholder="Tags (comma separated)" class="journal-tags-input">
             </div>
             
             <div class="journal-form-actions">
-              <button onclick="saveJournalEntry()" class="btn-primary">💾 Save Entry</button>
-              <button onclick="cancelJournalEntry()" class="btn-cancel">❌ Cancel</button>
+              <button onclick="saveJournalEntry()" class="btn-primary">Save Entry</button>
+              <button onclick="cancelJournalEntry()" class="btn-cancel">Cancel</button>
             </div>
           </div>
 
@@ -884,10 +884,10 @@ function showAllergyHealing(allergyInfo) {
   healingDiv.style.display = 'block';
   healingDiv.innerHTML = `
     <div style="background: linear-gradient(135deg, #8ED6B720, #EAD3FF20); padding: 30px; border-radius: 15px; margin: 20px 0;">
-      <h3 style="color: #8F5AFF; text-align: center; margin-bottom: 20px;">🌿 Allergy Healing Protocol</h3>
+      <h3 style="color: #8F5AFF; text-align: center; margin-bottom: 20px;">Allergy Healing Protocol</h3>
       
       <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #8ED6B7; margin-bottom: 20px;">
-        <h4 style="color: #8ED6B7; margin-bottom: 15px;">✨ Identified Allergen</h4>
+        <h4 style="color: #8ED6B7; margin-bottom: 15px;">Identified Allergen</h4>
         <div style="font-size: 18px; font-weight: bold; color: #8F5AFF; margin-bottom: 10px;">
           ${allergyInfo.allergen}
         </div>
@@ -903,7 +903,7 @@ function showAllergyHealing(allergyInfo) {
       </div>
       
       <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #FF914D; margin-bottom: 20px;">
-        <h4 style="color: #FF914D; margin-bottom: 15px;">🎯 5-Step Healing Process</h4>
+        <h4 style="color: #FF914D; margin-bottom: 15px;">5-Step Healing Process</h4>
         <div style="margin-bottom: 15px;">
           <strong>Step 1:</strong> Place your hand over the affected body area (${allergyInfo.bodySystem})
         </div>
@@ -922,7 +922,7 @@ function showAllergyHealing(allergyInfo) {
       </div>
       
       <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #8F5AFF;">
-        <h4 style="color: #8F5AFF; margin-bottom: 15px;">💫 Additional Healing Support</h4>
+        <h4 style="color: #8F5AFF; margin-bottom: 15px;">Additional Healing Support</h4>
         <p style="font-style: italic; color: #666; line-height: 1.6;">
           ${allergyInfo.healingSupport}
         </p>
@@ -1135,10 +1135,10 @@ function showBeliefHealing(beliefInfo) {
   healingDiv.style.display = 'block';
   healingDiv.innerHTML = `
     <div style="background: linear-gradient(135deg, #8ED6B720, #EAD3FF20); padding: 30px; border-radius: 15px; margin: 20px 0;">
-      <h3 style="color: #8F5AFF; text-align: center; margin-bottom: 20px;">🌟 Belief Transformation Protocol</h3>
+      <h3 style="color: #8F5AFF; text-align: center; margin-bottom: 20px;">Belief Transformation Protocol</h3>
       
       <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #8ED6B7; margin-bottom: 20px;">
-        <h4 style="color: #8ED6B7; margin-bottom: 15px;">🎯 Identified Limiting Belief</h4>
+        <h4 style="color: #8ED6B7; margin-bottom: 15px;">Identified Limiting Belief</h4>
         <div style="font-size: 18px; font-weight: bold; color: #8F5AFF; margin-bottom: 10px;">
           "${beliefInfo.belief}"
         </div>
@@ -1157,7 +1157,7 @@ function showBeliefHealing(beliefInfo) {
       </div>
       
       <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #FF914D; margin-bottom: 20px;">
-        <h4 style="color: #FF914D; margin-bottom: 15px;">✨ 5-Step Belief Transformation</h4>
+        <h4 style="color: #FF914D; margin-bottom: 15px;">5-Step Belief Transformation</h4>
         <div style="margin-bottom: 15px;">
           <strong>Step 1:</strong> Place your hand on your ${beliefInfo.chakraArea} area
         </div>
@@ -1176,7 +1176,7 @@ function showBeliefHealing(beliefInfo) {
       </div>
       
       <div style="background: white; padding: 25px; border-radius: 12px; border-left: 5px solid #8F5AFF;">
-        <h4 style="color: #8F5AFF; margin-bottom: 15px;">💫 Additional Transformation Support</h4>
+        <h4 style="color: #8F5AFF; margin-bottom: 15px;">Additional Transformation Support</h4>
         <p style="font-style: italic; color: #666; line-height: 1.6;">
           ${beliefInfo.healingSupport}
         </p>
@@ -2042,7 +2042,7 @@ async function checkAuthAndLoadMembership() {
             <strong>This Month:</strong> ${usageStats.history ? usageStats.history.length : 0}
           </div>
           ${usageStats.isSubscribed ? 
-            '<div style="color: #8ED6B7; font-weight: bold;">✓ Unlimited Access Active</div>' :
+            '<div style="color: #8ED6B7; font-weight: bold;">Unlimited Access Active</div>' :
             `<div style="margin-bottom: 15px;">
               <strong>Free Sessions:</strong> ${Math.max(0, 3 - usageStats.usage)}/3 remaining
             </div>`
@@ -2063,12 +2063,12 @@ async function checkAuthAndLoadMembership() {
         <h3 style="color: #8F5AFF; margin-bottom: 20px;">Healing Tools Dashboard</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
           <button onclick="navigate('emotion-decoder')" style="background: linear-gradient(135deg, #8F5AFF, #B785FF); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
-            <div style="font-weight: bold; margin-bottom: 5px;">🎯 Emotion Decoder</div>
+            <div style="font-weight: bold; margin-bottom: 5px;">Emotion Decoder</div>
             <div style="font-size: 12px; opacity: 0.9;">Release trapped emotions</div>
             <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${usageStats.emotionUsage || 0} sessions completed</div>
           </button>
           <button onclick="navigate('allergy-identifier')" style="background: linear-gradient(135deg, #8ED6B7, #B0E5D1); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
-            <div style="font-weight: bold; margin-bottom: 5px;">🌿 Allergy Identifier</div>
+            <div style="font-weight: bold; margin-bottom: 5px;">Allergy Identifier</div>
             <div style="font-size: 12px; opacity: 0.9;">Identify & heal allergens</div>
             <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${usageStats.allergyUsage || 0} sessions completed</div>
           </button>
@@ -2078,12 +2078,12 @@ async function checkAuthAndLoadMembership() {
             <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${usageStats.beliefUsage || 0} sessions completed</div>
           </button>
           <button onclick="navigate('journal')" style="background: linear-gradient(135deg, #85C9F2, #B3D9FF); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
-            <div style="font-weight: bold; margin-bottom: 5px;">📖 Journal</div>
+            <div style="font-weight: bold; margin-bottom: 5px;">Journal</div>
             <div style="font-size: 12px; opacity: 0.9;">Track your progress</div>
             <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">Sacred reflections</div>
           </button>
           <button onclick="navigate('card')" style="background: linear-gradient(135deg, #EAD3FF, #F0E5FF); color: #8F5AFF; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
-            <div style="font-weight: bold; margin-bottom: 5px;">🌟 Soul Card</div>
+            <div style="font-weight: bold; margin-bottom: 5px;">Soul Card</div>
             <div style="font-size: 12px; opacity: 0.9;">Discover your essence</div>
             <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">Daily guidance</div>
           </button>
@@ -2161,7 +2161,7 @@ async function loadJournalEntries() {
     const entriesList = document.getElementById('journal-entries-list');
     entriesList.innerHTML = `
       <div class="error-message">
-        <p>📱 Please sign in to access your journal entries</p>
+        <p>Please sign in to access your journal entries</p>
         <button onclick="window.location.href='/api/login'" class="btn-primary">Sign In</button>
       </div>
     `;
@@ -2175,7 +2175,7 @@ function renderJournalEntries() {
   if (journalEntries.length === 0) {
     entriesList.innerHTML = `
       <div class="empty-journal">
-        <div class="empty-journal-icon">📖</div>
+        <div class="empty-journal-icon">Journal</div>
         <h3>Your journal awaits your first reflection</h3>
         <p>Click "New Entry" above to begin your sacred writing journey.</p>
       </div>
@@ -2193,8 +2193,8 @@ function renderJournalEntries() {
         <div class="journal-entry-meta">
           <span class="journal-entry-date">${formatDate(entry.createdAt)}</span>
           <div class="journal-entry-actions">
-            <button onclick="editJournalEntry('${entry.id}')" class="btn-edit" title="Edit">✏️</button>
-            <button onclick="deleteJournalEntry('${entry.id}')" class="btn-delete" title="Delete">🗑️</button>
+            <button onclick="editJournalEntry('${entry.id}')" class="btn-edit" title="Edit">Edit</button>
+            <button onclick="deleteJournalEntry('${entry.id}')" class="btn-delete" title="Delete">Delete</button>
           </div>
         </div>
       </div>
@@ -2263,7 +2263,7 @@ async function saveJournalEntry() {
       // Refresh entries list
       await loadJournalEntries();
       cancelJournalEntry();
-      showSuccessMessage(currentEditingEntry ? 'Entry updated successfully! ✨' : 'Entry saved successfully! ✨');
+      showSuccessMessage(currentEditingEntry ? 'Entry updated successfully!' : 'Entry saved successfully!');
     } else {
       throw new Error(data.message || 'Failed to save entry');
     }
@@ -2286,7 +2286,7 @@ async function editJournalEntry(entryId) {
       document.getElementById('entry-mood').value = entry.mood || '';
       document.getElementById('entry-tags').value = entry.tags || '';
       showJournalEntryForm();
-      document.getElementById('journal-entry-form').querySelector('h3').textContent = '✏️ Edit Entry';
+      document.getElementById('journal-entry-form').querySelector('h3').textContent = 'Edit Entry';
     }
   } catch (error) {
     console.error('Error loading entry for editing:', error);
@@ -2307,7 +2307,7 @@ async function deleteJournalEntry(entryId) {
 
     if (response.ok) {
       await loadJournalEntries();
-      showSuccessMessage('Entry deleted successfully! 🗑️');
+      showSuccessMessage('Entry deleted successfully!');
     } else {
       throw new Error('Failed to delete entry');
     }
@@ -2328,7 +2328,7 @@ function viewFullEntry(entryId) {
     <div class="journal-modal">
       <div class="journal-modal-header">
         <h3>${entry.title || 'Untitled Entry'}</h3>
-        <button onclick="closeJournalModal()" class="btn-close">❌</button>
+        <button onclick="closeJournalModal()" class="btn-close">Close</button>
       </div>
       <div class="journal-modal-meta">
         <span class="journal-modal-date">${formatDate(entry.createdAt)}</span>
@@ -2339,8 +2339,8 @@ function viewFullEntry(entryId) {
       </div>
       ${entry.tags ? `<div class="journal-modal-tags">${formatTags(entry.tags)}</div>` : ''}
       <div class="journal-modal-actions">
-        <button onclick="editJournalEntry('${entry.id}'); closeJournalModal();" class="btn-primary">✏️ Edit</button>
-        <button onclick="deleteJournalEntry('${entry.id}'); closeJournalModal();" class="btn-delete">🗑️ Delete</button>
+        <button onclick="editJournalEntry('${entry.id}'); closeJournalModal();" class="btn-primary">Edit</button>
+        <button onclick="deleteJournalEntry('${entry.id}'); closeJournalModal();" class="btn-delete">Delete</button>
       </div>
     </div>
   `;
@@ -2399,7 +2399,7 @@ Generated by SoulArt Temple
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       
-      showSuccessMessage('Journal downloaded successfully! 📥');
+      showSuccessMessage('Journal downloaded successfully!');
     } else {
       throw new Error(data.message || 'Failed to download journal');
     }
@@ -2429,17 +2429,7 @@ function formatDate(dateString) {
 }
 
 function getMoodEmoji(mood) {
-  const moodEmojis = {
-    grateful: '🙏',
-    peaceful: '🕊️',
-    reflective: '🤔',
-    inspired: '✨',
-    curious: '🔍',
-    challenged: '💪',
-    emotional: '💗',
-    joyful: '😊'
-  };
-  return moodEmojis[mood] || '💭';
+  return '';
 }
 
 function formatTags(tagsString) {
@@ -2956,7 +2946,7 @@ function renderCardDeck() {
         <div class="card-deck">
           <div class="card-back" onclick="drawSingleCard()">
             <div class="card-back-design">
-              <div class="card-symbol">✨</div>
+              <div class="card-symbol">*</div>
               <div class="card-back-text">SoulArt Oracle</div>
               <div class="card-number">44 Cards</div>
             </div>
@@ -3113,7 +3103,7 @@ function showCardCarousel() {
           <div class="carousel-card" data-card-id="${card.id}" onclick="selectCarouselCard(${card.id})">
             <div class="carousel-card-front" style="background: ${card.color};">
               <div class="carousel-card-header">
-                <div class="carousel-card-symbol">✨</div>
+                <div class="carousel-card-symbol">*</div>
                 <div class="carousel-card-title">${card.title}</div>
                 <div class="carousel-card-element">${card.element}</div>
               </div>
@@ -3233,7 +3223,7 @@ function renderFlowArtModule() {
 
   main.innerHTML = `
     <div class="flow-art-container">
-      <h2>🎨 Flow Art Therapy</h2>
+      <h2>Flow Art Therapy</h2>
       <p class="flow-art-subtitle">Welcome to your fluid creative space. Let the colors move your emotions and bring you into stillness.</p>
       <p style="font-style: italic; color: var(--chakra-heart); margin-bottom: 30px;">
         "Through art, we give form to our formless feelings and find peace in creative expression."
@@ -3241,10 +3231,10 @@ function renderFlowArtModule() {
 
       <div class="flow-art-actions" style="margin: 30px 0;">
         <button onclick="showSampleArt()" class="btn-primary" style="margin-right: 15px;">
-          ✨ View Sample SoulArt Canvas
+          View Sample SoulArt Canvas
         </button>
         <button onclick="launchArtCreator()" class="btn-secondary">
-          🎨 Create My Flow Art
+          Create My Flow Art
         </button>
       </div>
 
@@ -3260,7 +3250,7 @@ function showSampleArt() {
       <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
         <div style="width: 100%; height: 200px; background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FECA57, #FF9FF3); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
           <p style="color: white; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.3); font-size: 18px;">
-            🌈 Sample Flowing Colors
+            Sample Flowing Colors
           </p>
         </div>
       </div>
@@ -3268,7 +3258,7 @@ function showSampleArt() {
         "Let your emotions speak in color. Each hue carries the vibration of your soul's truth."
       </p>
       <button onclick="launchArtCreator()" class="btn-primary" style="margin-top: 20px; background: white; color: var(--chakra-crown);">
-        🎨 Create My Own
+        Create My Own
       </button>
     </div>
   `;
@@ -3278,20 +3268,20 @@ function launchArtCreator() {
   const container = document.getElementById('flow-art-area');
   container.innerHTML = `
     <div style="background: linear-gradient(135deg, var(--chakra-heart), var(--chakra-sacral)); padding: 40px; border-radius: 15px; margin-top: 20px; text-align: center; color: white;">
-      <h3 style="color: white; margin-bottom: 25px;">🎨 Divine Creation Space Coming Soon</h3>
+      <h3 style="color: white; margin-bottom: 25px;">Divine Creation Space Coming Soon</h3>
       <p style="margin-bottom: 20px; line-height: 1.6;">
         This sacred feature will soon allow you to paint intuitively on your screen with vibrant chakra-based colors. 
         Express your inner world through flowing digital brushstrokes.
       </p>
       
       <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 10px; margin: 25px 0;">
-        <h4 style="color: white; margin-bottom: 15px;">✨ Coming Features:</h4>
+        <h4 style="color: white; margin-bottom: 15px;">Coming Features:</h4>
         <ul style="text-align: left; color: white; max-width: 300px; margin: 0 auto;">
-          <li>🖌️ Intuitive digital canvas</li>
-          <li>🌈 Chakra-aligned color palette</li>
-          <li>💾 Save your sacred creations</li>
-          <li>🖨️ Print for your altar space</li>
-          <li>📱 Share with your soul tribe</li>
+          <li>Intuitive digital canvas</li>
+          <li>Chakra-aligned color palette</li>
+          <li>Save your sacred creations</li>
+          <li>Print for your altar space</li>
+          <li>Share with your soul tribe</li>
         </ul>
       </div>
       
@@ -3300,10 +3290,10 @@ function launchArtCreator() {
       </p>
       
       <button onclick="navigate('journal')" class="btn-primary" style="background: white; color: var(--chakra-heart); margin-right: 15px;">
-        📝 Journal Your Emotions Instead
+        Journal Your Emotions Instead
       </button>
       <button onclick="navigate('soulart-cards')" class="btn-secondary" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white;">
-        🔮 Pull a SoulArt Card
+        Pull a SoulArt Card
       </button>
     </div>
   `;
