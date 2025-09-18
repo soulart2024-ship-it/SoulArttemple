@@ -3266,6 +3266,10 @@ function showSampleArt() {
 
 function launchArtCreator() {
   const container = document.getElementById('flow-art-area');
+  if (!container) {
+    alert('Container not found!');
+    return;
+  }
   container.innerHTML = `
     <div style="background: linear-gradient(135deg, var(--chakra-heart), var(--chakra-sacral)); padding: 40px; border-radius: 15px; margin-top: 20px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.15);">
       <div style="background: rgba(255,255,255,0.95); padding: 30px; border-radius: 12px; color: var(--text-primary);">
