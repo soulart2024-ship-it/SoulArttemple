@@ -3248,7 +3248,7 @@ function showSampleArt() {
   container.innerHTML = `
     <div style="background: linear-gradient(135deg, var(--chakra-crown), var(--chakra-throat)); padding: 30px; border-radius: 15px; margin-top: 20px; text-align: center;">
       <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-        <img src="assets/flow-art-sample.png" alt="Sample Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <img src="/assets/flow-art-sample.png?t=${Date.now()}" alt="Be Courage Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" onload="console.log('Image loaded successfully')" onerror="console.log('Image failed to load'); this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRjZCNkIiLz48c3RvcCBvZmZzZXQ9IjIwJSIgc3RvcC1jb2xvcj0iIzRFQ0RDNCIvPjxzdG9wIG9mZnNldD0iNDAlIiBzdG9wLWNvbG9yPSIjNDVCN0QxIi8+PHN0b3Agb2Zmc2V0PSI2MCUiIHN0b3AtY29sb3I9IiM5NkNFQjQiLz48c3RvcCBvZmZzZXQ9IjgwJSIgc3RvcC1jb2xvcj0iI0ZFQ0E1NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0ZGOUZGMyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjUwIiBmaWxsPSJ1cmwoI2dyYWQpIi8+PHRleHQgeD0iMjAwIiB5PSIxMzAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj5CZSBDb3VyYWdlPC90ZXh0Pjwvc3ZnPg==';">
         <p style="color: var(--text-primary); font-weight: bold; font-size: 18px; margin-top: 15px; font-style: italic;">
           "Be Courage" - Sample SoulArt Flow
         </p>
@@ -3270,10 +3270,7 @@ function launchArtCreator() {
       <div style="background: rgba(255,255,255,0.95); padding: 30px; border-radius: 12px; color: var(--text-primary);">
         
         <div style="margin-bottom: 30px;">
-          <img src="assets/flow-art-sample.png" alt="Be Courage Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.15);" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div style="display: none; width: 100%; max-width: 400px; height: 250px; background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FECA57, #FF9FF3); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">
-            Be Courage - Flow Art
-          </div>
+          <img src="/assets/flow-art-sample.png?t=${Date.now()}" alt="Be Courage Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.15);" onload="console.log('Create flow art image loaded')" onerror="console.log('Create image failed'); this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRjZCNkIiLz48c3RvcCBvZmZzZXQ9IjIwJSIgc3RvcC1jb2xvcj0iIzRFQ0RDNCIvPjxzdG9wIG9mZnNldD0iNDAlIiBzdG9wLWNvbG9yPSIjNDVCN0QxIi8+PHN0b3Agb2Zmc2V0PSI2MCUiIHN0b3AtY29sb3I9IiM5NkNFQjQiLz48c3RvcCBvZmZzZXQ9IjgwJSIgc3RvcC1jb2xvcj0iI0ZFQ0E1NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0ZGOUZGMyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjUwIiBmaWxsPSJ1cmwoI2dyYWQpIi8+PHRleHQgeD0iMjAwIiB5PSIxMzAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj5CZSBDb3VyYWdlPC90ZXh0Pjwvc3ZnPg==';" />
           <h3 style="color: var(--chakra-crown); margin-top: 15px; font-size: 1.8em; font-style: italic;">"Be Courage"</h3>
         </div>
         
