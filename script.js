@@ -1,3 +1,5 @@
+// Load Flow Canvas Module
+// Assuming you're placing the function directly or in same script
 // API Base URL Configuration
 const API_BASE_URL = window.location.origin;
 
@@ -239,6 +241,9 @@ function navigate(page) {
       loadJournalEntries();
     } else if (page === 'flowart') {
       renderFlowArtModule();
+      else if (page === 'flow-art') {
+        loadFlowCanvas();
+      }
     }else if (page === 'thankyou') {
       main.innerHTML = `
         <h2>Thank You, Beloved</h2>
@@ -3305,4 +3310,59 @@ function launchArtCreator() {
       </button>
     </div>
   `;
+}
+let drawing = false;
+let context;
+
+function setupCanvas() {
+  const canvas = document.getElementById('flowCanvas');
+  context = canvas.getContext('2d');
+  context.lineWidth = 6;
+  context.lineCap = 'round';
+  context.strokeStyle = document.getElementById('colorPicker').value;
+
+  canvas.addEventListener('touchstart', startDrawing);
+  canvas.addEventListener('touchmove', draw);
+  canvas.addEventListener('touchend', stopDrawing);
+}
+
+function changeColor() {
+  if (context) {
+    context.strokeStyle = document.getElementById('colorPicker').value;
+  }
+}
+
+function startDrawing(e) {
+  e.preventDefault();
+  drawing = true;
+  const touch = e.touches[0];
+  context.beginPath();
+  context.moveTo(touch.clientX - e.target.offsetLeft, touch.clientY - e.target.offsetTop);
+}
+
+function draw(e) {
+  e.preventDefault();
+  if (!drawing) return;
+  const touch = e.touches[0];
+  context.lineTo(touch.clientX - e.target.offsetLeft, touch.clientY - e.target.offsetTop);
+  context.stroke();
+}
+
+function stopDrawing(e) {
+  e.preventDefault();
+  drawing = false;
+}
+
+function clearCanvas() {
+  const canvas = document.getElementById('flowCanvas');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function saveArt() {
+  const canvas = document.getElementById('flowCanvas');
+  const image = canvas.toDataURL("image/png");
+  const link = document.createElement('a');
+  link.download = 'soulart-fluid-art.png';
+  link.href = image;
+  link.click();
 }
