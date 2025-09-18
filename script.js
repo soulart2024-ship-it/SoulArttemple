@@ -3248,7 +3248,7 @@ function showSampleArt() {
   container.innerHTML = `
     <div style="background: linear-gradient(135deg, var(--chakra-crown), var(--chakra-throat)); padding: 30px; border-radius: 15px; margin-top: 20px; text-align: center;">
       <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-        <img src="./flow-art-sample.png" alt="Sample Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <img src="assets/flow-art-sample.png" alt="Sample Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
         <div style="display: none; width: 100%; max-width: 400px; height: 250px; background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FECA57, #FF9FF3); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">
           Be Courage - Flow Art
         </div>
@@ -3273,7 +3273,7 @@ function launchArtCreator() {
       <div style="background: rgba(255,255,255,0.95); padding: 30px; border-radius: 12px; color: var(--text-primary);">
         
         <div style="margin-bottom: 30px;">
-          <img src="./flow-art-sample.png" alt="Be Courage Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.15);" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <img src="assets/flow-art-sample.png" alt="Be Courage Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.15);" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
           <div style="display: none; width: 100%; max-width: 400px; height: 250px; background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FECA57, #FF9FF3); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">
             Be Courage - Flow Art
           </div>
