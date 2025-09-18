@@ -241,10 +241,7 @@ function navigate(page) {
       loadJournalEntries();
     } else if (page === 'flowart') {
       renderFlowArtModule();
-      else if (page === 'flow-art') {
-        loadFlowCanvas();
-      }
-    }else if (page === 'thankyou') {
+    } else if (page === 'thankyou') {
       main.innerHTML = `
         <h2>Thank You, Beloved</h2>
         <p>Your sacred message has been received by Soraya.</p>
