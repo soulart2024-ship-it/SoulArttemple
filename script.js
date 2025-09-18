@@ -242,8 +242,13 @@ function navigate(page) {
       loadJournalEntries();
     } else if (page === 'flowart') {
       console.log('Flow Art navigation triggered');
-      renderFlowArtModule();
-      console.log('renderFlowArtModule called');
+      main.innerHTML = `
+        <h2>Flow Art Therapy - TEST</h2>
+        <p>This is a test to see if navigation works.</p>
+        <p>If you see this, the navigation is working!</p>
+        <button onclick="navigate('home')">Back to Home</button>
+      `;
+      console.log('Flow Art test content loaded');
     } else if (page === 'thankyou') {
       main.innerHTML = `
         <h2>Thank You, Beloved</h2>
