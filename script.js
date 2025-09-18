@@ -115,7 +115,6 @@ document.addEventListener('click', function(event) {
 });
 
 function navigate(page) {
-  console.log('Navigate called with page:', page);
   const main = document.getElementById('main-content');
   main.style.opacity = 0;
   
@@ -241,14 +240,7 @@ function navigate(page) {
       
       loadJournalEntries();
     } else if (page === 'flowart') {
-      console.log('Flow Art navigation triggered');
-      main.innerHTML = `
-        <h2>Flow Art Therapy - TEST</h2>
-        <p>This is a test to see if navigation works.</p>
-        <p>If you see this, the navigation is working!</p>
-        <button onclick="navigate('home')">Back to Home</button>
-      `;
-      console.log('Flow Art test content loaded');
+      renderFlowArtModule();
     } else if (page === 'thankyou') {
       main.innerHTML = `
         <h2>Thank You, Beloved</h2>
@@ -3227,7 +3219,6 @@ function addTouchSupport(carousel) {
 // ===== FLOW ART THERAPY MODULE =====
 
 function renderFlowArtModule() {
-  console.log('renderFlowArtModule function started');
   const main = document.getElementById('main-content');
 
   main.innerHTML = `
@@ -3276,34 +3267,36 @@ function showSampleArt() {
 function launchArtCreator() {
   const container = document.getElementById('flow-art-area');
   container.innerHTML = `
-    <div style="background: linear-gradient(135deg, var(--chakra-heart), var(--chakra-sacral)); padding: 40px; border-radius: 15px; margin-top: 20px; text-align: center; color: white;">
-      <h3 style="color: white; margin-bottom: 25px;">Divine Creation Space Coming Soon</h3>
-      <p style="margin-bottom: 20px; line-height: 1.6;">
-        This sacred feature will soon allow you to paint intuitively on your screen with vibrant chakra-based colors. 
-        Express your inner world through flowing digital brushstrokes.
-      </p>
-      
-      <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 10px; margin: 25px 0;">
-        <h4 style="color: white; margin-bottom: 15px;">Coming Features:</h4>
-        <ul style="text-align: left; color: white; max-width: 300px; margin: 0 auto;">
-          <li>Intuitive digital canvas</li>
-          <li>Chakra-aligned color palette</li>
-          <li>Save your sacred creations</li>
-          <li>Print for your altar space</li>
-          <li>Share with your soul tribe</li>
-        </ul>
+    <div style="background: linear-gradient(135deg, var(--chakra-heart), var(--chakra-sacral)); padding: 40px; border-radius: 15px; margin-top: 20px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.15);">
+      <div style="background: rgba(255,255,255,0.95); padding: 30px; border-radius: 12px; color: var(--text-primary);">
+        <h3 style="color: var(--chakra-crown); margin-bottom: 25px; font-size: 1.8em;">Divine Creation Space Coming Soon</h3>
+        <p style="margin-bottom: 20px; line-height: 1.6; color: var(--text-primary); font-size: 1.1em;">
+          This sacred feature will soon allow you to paint intuitively on your screen with vibrant chakra-based colors. 
+          Express your inner world through flowing digital brushstrokes.
+        </p>
+        
+        <div style="background: var(--chakra-crown); color: white; padding: 25px; border-radius: 10px; margin: 25px 0;">
+          <h4 style="color: white; margin-bottom: 15px; font-size: 1.3em;">Coming Features:</h4>
+          <ul style="text-align: left; color: white; max-width: 300px; margin: 0 auto; font-size: 1.05em;">
+            <li style="margin-bottom: 8px;">✨ Intuitive digital canvas</li>
+            <li style="margin-bottom: 8px;">🌈 Chakra-aligned color palette</li>
+            <li style="margin-bottom: 8px;">💾 Save your sacred creations</li>
+            <li style="margin-bottom: 8px;">🖨️ Print for your altar space</li>
+            <li style="margin-bottom: 8px;">🤝 Share with your soul tribe</li>
+          </ul>
+        </div>
+        
+        <p style="font-style: italic; margin-bottom: 25px; color: var(--chakra-third-eye); font-size: 1.1em;">
+          "Every color you choose is a prayer, every stroke a healing."
+        </p>
+        
+        <button onclick="navigate('journal')" class="btn-primary" style="margin-right: 15px; font-size: 1.1em;">
+          Journal Your Emotions Instead
+        </button>
+        <button onclick="navigate('soulart-cards')" class="btn-secondary" style="font-size: 1.1em;">
+          Pull a SoulArt Card
+        </button>
       </div>
-      
-      <p style="font-style: italic; margin-bottom: 25px; opacity: 0.9;">
-        "Every color you choose is a prayer, every stroke a healing."
-      </p>
-      
-      <button onclick="navigate('journal')" class="btn-primary" style="background: white; color: var(--chakra-heart); margin-right: 15px;">
-        Journal Your Emotions Instead
-      </button>
-      <button onclick="navigate('soulart-cards')" class="btn-secondary" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white;">
-        Pull a SoulArt Card
-      </button>
     </div>
   `;
 }
