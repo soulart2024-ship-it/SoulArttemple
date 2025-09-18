@@ -115,6 +115,7 @@ document.addEventListener('click', function(event) {
 });
 
 function navigate(page) {
+  console.log('Navigate called with page:', page);
   const main = document.getElementById('main-content');
   main.style.opacity = 0;
   
@@ -240,7 +241,9 @@ function navigate(page) {
       
       loadJournalEntries();
     } else if (page === 'flowart') {
+      console.log('Flow Art navigation triggered');
       renderFlowArtModule();
+      console.log('renderFlowArtModule called');
     } else if (page === 'thankyou') {
       main.innerHTML = `
         <h2>Thank You, Beloved</h2>
@@ -3219,6 +3222,7 @@ function addTouchSupport(carousel) {
 // ===== FLOW ART THERAPY MODULE =====
 
 function renderFlowArtModule() {
+  console.log('renderFlowArtModule function started');
   const main = document.getElementById('main-content');
 
   main.innerHTML = `
