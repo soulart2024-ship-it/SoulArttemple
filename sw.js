@@ -1,5 +1,5 @@
 // SoulArt Temple Service Worker
-const CACHE_NAME = 'soulart-temple-v1.0.1';
+const CACHE_NAME = 'soulart-temple-v1.0.2';
 const STATIC_CACHE_URLS = [
   '/',
   '/index.html',
@@ -95,13 +95,35 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // For static assets (CSS, JS, images) - Stale while revalidate
-  if (event.request.destination === 'style' || 
-      event.request.destination === 'script' || 
-      event.request.destination === 'image' ||
-      event.request.destination === 'font' ||
-      url.pathname.endsWith('.css') ||
+  // For critical files (JS, CSS, HTML) - Network first for fresh updates
+  if (event.request.destination === 'script' || 
       url.pathname.endsWith('.js') ||
+      url.pathname.endsWith('.css') ||
+      url.pathname.endsWith('.html')) {
+    
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          // Valid response - clone and cache
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Network failed - try cache as fallback
+          return caches.match(event.request);
+        })
+    );
+    return;
+  }
+
+  // For other static assets (images, fonts) - Stale while revalidate
+  if (event.request.destination === 'image' ||
+      event.request.destination === 'font' ||
       url.pathname.endsWith('.png') ||
       url.pathname.endsWith('.jpg') ||
       url.pathname.endsWith('.svg') ||
