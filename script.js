@@ -104,17 +104,29 @@ function toggleDropdown(event) {
   dropdown.classList.toggle('active');
 }
 
-// Close dropdown when clicking outside
+// Close dropdown when clicking outside (with delay)
+let dropdownCloseTimeout;
 document.addEventListener('click', function(event) {
   const dropdown = document.getElementById('membership-dropdown');
   const dropdownToggle = event.target.closest('.dropdown-toggle');
+  const dropdownContent = event.target.closest('#membership-dropdown');
   
-  if (!dropdownToggle && dropdown && dropdown.classList.contains('active')) {
-    dropdown.classList.remove('active');
+  if (!dropdownToggle && !dropdownContent && dropdown && dropdown.classList.contains('active')) {
+    // Add a small delay to allow dropdown item clicks
+    dropdownCloseTimeout = setTimeout(() => {
+      dropdown.classList.remove('active');
+    }, 100);
   }
 });
 
-function navigate(page) {
+// Prevent dropdown from closing when clicking inside it
+document.addEventListener('mouseenter', function(event) {
+  if (event.target.closest('#membership-dropdown')) {
+    clearTimeout(dropdownCloseTimeout);
+  }
+});
+
+async function navigate(page) {
   const main = document.getElementById('main-content');
   main.style.opacity = 0;
   
@@ -126,7 +138,7 @@ function navigate(page) {
   
   // Navigation cleanup - no chart to destroy with tile layout
 
-  setTimeout(() => {
+  setTimeout(async () => {
     if (page === 'home') {
       main.innerHTML = `
         <h2>Welcome to the SoulArt Temple</h2>
@@ -355,7 +367,7 @@ function navigate(page) {
         loadAllergyData().then(() => {
           renderAllergyTiles();
         });
-      }).catch(error => {
+      } catch (error) {
         console.error('Error checking access:', error);
         main.innerHTML = `
           <h2>Allergy Identification System</h2>
@@ -458,7 +470,7 @@ function navigate(page) {
         loadBeliefData().then(() => {
           renderBeliefTiles();
         });
-      }).catch(error => {
+      } catch (error) {
         console.error('Error checking access:', error);
         main.innerHTML = `
           <h2>Belief Decoder System</h2>
@@ -578,7 +590,7 @@ function navigate(page) {
         loadEmotionData().then(() => {
           renderEmotionTiles();
         });
-      }).catch(error => {
+      } catch (error) {
         console.error('Error checking access:', error);
         main.innerHTML = `
           <h2>Trapped Emotion Release Tiles</h2>
