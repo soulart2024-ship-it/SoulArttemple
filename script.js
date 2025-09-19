@@ -439,11 +439,24 @@ async function navigate(page, addToHistory = true) {
       loadEmotionData().then(() => {
         renderEmotionTiles();
       });
-    } else if (page === 'membership') {
-      // Check authentication and load membership dashboard
-      checkAuthAndLoadMembership();
-    }
+   } else if (page === 'membership') {
+  // Check authentication and load membership dashboard
+  checkAuthAndLoadMembership();
 
+} else if (page === 'release-emotions') {
+  main.innerHTML = `
+    <h2>Release Trapped Emotions</h2>
+    <p>Select the trapped emotion that resonates. You will be guided to release and replace it.</p>
+    <div class="emotion-grid">
+      <button class="emotion-btn" onclick="showRelease('Fear')">Fear</button>
+      <button class="emotion-btn" onclick="showRelease('Grief')">Grief</button>
+      <button class="emotion-btn" onclick="showRelease('Anger')">Anger</button>
+      <button class="emotion-btn" onclick="showRelease('Shame')">Shame</button>
+      <button class="emotion-btn" onclick="showRelease('Guilt')">Guilt</button>
+    </div>
+    <div id="release-box" class="release-box"></div>
+  `;
+}
     main.style.opacity = 1;
   }, 200);
 }
@@ -2546,6 +2559,46 @@ function showSuccessMessage(message) {
   setTimeout(() => {
     messageDiv.remove();
   }, 3000);
+}
+// ========================================
+// RELEASE TRAPPED EMOTION MODULE
+// ========================================
+function showRelease(emotion) {
+  const releaseBox = document.getElementById('release-box');
+
+  const healingMap = {
+    "Fear": {
+      intention: "I release all fear from my cellular memory and choose to trust fully.",
+      replacement: "Trust"
+    },
+    "Grief": {
+      intention: "I release the weight of grief and open my heart to divine peace.",
+      replacement: "Peace"
+    },
+    "Anger": {
+      intention: "I release all anger and choose to respond with loving awareness.",
+      replacement: "Compassion"
+    },
+    "Shame": {
+      intention: "I release shame and reclaim my worthiness and light.",
+      replacement: "Acceptance"
+    },
+    "Guilt": {
+      intention: "I release guilt and allow grace to restore my innocence.",
+      replacement: "Forgiveness"
+    }
+  };
+
+  const { intention, replacement } = healingMap[emotion];
+
+  releaseBox.innerHTML = `
+    <div class="release-instructions">
+      <h3>🌀 Emotion Selected: ${emotion}</h3>
+      <p><strong>Release Intention:</strong><br> ${intention}</p>
+      <p><strong>Technique:</strong><br> Use a magnet or hand to swipe down your governing meridian (head to neck, 3x) while holding the intention in your heart.</p>
+      <p><strong>Replace With:</strong><br> <span class="high-vibe-word">${replacement}</span></p>
+    </div>
+  `;
 }
 
 // ========================================
