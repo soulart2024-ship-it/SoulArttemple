@@ -336,6 +336,9 @@ async function navigate(page, addToHistory = true) {
         
         const user = await response.json();
         
+        // Debug: Log user data to see what we're getting for allergy access
+        console.log('User data for allergy access:', user);
+        
         // Check if user has premium access
         if (user.subscriptionTier !== 'premium' || user.subscriptionStatus !== 'active') {
           main.innerHTML = `
@@ -433,6 +436,9 @@ async function navigate(page, addToHistory = true) {
         }
         
         const user = await response.json();
+        
+        // Debug: Log user data to see what we're getting for belief access
+        console.log('User data for belief access:', user);
         
         // Check if user has premium access
         if (user.subscriptionTier !== 'premium' || user.subscriptionStatus !== 'active') {
