@@ -264,15 +264,17 @@ function navigate(page) {
         <button onclick="navigate('home')">Return to Home</button>
       `;
     } else if (page === 'allergy-identifier') {
-      // Check authentication and usage first
-      checkAllergyIdentifierAccess().then(accessInfo => {
-        if (accessInfo.needsAuth) {
+      // Check authentication first
+      try {
+        const response = await fetch('/api/auth/user');
+        
+        if (response.status === 401) {
           main.innerHTML = `
-            <h2>Allergy Identification System</h2>
+            <h2>🔒 Allergy Identification System</h2>
             <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px; margin: 20px 0;">
               <h3 style="color: #8F5AFF; margin-bottom: 15px;">Sign In Required</h3>
               <p style="margin-bottom: 20px; color: #666;">
-                Please sign in to access the Allergy Identifier and track your healing journey.
+                Please sign in to access premium healing features and track your journey.
               </p>
               <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
                 Sign In to Continue
@@ -281,37 +283,50 @@ function navigate(page) {
           `;
           return;
         }
-
-        if (accessInfo.needsSubscription) {
+        
+        const user = await response.json();
+        
+        // Check if user has premium access
+        if (user.subscriptionTier !== 'premium' || user.subscriptionStatus !== 'active') {
           main.innerHTML = `
-            <h2>Allergy Identification System</h2>
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF914D20, #EAD3FF20); border-radius: 15px; margin: 20px 0;">
-              <h3 style="color: #FF914D; margin-bottom: 15px;">Upgrade to Unlimited Access</h3>
-              <p style="margin-bottom: 10px; color: #666;">
-                You've used all 3 free allergy identification sessions.
-              </p>
+            <h2>🔒 Allergy Identification System</h2>
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF6B9D20, #8F5AFF20); border-radius: 15px; margin: 20px 0;">
+              <h3 style="color: #FF6B9D; margin-bottom: 15px;">⭐ Premium Feature Required</h3>
               <p style="margin-bottom: 20px; color: #666;">
-                Upgrade to unlimited access for just <strong>£3.99/month</strong>
+                The Allergy Identifier requires a <strong>Premium subscription (£5.99/month)</strong> to access advanced healing protocols.
               </p>
-              <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #8F5AFF;">
-                <h4 style="color: #8F5AFF; margin-bottom: 15px;">Unlimited Membership Includes:</h4>
-                <ul style="text-align: left; color: #666; max-width: 300px; margin: 0 auto;">
-                  <li>Unlimited allergy identifier sessions</li>
-                  <li>Complete healing protocols</li>
-                  <li>Usage analytics and progress tracking</li>
-                  <li>Priority access to new features</li>
+              <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #FF6B9D;">
+                <h4 style="color: #FF6B9D; margin-bottom: 15px;">⭐ Premium Membership Includes:</h4>
+                <ul style="text-align: left; color: #666; max-width: 350px; margin: 0 auto; line-height: 1.6;">
+                  <li><strong>🔓 Unlimited Allergy Identifier</strong> - Advanced allergen protocols</li>
+                  <li><strong>🔓 Unlimited Belief Decoder</strong> - Transform limiting beliefs</li>
+                  <li><strong>Everything in Basic</strong> - Emotion Decoder, Doodle Canvas, Journal</li>
+                  <li>Advanced analytics and priority support</li>
                 </ul>
               </div>
-              <button onclick="subscribeToUnlimited()" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
-                Subscribe for £3.99/month
+              <button onclick="showPricingModal()" style="background: linear-gradient(135deg, #FF6B9D, #8F5AFF); color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px; font-weight: bold;">
+                View Premium Plans
               </button>
-              <button onclick="navigate('home')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                Return Home
+              <button onclick="navigate('membership')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                View Dashboard
               </button>
             </div>
           `;
           return;
         }
+      } catch (error) {
+        console.error('Error checking access:', error);
+        main.innerHTML = `
+          <h2>Allergy Identification System</h2>
+          <div style="text-align: center; padding: 40px;">
+            <p style="color: #FF6B9D;">Unable to verify access. Please try again.</p>
+            <button onclick="navigate('home')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer;">
+              Return Home
+            </button>
+          </div>
+        `;
+        return;
+      }
 
         // Show the allergy identifier interface
         main.innerHTML = `
@@ -352,15 +367,17 @@ function navigate(page) {
       });
 
     } else if (page === 'belief-decoder') {
-      // Check authentication and usage first
-      checkBeliefDecoderAccess().then(accessInfo => {
-        if (accessInfo.needsAuth) {
+      // Check authentication first
+      try {
+        const response = await fetch('/api/auth/user');
+        
+        if (response.status === 401) {
           main.innerHTML = `
-            <h2>Belief Decoder System</h2>
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px; margin: 20px 0;">
+            <h2>🔒 Belief Decoder System</h2>
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #FF914D20); border-radius: 15px; margin: 20px 0;">
               <h3 style="color: #8F5AFF; margin-bottom: 15px;">Sign In Required</h3>
               <p style="margin-bottom: 20px; color: #666;">
-                Please sign in to access the Belief Decoder and transform limiting beliefs.
+                Please sign in to access premium healing features and transform limiting beliefs.
               </p>
               <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
                 Sign In to Continue
@@ -369,37 +386,50 @@ function navigate(page) {
           `;
           return;
         }
-
-        if (accessInfo.needsSubscription) {
+        
+        const user = await response.json();
+        
+        // Check if user has premium access
+        if (user.subscriptionTier !== 'premium' || user.subscriptionStatus !== 'active') {
           main.innerHTML = `
-            <h2>Belief Decoder System</h2>
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF914D20, #EAD3FF20); border-radius: 15px; margin: 20px 0;">
-              <h3 style="color: #FF914D; margin-bottom: 15px;">Upgrade to Unlimited Access</h3>
-              <p style="margin-bottom: 10px; color: #666;">
-                You've used all 3 free belief decoding sessions.
-              </p>
+            <h2>🔒 Belief Decoder System</h2>
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF6B9D20, #8F5AFF20); border-radius: 15px; margin: 20px 0;">
+              <h3 style="color: #FF6B9D; margin-bottom: 15px;">⭐ Premium Feature Required</h3>
               <p style="margin-bottom: 20px; color: #666;">
-                Upgrade to unlimited access for just <strong>£3.99/month</strong>
+                The Belief Decoder requires a <strong>Premium subscription (£5.99/month)</strong> to access advanced belief transformation protocols.
               </p>
-              <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #8F5AFF;">
-                <h4 style="color: #8F5AFF; margin-bottom: 15px;">Unlimited Membership Includes:</h4>
-                <ul style="text-align: left; color: #666; max-width: 300px; margin: 0 auto;">
-                  <li>Unlimited belief decoder sessions</li>
-                  <li>Complete healing protocols</li>
-                  <li>Usage analytics and progress tracking</li>
-                  <li>Priority access to new features</li>
+              <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #FF6B9D;">
+                <h4 style="color: #FF6B9D; margin-bottom: 15px;">⭐ Premium Membership Includes:</h4>
+                <ul style="text-align: left; color: #666; max-width: 350px; margin: 0 auto; line-height: 1.6;">
+                  <li><strong>🔓 Unlimited Belief Decoder</strong> - Transform limiting beliefs</li>
+                  <li><strong>🔓 Unlimited Allergy Identifier</strong> - Advanced allergen protocols</li>
+                  <li><strong>Everything in Basic</strong> - Emotion Decoder, Doodle Canvas, Journal</li>
+                  <li>Advanced analytics and priority support</li>
                 </ul>
               </div>
-              <button onclick="subscribeToUnlimited()" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
-                Subscribe for £3.99/month
+              <button onclick="showPricingModal()" style="background: linear-gradient(135deg, #FF6B9D, #8F5AFF); color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px; font-weight: bold;">
+                View Premium Plans
               </button>
-              <button onclick="navigate('home')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                Return Home
+              <button onclick="navigate('membership')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                View Dashboard
               </button>
             </div>
           `;
           return;
         }
+      } catch (error) {
+        console.error('Error checking access:', error);
+        main.innerHTML = `
+          <h2>Belief Decoder System</h2>
+          <div style="text-align: center; padding: 40px;">
+            <p style="color: #FF6B9D;">Unable to verify access. Please try again.</p>
+            <button onclick="navigate('home')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer;">
+              Return Home
+            </button>
+          </div>
+        `;
+        return;
+      }
 
         // Show the belief decoder interface
         main.innerHTML = `
@@ -461,25 +491,24 @@ function navigate(page) {
         if (accessInfo.needsSubscription) {
           main.innerHTML = `
             <h2>Trapped Emotion Release Tiles</h2>
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF914D20, #EAD3FF20); border-radius: 15px; margin: 20px 0;">
-              <h3 style="color: #FF914D; margin-bottom: 15px;">Upgrade to Unlimited Access</h3>
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #8F5AFF20, #EAD3FF20); border-radius: 15px; margin: 20px 0;">
+              <h3 style="color: #8F5AFF; margin-bottom: 15px;">Free Sessions Complete</h3>
               <p style="margin-bottom: 10px; color: #666;">
-                You've used all 3 free emotion healing sessions.
+                You've used all 3 free Emotion Decoder sessions.
               </p>
               <p style="margin-bottom: 20px; color: #666;">
-                Upgrade to unlimited access for just <strong>£3.99/month</strong>
+                Choose a subscription plan to continue your healing journey.
               </p>
               <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #8F5AFF;">
-                <h4 style="color: #8F5AFF; margin-bottom: 15px;">Unlimited Membership Includes:</h4>
-                <ul style="text-align: left; color: #666; max-width: 300px; margin: 0 auto;">
-                  <li>Unlimited emotion decoder sessions</li>
-                  <li>Complete 5-step healing process</li>
-                  <li>Usage analytics and progress tracking</li>
-                  <li>Priority access to new features</li>
+                <h4 style="color: #8F5AFF; margin-bottom: 15px;">Available Subscription Plans:</h4>
+                <ul style="text-align: left; color: #666; max-width: 350px; margin: 0 auto; line-height: 1.6;">
+                  <li><strong>Basic (£3.99/month):</strong> Unlimited Emotion Decoder + Doodle Canvas + Journal</li>
+                  <li><strong>Premium (£5.99/month):</strong> Everything + Belief Decoder + Allergy Identifier</li>
+                  <li>Annual plans available with 25% discount</li>
                 </ul>
               </div>
-              <button onclick="subscribeToUnlimited()" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
-                Subscribe for £3.99/month
+              <button onclick="showPricingModal()" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px; font-weight: bold;">
+                View Pricing Plans
               </button>
               <button onclick="navigate('home')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
                 Return Home
@@ -1648,6 +1677,155 @@ async function identifyAnotherEmotion() {
   }
 }
 
+// Function to show pricing modal with new tiered structure
+function showPricingModal() {
+  const modal = document.createElement('div');
+  modal.id = 'pricing-modal';
+  modal.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.7); z-index: 1000; display: flex; 
+    align-items: center; justify-content: center; padding: 20px;
+  `;
+  
+  modal.innerHTML = `
+    <div style="background: white; border-radius: 20px; padding: 40px; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="color: #8F5AFF; margin: 0;">Choose Your SoulArt Journey</h2>
+        <button onclick="closePricingModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
+      </div>
+      
+      <!-- Free Plan -->
+      <div style="border: 2px solid #EAD3FF; border-radius: 15px; padding: 20px; margin-bottom: 20px;">
+        <h3 style="color: #8F5AFF; margin: 0 0 10px 0;">✨ Free Explorer</h3>
+        <div style="font-size: 24px; font-weight: bold; color: #8F5AFF; margin-bottom: 15px;">£0</div>
+        <ul style="margin: 15px 0; padding-left: 20px; color: #666;">
+          <li>3 Free Emotion Decoder sessions</li>
+          <li>Unlimited Doodle Canvas access</li>
+          <li>Basic journaling features</li>
+          <li>SoulArt Cards</li>
+        </ul>
+        <div style="text-align: center;">
+          <button onclick="closePricingModal()" style="background: transparent; color: #8F5AFF; padding: 12px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer;">
+            Current Plan
+          </button>
+        </div>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        <!-- Basic Monthly -->
+        <div style="border: 3px solid #8F5AFF; border-radius: 15px; padding: 25px; position: relative;">
+          <div style="background: #8F5AFF; color: white; padding: 5px 15px; border-radius: 20px; position: absolute; top: -12px; left: 20px; font-size: 12px; font-weight: bold;">POPULAR</div>
+          <h3 style="color: #8F5AFF; margin: 0 0 10px 0;">✨ Basic Monthly</h3>
+          <div style="font-size: 32px; font-weight: bold; color: #8F5AFF; margin-bottom: 5px;">£3.99<span style="font-size: 16px; color: #666;">/month</span></div>
+          <ul style="margin: 20px 0; padding-left: 20px; color: #666; line-height: 1.8;">
+            <li><strong>Unlimited Emotion Decoder</strong></li>
+            <li>Unlimited Doodle Canvas</li>
+            <li>Advanced journal features</li>
+            <li>SoulArt Cards & guidance</li>
+            <li>Progress tracking & analytics</li>
+          </ul>
+          <div style="text-align: center;">
+            <button onclick="subscribeToPlan('basic_monthly')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold;">
+              Choose Basic
+            </button>
+          </div>
+        </div>
+        
+        <!-- Premium Monthly -->
+        <div style="border: 3px solid #FF6B9D; border-radius: 15px; padding: 25px; position: relative; background: linear-gradient(135deg, #FF6B9D05, #8F5AFF05);">
+          <div style="background: linear-gradient(135deg, #FF6B9D, #8F5AFF); color: white; padding: 5px 15px; border-radius: 20px; position: absolute; top: -12px; left: 20px; font-size: 12px; font-weight: bold;">⭐ PREMIUM</div>
+          <h3 style="color: #FF6B9D; margin: 0 0 10px 0;">⭐ Premium Monthly</h3>
+          <div style="font-size: 32px; font-weight: bold; color: #FF6B9D; margin-bottom: 5px;">£5.99<span style="font-size: 16px; color: #666;">/month</span></div>
+          <ul style="margin: 20px 0; padding-left: 20px; color: #666; line-height: 1.8;">
+            <li><strong>Everything in Basic, plus:</strong></li>
+            <li><strong>🔓 Belief Decoder</strong> - Transform beliefs</li>
+            <li><strong>🔓 Allergy Identifier</strong> - Heal allergens</li>
+            <li>Advanced analytics & insights</li>
+            <li>Priority support</li>
+          </ul>
+          <div style="text-align: center;">
+            <button onclick="subscribeToPlan('premium_monthly')" style="background: linear-gradient(135deg, #FF6B9D, #8F5AFF); color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold;">
+              Choose Premium
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #EAD3FF;">
+        <h3 style="color: #8F5AFF; text-align: center; margin-bottom: 20px;">💰 Save 25% with Annual Plans</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+          <!-- Basic Yearly -->
+          <div style="border: 2px solid #8F5AFF; border-radius: 15px; padding: 20px;">
+            <h4 style="color: #8F5AFF; margin: 0 0 10px 0;">Basic Annual</h4>
+            <div style="font-size: 24px; font-weight: bold; color: #8F5AFF;">£36<span style="font-size: 14px; color: #666;">/year</span></div>
+            <div style="font-size: 12px; color: #8ED6B7; margin: 5px 0;">Save £12 vs monthly</div>
+            <button onclick="subscribeToPlan('basic_yearly')" style="background: #8F5AFF; color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px;">
+              Choose Annual Basic
+            </button>
+          </div>
+          
+          <!-- Premium Yearly -->  
+          <div style="border: 2px solid #FF6B9D; border-radius: 15px; padding: 20px;">
+            <h4 style="color: #FF6B9D; margin: 0 0 10px 0;">⭐ Premium Annual</h4>
+            <div style="font-size: 24px; font-weight: bold; color: #FF6B9D;">£53.91<span style="font-size: 14px; color: #666;">/year</span></div>
+            <div style="font-size: 12px; color: #8ED6B7; margin: 5px 0;">Save £17.97 vs monthly</div>
+            <button onclick="subscribeToPlan('premium_yearly')" style="background: linear-gradient(135deg, #FF6B9D, #8F5AFF); color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px;">
+              Choose Annual Premium
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 30px; padding: 20px; background: #EAD3FF10; border-radius: 10px;">
+        <p style="margin: 0; color: #666; font-size: 14px;">
+          ✨ All plans include unlimited access to Doodle Canvas, Journal, and SoulArt Cards<br>
+          🔒 Cancel anytime • 💳 Secure payment • 🌟 Start your healing journey today
+        </p>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  // Close modal when clicking outside
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closePricingModal();
+    }
+  });
+}
+
+function closePricingModal() {
+  const modal = document.getElementById('pricing-modal');
+  if (modal) {
+    modal.remove();
+  }
+}
+
+async function subscribeToPlan(planId) {
+  try {
+    const response = await fetch(`/api/checkout/start?plan=${planId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      alert(error.message || 'Failed to start checkout');
+      return;
+    }
+    
+    const data = await response.json();
+    // Redirect to Stripe Checkout
+    window.location.href = data.checkoutUrl;
+  } catch (error) {
+    console.error('Checkout error:', error);
+    alert('Unable to start checkout. Please try again.');
+  }
+}
+
 // Function to complete the current session
 async function completeSession() {
   try {
@@ -1956,146 +2134,46 @@ async function recordBeliefDecoderUsage(belief) {
   }
 }
 
-// Function to subscribe to unlimited access
-async function subscribeToUnlimited() {
-  try {
-    // Show loading state
-    const button = event.target;
-    const originalText = button.textContent;
-    button.textContent = 'Processing...';
-    button.disabled = true;
-    
-    const response = await makeApiCall('/api/get-or-create-subscription', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-    
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error?.message || 'Failed to create subscription');
-    }
-    
-    const { clientSecret, subscriptionId } = await response.json();
-    
-    if (clientSecret) {
-      // Initialize Stripe and handle payment
-      if (typeof Stripe === 'undefined') {
-        // Load Stripe if not already loaded
-        const script = document.createElement('script');
-        script.src = 'https://js.stripe.com/v3/';
-        script.onload = () => initializeStripePayment(clientSecret);
-        document.head.appendChild(script);
-      } else {
-        initializeStripePayment(clientSecret);
-      }
-    } else {
-      // Subscription already active
-      alert('Your subscription is already active!');
-      navigate('emotion-decoder');
-    }
-  } catch (error) {
-    console.error('Subscription error:', error);
-    alert('Failed to process subscription. Please try again.');
-    
-    // Reset button
-    const button = event.target;
-    button.textContent = 'Subscribe for $3.99/month';
-    button.disabled = false;
-  }
+// Legacy subscription function - redirects to new pricing modal
+function subscribeToUnlimited() {
+  // Redirect to new comprehensive pricing modal
+  showPricingModal();
 }
 
-// Function to initialize Stripe payment
-async function initializeStripePayment(clientSecret) {
+// Function to complete the current session
+async function completeSession() {
   try {
-    // Load Stripe.js if not already loaded
-    if (typeof Stripe === 'undefined') {
-      const script = document.createElement('script');
-      script.src = 'https://js.stripe.com/v3/';
-      document.head.appendChild(script);
-      
-      // Wait for Stripe to load
-      await new Promise((resolve) => {
-        script.onload = resolve;
-      });
-    }
-
-    // Initialize Stripe - use your actual public key here
-    const stripe = Stripe('pk_test_51234...'); // Replace with actual public key
+    const result = await completeEmotionSession();
     
-    // Create a simple payment form
-    const paymentContainer = document.createElement('div');
-    paymentContainer.innerHTML = `
-      <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center;">
-        <div style="background: white; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%;">
-          <h3 style="color: #8F5AFF; margin-bottom: 20px; text-align: center;">Complete Your Subscription</h3>
-          <div id="card-element" style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
-            <!-- Stripe Elements will create form elements here -->
-          </div>
-          <div style="text-align: center; margin-top: 20px;">
-            <button id="submit-payment" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;">
-              Subscribe for £3.99/month
-            </button>
-            <button onclick="this.closest('div[style*=fixed]').remove()" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
-              Cancel
-            </button>
-          </div>
-          <div id="card-errors" style="color: red; margin-top: 10px; text-align: center;"></div>
+    // Show completion summary
+    const main = document.getElementById('main-content');
+    main.innerHTML = `
+      <div style="text-align: center; padding: 40px;">
+        <h2 style="color: #8ED6B7; margin-bottom: 20px;">🎉 Session Complete!</h2>
+        <p style="color: #666; margin-bottom: 20px;">
+          You've successfully completed this healing session.
+        </p>
+        <div style="background: #8ED6B720; padding: 20px; border-radius: 15px; margin: 20px 0;">
+          <h3 style="color: #8F5AFF;">Session Summary:</h3>
+          <p><strong>Emotions Released:</strong> ${result.emotionsRemoved || 0}</p>
+          <p><strong>Healing Achieved:</strong> Complete transformation</p>
+        </div>
+        <div style="margin-top: 30px;">
+          <button onclick="navigate('emotion-decoder')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; margin-right: 10px;">
+            Start New Session
+          </button>
+          <button onclick="navigate('membership')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer;">
+            View Dashboard
+          </button>
         </div>
       </div>
     `;
     
-    document.body.appendChild(paymentContainer);
-    
-    // Create card element
-    const elements = stripe.elements();
-    const cardElement = elements.create('card', {
-      style: {
-        base: {
-          fontSize: '16px',
-          color: '#424770',
-          '::placeholder': {
-            color: '#aab7c4',
-          },
-        },
-      },
-    });
-    
-    cardElement.mount('#card-element');
-    
-    // Handle form submission
-    const submitButton = paymentContainer.querySelector('#submit-payment');
-    const cardErrors = paymentContainer.querySelector('#card-errors');
-    
-    submitButton.addEventListener('click', async (event) => {
-      event.preventDefault();
-      
-      submitButton.disabled = true;
-      submitButton.textContent = 'Processing...';
-      
-      const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: cardElement,
-        }
-      });
-      
-      if (result.error) {
-        cardErrors.textContent = result.error.message;
-        submitButton.disabled = false;
-        submitButton.textContent = 'Subscribe for £3.99/month';
-      } else {
-        // Payment succeeded
-        paymentContainer.remove();
-        alert('Welcome to unlimited access! Your subscription is now active.');
-        navigate('emotion-decoder');
-      }
-    });
-    
   } catch (error) {
-    console.error('Stripe initialization error:', error);
-    alert('Payment system unavailable. Please try again later.');
+    console.error('Error completing session:', error);
+    alert('Unable to complete session. Please try again.');
   }
+}
 }
 
 // Function to check authentication and load membership dashboard
@@ -2186,16 +2264,20 @@ async function checkAuthAndLoadMembership() {
           <div style="margin-bottom: 10px;">
             <strong>This Month:</strong> ${usageStats.history ? usageStats.history.length : 0}
           </div>
-          ${usageStats.isSubscribed ? 
-            '<div style="color: #8ED6B7; font-weight: bold;">Unlimited Access Active</div>' :
+          ${usageStats.subscriptionTier === 'premium' ? 
+            '<div style="color: #8ED6B7; font-weight: bold;">⭐ Premium Access Active</div>' :
+            usageStats.subscriptionTier === 'basic' ? 
+            '<div style="color: #8F5AFF; font-weight: bold;">✨ Basic Access Active</div>' :
             `<div style="margin-bottom: 15px;">
-              <strong>Free Sessions:</strong> ${Math.max(0, 3 - usageStats.usage)}/3 remaining
+              <strong>Free Emotion Sessions:</strong> ${Math.max(0, 3 - (usageStats.emotionDecoderSessions || 0))}/3 remaining
             </div>`
           }
           ${!usageStats.isSubscribed ? 
-            `<button onclick="subscribeToUnlimited()" style="background: #8F5AFF; color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px;">
-              Upgrade to Premium - £3.99/month
-            </button>` : 
+            `<div style="margin-top: 15px;">
+              <button onclick="showPricingModal()" style="background: #8F5AFF; color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; width: 100%; margin-bottom: 10px;">
+                View Pricing Plans
+              </button>
+            </div>` : 
             `<button onclick="manageBilling()" style="background: transparent; color: #8F5AFF; padding: 10px 20px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px;">
               Manage Billing
             </button>`
@@ -2212,15 +2294,15 @@ async function checkAuthAndLoadMembership() {
             <div style="font-size: 12px; opacity: 0.9;">Release trapped emotions</div>
             <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${usageStats.emotionUsage || 0} sessions completed</div>
           </button>
-          <button onclick="navigate('allergy-identifier')" style="background: linear-gradient(135deg, #8ED6B7, #B0E5D1); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
-            <div style="font-weight: bold; margin-bottom: 5px;">Allergy Identifier</div>
+          <button onclick="navigate('allergy-identifier')" style="background: linear-gradient(135deg, #8ED6B7, #B0E5D1); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left; position: relative;">
+            <div style="font-weight: bold; margin-bottom: 5px;">🔒 Allergy Identifier</div>
             <div style="font-size: 12px; opacity: 0.9;">Identify & heal allergens</div>
-            <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${usageStats.allergyUsage || 0} sessions completed</div>
+            <div style="font-size: 10px; opacity: 0.8; margin-top: 5px; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 10px; display: inline-block;">Premium £5.99+</div>
           </button>
-          <button onclick="navigate('belief-decoder')" style="background: linear-gradient(135deg, #FF914D, #FFAD70); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
-            <div style="font-weight: bold; margin-bottom: 5px;">⭐ Belief Decoder</div>
+          <button onclick="navigate('belief-decoder')" style="background: linear-gradient(135deg, #FF914D, #FFAD70); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left; position: relative;">
+            <div style="font-weight: bold; margin-bottom: 5px;">🔒 Belief Decoder</div>
             <div style="font-size: 12px; opacity: 0.9;">Transform limiting beliefs</div>
-            <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${usageStats.beliefUsage || 0} sessions completed</div>
+            <div style="font-size: 10px; opacity: 0.8; margin-top: 5px; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 10px; display: inline-block;">Premium £5.99+</div>
           </button>
           <button onclick="navigate('journal')" style="background: linear-gradient(135deg, #85C9F2, #B3D9FF); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
             <div style="font-weight: bold; margin-bottom: 5px;">Journal</div>

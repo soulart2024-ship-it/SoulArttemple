@@ -927,12 +927,23 @@ function hasPremiumAccess(user) {
   return user.subscriptionTier === 'premium';
 }
 
-function canUseEmotionDecoder(user) {
-  // Premium/basic subscribers get unlimited access
-  if (hasBasicAccess(user)) return true;
+async function canStartSession(feature, user) {
+  // Check subscription tier for premium features
+  if (feature === 'belief_decoder' || feature === 'allergy_identifier') {
+    return hasPremiumAccess(user) && user.subscriptionStatus === 'active';
+  }
   
-  // Free users get 3 sessions
-  return (user.emotionDecoderSessions || 0) < 3;
+  // For emotion decoder - basic/premium subscribers get unlimited access
+  if (feature === 'emotion_decoder') {
+    if (hasBasicAccess(user) && user.subscriptionStatus === 'active') {
+      return true;
+    }
+    
+    // Free users get 3 sessions
+    return (user.emotionDecoderSessions || 0) < 3;
+  }
+  
+  return false;
 }
 
 // Session Management API for healing features
@@ -950,24 +961,28 @@ app.post('/api/sessions/start', isAuthenticated, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     
-    // Check access permissions
-    if (feature === 'belief_decoder' || feature === 'allergy_identifier') {
-      if (!hasPremiumAccess(user[0])) {
+    // Check access permissions using new session-based logic
+    const canStart = await canStartSession(feature, user[0]);
+    
+    if (!canStart) {
+      if (feature === 'belief_decoder' || feature === 'allergy_identifier') {
         return res.status(403).json({ 
-          message: `${feature.replace('_', ' ')} requires premium subscription`,
+          message: `${feature.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())} requires Premium subscription (£5.99/month)`,
           needsSubscription: true,
-          requiredTier: 'premium'
+          requiredTier: 'premium',
+          currentTier: user[0].subscriptionTier || 'free'
         });
       }
-    }
-    
-    if (feature === 'emotion_decoder' && !canUseEmotionDecoder(user[0])) {
-      return res.status(403).json({
-        message: "You've used all 3 free Emotion Decoder sessions. Subscribe for unlimited access!",
-        needsSubscription: true,
-        sessionsUsed: user[0].emotionDecoderSessions || 0,
-        maxSessions: 3
-      });
+      
+      if (feature === 'emotion_decoder') {
+        return res.status(403).json({
+          message: "You've used all 3 free Emotion Decoder sessions. Subscribe for unlimited access!",
+          needsSubscription: true,
+          sessionsUsed: user[0].emotionDecoderSessions || 0,
+          maxSessions: 3,
+          currentTier: user[0].subscriptionTier || 'free'
+        });
+      }
     }
     
     // Check for existing active session
@@ -1341,8 +1356,21 @@ app.post('/api/stripe/webhook', express.raw({type: 'application/json'}), async (
           const userId = session.metadata.userId;
           const tier = session.metadata.tier || 'basic';
           const interval = session.metadata.interval || 'month';
+          const plan = session.metadata.plan;
           
-          // Update user with subscription details
+          // Get the subscription to extract period end and price details
+          let currentPeriodEnd = null;
+          let stripePriceId = null;
+          
+          try {
+            const subscription = await stripe.subscriptions.retrieve(session.subscription);
+            currentPeriodEnd = new Date(subscription.current_period_end * 1000);
+            stripePriceId = subscription.items.data[0]?.price?.id || null;
+          } catch (error) {
+            console.error('Error retrieving subscription details:', error);
+          }
+          
+          // Update user with complete subscription details
           await db.update(users)
             .set({
               stripeSubscriptionId: session.subscription,
@@ -1350,9 +1378,13 @@ app.post('/api/stripe/webhook', express.raw({type: 'application/json'}), async (
               isSubscribed: true,
               subscriptionTier: tier,
               subscriptionInterval: interval,
+              subscriptionCurrentPeriodEnd: currentPeriodEnd,
+              stripePriceId: stripePriceId,
               updatedAt: new Date()
             })
             .where(eq(users.id, userId));
+            
+          console.log(`User ${userId} subscription updated: ${tier} ${interval}, ends: ${currentPeriodEnd}`);
         }
         break;
         
@@ -1393,15 +1425,40 @@ app.post('/api/stripe/webhook', express.raw({type: 'application/json'}), async (
         const [subscriptionUser] = await db.select().from(users).where(eq(users.stripeSubscriptionId, updatedSubscription.id));
         
         if (subscriptionUser) {
-          // Get the current period end and update subscription details
+          // Extract price details to determine tier and interval
+          let tier = subscriptionUser.subscriptionTier || 'basic';
+          let interval = subscriptionUser.subscriptionInterval || 'month';
+          let stripePriceId = null;
+          
+          if (updatedSubscription.items?.data?.[0]?.price) {
+            const priceAmount = updatedSubscription.items.data[0].price.unit_amount;
+            const priceInterval = updatedSubscription.items.data[0].price.recurring?.interval;
+            stripePriceId = updatedSubscription.items.data[0].price.id;
+            
+            // Map price to tier based on amount and interval
+            if (priceInterval === 'month') {
+              tier = priceAmount >= 599 ? 'premium' : 'basic'; // £5.99+ = premium
+              interval = 'month';
+            } else if (priceInterval === 'year') {
+              tier = priceAmount >= 5391 ? 'premium' : 'basic'; // £53.91+ = premium
+              interval = 'year';
+            }
+          }
+          
+          // Update subscription details
           await db.update(users)
             .set({
               subscriptionStatus: updatedSubscription.status,
               isSubscribed: updatedSubscription.status === 'active',
+              subscriptionTier: tier,
+              subscriptionInterval: interval,
               subscriptionCurrentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000),
+              stripePriceId: stripePriceId,
               updatedAt: new Date()
             })
             .where(eq(users.id, subscriptionUser.id));
+            
+          console.log(`Subscription updated for user ${subscriptionUser.id}: ${tier} ${interval}, status: ${updatedSubscription.status}`);
         }
         break;
         
