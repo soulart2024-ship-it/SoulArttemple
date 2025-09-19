@@ -133,12 +133,14 @@ document.addEventListener('click', function(event) {
   }
 });
 
-// Prevent dropdown from closing when clicking inside it
-document.addEventListener('mouseenter', function(event) {
-  if (event.target.closest('#membership-dropdown')) {
+// Prevent dropdown from closing when hovering over it
+// Attach to the dropdown element specifically to avoid target issues
+const membershipDropdown = document.getElementById('membership-dropdown');
+if (membershipDropdown) {
+  membershipDropdown.addEventListener('mouseenter', function(event) {
     clearTimeout(dropdownCloseTimeout);
-  }
-});
+  });
+}
 
 async function navigate(page, addToHistory = true) {
   const main = document.getElementById('main-content');
