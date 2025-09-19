@@ -9,7 +9,7 @@ const { Strategy } = require("openid-client/passport");
 const Stripe = require("stripe");
 const { drizzle } = require("drizzle-orm/postgres-js");
 const postgres = require("postgres");
-const { users, usageLog, sessions, journalEntries, artworks } = require("../shared/schema-js.js");
+const { users, usageLog, sessions, journalEntries, artworks, healingSessions } = require("../shared/schema-js.js");
 const { eq, and, gte, desc, sql } = require("drizzle-orm");
 
 const app = express();

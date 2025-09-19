@@ -41,6 +41,13 @@ export const users = pgTable("users", {
   beliefDecoderUsage: integer("belief_decoder_usage").default(0),
   isSubscribed: boolean("is_subscribed").default(false),
   subscriptionStatus: varchar("subscription_status"), // active, canceled, past_due, etc.
+  // New subscription tier system
+  subscriptionTier: varchar("subscription_tier"), // basic, premium
+  subscriptionInterval: varchar("subscription_interval"), // month, year
+  subscriptionCurrentPeriodEnd: timestamp("subscription_current_period_end"),
+  stripePriceId: varchar("stripe_price_id"),
+  // Session-based tracking for Emotion Decoder (3 free sessions)
+  emotionDecoderSessions: integer("emotion_decoder_sessions").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -90,3 +97,19 @@ export type JournalEntry = typeof journalEntries.$inferSelect;
 export type InsertJournalEntry = typeof journalEntries.$inferInsert;
 export type Artwork = typeof artworks.$inferSelect;
 export type InsertArtwork = typeof artworks.$inferInsert;
+
+// Healing sessions table for session-based feature usage
+export const healingSessions = pgTable("healing_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  feature: varchar("feature").notNull(), // emotion_decoder, belief_decoder, allergy_identifier
+  startedAt: timestamp("started_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+  removalCount: integer("removal_count").default(0), // number of emotions/beliefs/allergens processed in this session
+  status: varchar("status").notNull().default("active"), // active, completed
+}, (table) => [
+  index("idx_healing_sessions_user_status").on(table.userId, table.status),
+]);
+
+export type HealingSession = typeof healingSessions.$inferSelect;
+export type InsertHealingSession = typeof healingSessions.$inferInsert;
