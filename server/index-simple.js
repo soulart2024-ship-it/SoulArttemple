@@ -507,6 +507,18 @@ app.get('/api/auth/user', isAuthenticated, async (req, res) => {
   }
 });
 
+// Premium access endpoint - single source of truth
+app.get('/api/access', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const access = await storage.getPremiumAccess(userId);
+    res.json(access);
+  } catch (error) {
+    console.error("Error checking premium access:", error);
+    res.status(500).json({ message: "Failed to check access" });
+  }
+});
+
 // Emotion decoder routes
 app.get('/api/emotion-decoder/can-use', isAuthenticated, async (req, res) => {
   try {
@@ -890,16 +902,8 @@ app.delete('/api/artworks/:artworkId', isAuthenticated, async (req, res) => {
   }
 });
 
-// New tiered subscription system
+// Simplified single premium tier subscription system
 const SUBSCRIPTION_PLANS = {
-  basic_monthly: {
-    name: 'SoulArt Temple Basic Monthly',
-    description: 'Emotion Decoder + Doodle Canvas + Journal',
-    amount: 399, // £3.99 in pence
-    currency: 'gbp',
-    interval: 'month',
-    tier: 'basic'
-  },
   premium_monthly: {
     name: 'SoulArt Temple Premium Monthly', 
     description: 'All features including Belief Decoder + Allergy Identifier',
@@ -908,18 +912,10 @@ const SUBSCRIPTION_PLANS = {
     interval: 'month',
     tier: 'premium'
   },
-  basic_yearly: {
-    name: 'SoulArt Temple Basic Yearly',
-    description: 'Emotion Decoder + Doodle Canvas + Journal (25% discount)',
-    amount: 3600, // £36.00 in pence (25% off £48)
-    currency: 'gbp',
-    interval: 'year',
-    tier: 'basic'
-  },
   premium_yearly: {
     name: 'SoulArt Temple Premium Yearly',
-    description: 'All features (25% discount)',
-    amount: 5391, // £53.91 in pence (25% off £71.88)
+    description: 'All features (yearly discount)',
+    amount: 3500, // £35.00 in pence
     currency: 'gbp',
     interval: 'year', 
     tier: 'premium'

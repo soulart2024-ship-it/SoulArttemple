@@ -338,8 +338,14 @@ async function navigate(page, addToHistory = true) {
         
         const user = await response.json();
         
-        // Check if user has premium access
-        if (user.subscriptionTier !== 'premium' || user.subscriptionStatus !== 'active') {
+        // Check premium access using new single endpoint
+        const accessResponse = await fetch('/api/access');
+        if (!accessResponse.ok) {
+          throw new Error('Failed to check access');
+        }
+        const access = await accessResponse.json();
+        
+        if (!access.hasPremium) {
           main.innerHTML = `
             <h2>🔒 Allergy Identification System</h2>
             <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF6B9D20, #8F5AFF20); border-radius: 15px; margin: 20px 0;">
@@ -436,8 +442,14 @@ async function navigate(page, addToHistory = true) {
         
         const user = await response.json();
         
-        // Check if user has premium access
-        if (user.subscriptionTier !== 'premium' || user.subscriptionStatus !== 'active') {
+        // Check premium access using new single endpoint
+        const accessResponse = await fetch('/api/access');
+        if (!accessResponse.ok) {
+          throw new Error('Failed to check access');
+        }
+        const access = await accessResponse.json();
+        
+        if (!access.hasPremium) {
           main.innerHTML = `
             <h2>🔒 Belief Decoder System</h2>
             <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF6B9D20, #8F5AFF20); border-radius: 15px; margin: 20px 0;">

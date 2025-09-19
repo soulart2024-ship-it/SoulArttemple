@@ -34,6 +34,9 @@ export interface IStorage {
   
   // Usage analytics
   getUserUsageHistory(userId: string, days?: number): Promise<any[]>;
+  
+  // Premium access control - single source of truth
+  getPremiumAccess(userId: string): Promise<{ hasPremium: boolean; plan: string | null; interval: string | null }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -224,6 +227,30 @@ export class DatabaseStorage implements IStorage {
         gte(usageLog.timestamp, since)
       ))
       .orderBy(desc(usageLog.timestamp));
+  }
+
+  // Premium access control - single source of truth
+  async getPremiumAccess(userId: string): Promise<{ hasPremium: boolean; plan: string | null; interval: string | null }> {
+    const user = await this.getUser(userId);
+    if (!user) {
+      return { hasPremium: false, plan: null, interval: null };
+    }
+
+    // Check all subscription indicators - robust checks for premium access
+    const isSubscribed = user.isSubscribed === true;
+    const hasActiveStatus = user.subscriptionStatus === 'active';
+    const hasPremiumTier = user.subscriptionTier === 'premium';
+    
+    // Check if subscription hasn't expired (if period end is set)
+    const isNotExpired = !user.subscriptionCurrentPeriodEnd || new Date() < new Date(user.subscriptionCurrentPeriodEnd);
+    
+    const hasPremium = (isSubscribed || hasActiveStatus || hasPremiumTier) && isNotExpired;
+    
+    return {
+      hasPremium,
+      plan: hasPremium ? 'premium' : null,
+      interval: user.subscriptionInterval || null
+    };
   }
 }
 
