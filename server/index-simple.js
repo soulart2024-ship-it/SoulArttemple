@@ -492,7 +492,15 @@ app.get('/api/auth/user', isAuthenticated, async (req, res) => {
   try {
     const userId = req.user.claims.sub;
     const user = await storage.getUser(userId);
-    res.json(user);
+    
+    // Ensure consistent field names for frontend
+    const responseUser = {
+      ...user,
+      subscriptionTier: user.subscriptionTier || user.subscription_tier,
+      subscriptionStatus: user.subscriptionStatus || user.subscription_status
+    };
+    
+    res.json(responseUser);
   } catch (error) {
     console.error("Error fetching user:", error);
     res.status(500).json({ message: "Failed to fetch user" });
