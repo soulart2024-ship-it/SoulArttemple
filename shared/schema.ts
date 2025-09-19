@@ -69,9 +69,24 @@ export const journalEntries = pgTable("journal_entries", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Artworks table for Doodle Canvas creations
+export const artworks = pgTable("artworks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  title: varchar("title"), // optional title for the artwork
+  imageDataUrl: varchar("image_data_url").notNull(), // base64 encoded image data
+  canvasWidth: integer("canvas_width").default(600),
+  canvasHeight: integer("canvas_height").default(450),
+  toolsUsed: jsonb("tools_used"), // metadata about tools/colors used
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type UsageLog = typeof usageLog.$inferSelect;
 export type InsertUsageLog = typeof usageLog.$inferInsert;
 export type JournalEntry = typeof journalEntries.$inferSelect;
 export type InsertJournalEntry = typeof journalEntries.$inferInsert;
+export type Artwork = typeof artworks.$inferSelect;
+export type InsertArtwork = typeof artworks.$inferInsert;

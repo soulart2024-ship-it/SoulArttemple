@@ -9,7 +9,7 @@ const { Strategy } = require("openid-client/passport");
 const Stripe = require("stripe");
 const { drizzle } = require("drizzle-orm/postgres-js");
 const postgres = require("postgres");
-const { users, usageLog, sessions, journalEntries } = require("../shared/schema-js.js");
+const { users, usageLog, sessions, journalEntries, artworks } = require("../shared/schema-js.js");
 const { eq, and, gte, desc, sql } = require("drizzle-orm");
 
 const app = express();
@@ -740,6 +740,145 @@ app.get('/api/journal/download', isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error("Error preparing journal download:", error);
     res.status(500).json({ message: "Failed to prepare journal download" });
+  }
+});
+
+// Artwork routes for Doodle Canvas
+app.post('/api/artworks', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { title, imageDataUrl, canvasWidth, canvasHeight, toolsUsed } = req.body;
+    
+    // Validate input
+    if (!imageDataUrl || typeof imageDataUrl !== 'string') {
+      return res.status(400).json({ message: "Image data is required" });
+    }
+    
+    // Check if it's a valid data URL
+    if (!imageDataUrl.startsWith('data:image/')) {
+      return res.status(400).json({ message: "Invalid image format" });
+    }
+    
+    // Check size limits (10MB max)
+    if (imageDataUrl.length > 10 * 1024 * 1024) {
+      return res.status(400).json({ message: "Image too large (max 10MB)" });
+    }
+    
+    // Create artwork record
+    const [artwork] = await db.insert(artworks).values({
+      userId,
+      title: title || `Doodle Art ${new Date().toLocaleDateString()}`,
+      imageDataUrl,
+      canvasWidth: canvasWidth || 600,
+      canvasHeight: canvasHeight || 450,
+      toolsUsed: toolsUsed || {},
+    }).returning();
+    
+    res.json({
+      id: artwork.id,
+      title: artwork.title,
+      createdAt: artwork.createdAt,
+      message: "Artwork saved successfully!"
+    });
+  } catch (error) {
+    console.error("Error saving artwork:", error);
+    res.status(500).json({ message: "Failed to save artwork" });
+  }
+});
+
+app.get('/api/artworks', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = parseInt(req.query.offset) || 0;
+    
+    const userArtworks = await db
+      .select({
+        id: artworks.id,
+        title: artworks.title,
+        canvasWidth: artworks.canvasWidth,
+        canvasHeight: artworks.canvasHeight,
+        createdAt: artworks.createdAt,
+        updatedAt: artworks.updatedAt,
+      })
+      .from(artworks)
+      .where(eq(artworks.userId, userId))
+      .orderBy(desc(artworks.createdAt))
+      .limit(limit)
+      .offset(offset);
+    
+    // Get total count
+    const [countResult] = await db
+      .select({ count: sql`count(*)` })
+      .from(artworks)
+      .where(eq(artworks.userId, userId));
+    
+    res.json({
+      artworks: userArtworks,
+      totalCount: parseInt(countResult.count) || 0,
+      limit,
+      offset
+    });
+  } catch (error) {
+    console.error("Error fetching artworks:", error);
+    res.status(500).json({ message: "Failed to fetch artworks" });
+  }
+});
+
+app.get('/api/artworks/:artworkId', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { artworkId } = req.params;
+    
+    const [artwork] = await db
+      .select()
+      .from(artworks)
+      .where(and(
+        eq(artworks.id, artworkId),
+        eq(artworks.userId, userId)
+      ));
+    
+    if (!artwork) {
+      return res.status(404).json({ message: "Artwork not found" });
+    }
+    
+    res.json(artwork);
+  } catch (error) {
+    console.error("Error fetching artwork:", error);
+    res.status(500).json({ message: "Failed to fetch artwork" });
+  }
+});
+
+app.delete('/api/artworks/:artworkId', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { artworkId } = req.params;
+    
+    // Check if artwork exists and belongs to user
+    const [artwork] = await db
+      .select()
+      .from(artworks)
+      .where(and(
+        eq(artworks.id, artworkId),
+        eq(artworks.userId, userId)
+      ));
+    
+    if (!artwork) {
+      return res.status(404).json({ message: "Artwork not found" });
+    }
+    
+    // Delete the artwork
+    await db
+      .delete(artworks)
+      .where(and(
+        eq(artworks.id, artworkId),
+        eq(artworks.userId, userId)
+      ));
+    
+    res.json({ message: "Artwork deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting artwork:", error);
+    res.status(500).json({ message: "Failed to delete artwork" });
   }
 });
 

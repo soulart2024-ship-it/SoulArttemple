@@ -3222,242 +3222,783 @@ function renderFlowArtModule() {
   const main = document.getElementById('main-content');
 
   main.innerHTML = `
-    <div class="flow-art-container">
-      <h2>Flow Art Therapy</h2>
-      <p class="flow-art-subtitle">Welcome to your fluid creative space. Let the colors move your emotions and bring you into stillness.</p>
+    <div class="doodle-canvas-container">
+      <h2>Your Doodle Canvas</h2>
+      <p class="doodle-canvas-subtitle">Create beautiful art in your digital coloring book. Draw, doodle, and express your creativity with brushes, colors, and stamps.</p>
       <p style="font-style: italic; color: var(--chakra-heart); margin-bottom: 30px;">
-        "Through art, we give form to our formless feelings and find peace in creative expression."
+        "Every stroke tells a story, every color holds an emotion, every creation holds your essence."
       </p>
 
-      <div class="flow-art-actions" style="margin: 30px 0;">
-        <button onclick="showSampleArt()" class="btn-primary" style="margin-right: 15px;">
-          View Sample SoulArt Canvas
+      <div class="doodle-canvas-actions" style="margin: 30px 0;">
+        <button onclick="showMeditationArtPieces()" class="btn-primary" style="margin-right: 15px;">
+          SoulArt Meditation Art Pieces
         </button>
-        <button onclick="launchArtCreator()" class="btn-secondary">
-          Create My Flow Art
+        <button onclick="launchDoodleCanvas()" class="btn-secondary">
+          Create My Doodle Art
         </button>
       </div>
 
-      <div id="flow-art-area" class="flow-art-display"></div>
+      <div id="doodle-canvas-area" class="doodle-canvas-display"></div>
     </div>
   `;
 }
 
-function showSampleArt() {
-  const container = document.getElementById('flow-art-area');
+function showMeditationArtPieces() {
+  const container = document.getElementById('doodle-canvas-area');
   container.innerHTML = `
     <div style="background: linear-gradient(135deg, var(--chakra-crown), var(--chakra-throat)); padding: 30px; border-radius: 15px; margin-top: 20px; text-align: center;">
-      <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-        <img src="/flow-art-sample.png?t=${Date.now()}" alt="Be Courage Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" onload="console.log('Image loaded successfully')" onerror="console.log('Image failed to load'); this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRjZCNkIiLz48c3RvcCBvZmZzZXQ9IjIwJSIgc3RvcC1jb2xvcj0iIzRFQ0RDNCIvPjxzdG9wIG9mZnNldD0iNDAlIiBzdG9wLWNvbG9yPSIjNDVCN0QxIi8+PHN0b3Agb2Zmc2V0PSI2MCUiIHN0b3AtY29sb3I9IiM5NkNFQjQiLz48c3RvcCBvZmZzZXQ9IjgwJSIgc3RvcC1jb2xvcj0iI0ZFQ0E1NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0ZGOUZGMyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjUwIiBmaWxsPSJ1cmwoI2dyYWQpIi8+PHRleHQgeD0iMjAwIiB5PSIxMzAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj5CZSBDb3VyYWdlPC90ZXh0Pjwvc3ZnPg==';">
-        <p style="color: var(--text-primary); font-weight: bold; font-size: 18px; margin-top: 15px; font-style: italic;">
-          "Be Courage" - Sample SoulArt Flow
-        </p>
+      <h3 style="color: white; margin-bottom: 25px; font-size: 1.8em;">SoulArt Meditation Art Pieces</h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <!-- Meditation Art Piece 1 -->
+        <div style="background: rgba(255,255,255,0.95); padding: 20px; border-radius: 10px; cursor: pointer;" onclick="openMeditationPiece(1)">
+          <img src="/flow-art-sample.png?t=${Date.now()}" alt="Sacred Courage Meditation" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;" onload="console.log('Image loaded successfully')" onerror="console.log('Image failed to load'); this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQxIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkY2QjZCIi8+PHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiM0RUNEQzQiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM5NkNFQjQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE1MCIgZmlsbD0idXJsKCNncmFkMSkiLz48dGV4dCB4PSIyMDAiIHk9IjgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSI+U2FjcmVkIENvdXJhZ2U8L3RleHQ+PC9zdmc+';">
+          <h4 style="color: var(--chakra-crown); margin: 10px 0 5px 0;">Sacred Courage</h4>
+          <p style="color: var(--text-primary); font-size: 0.9em; margin: 0;">5-minute courage meditation</p>
+        </div>
+        
+        <!-- Meditation Art Piece 2 -->
+        <div style="background: rgba(255,255,255,0.95); padding: 20px; border-radius: 10px; cursor: pointer;" onclick="openMeditationPiece(2)">
+          <div style="width: 100%; height: 150px; background: linear-gradient(45deg, var(--chakra-heart), var(--chakra-sacral)); border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center;">
+            <span style="color: white; font-size: 18px; font-weight: bold;">Healing Waters</span>
+          </div>
+          <h4 style="color: var(--chakra-crown); margin: 10px 0 5px 0;">Healing Waters</h4>
+          <p style="color: var(--text-primary); font-size: 0.9em; margin: 0;">10-minute emotional healing</p>
+        </div>
+        
+        <!-- Meditation Art Piece 3 -->
+        <div style="background: rgba(255,255,255,0.95); padding: 20px; border-radius: 10px; cursor: pointer;" onclick="openMeditationPiece(3)">
+          <div style="width: 100%; height: 150px; background: linear-gradient(135deg, var(--chakra-third-eye), var(--chakra-crown)); border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center;">
+            <span style="color: white; font-size: 18px; font-weight: bold;">Inner Wisdom</span>
+          </div>
+          <h4 style="color: var(--chakra-crown); margin: 10px 0 5px 0;">Inner Wisdom</h4>
+          <p style="color: var(--text-primary); font-size: 0.9em; margin: 0;">15-minute wisdom meditation</p>
+        </div>
       </div>
-      <p style="color: white; font-style: italic; margin: 0;">
-        "Let your emotions speak in color. Each hue carries the vibration of your soul's truth."
+      
+      <p style="color: white; font-style: italic; margin: 15px 0;">
+        "Click any piece above to begin your guided meditation with beautiful visuals and healing music."
       </p>
-      <button onclick="launchArtCreator()" class="btn-primary" style="margin-top: 20px; background: white; color: var(--chakra-crown);">
-        Create My Own
+      <button onclick="launchDoodleCanvas()" class="btn-primary" style="margin-top: 20px; background: white; color: var(--chakra-crown);">
+        Create Your Own Art
       </button>
     </div>
   `;
 }
 
-function launchArtCreator() {
-  const container = document.getElementById('flow-art-area');
+function launchDoodleCanvas() {
+  const container = document.getElementById('doodle-canvas-area');
   container.innerHTML = `
-    <div style="background: linear-gradient(135deg, var(--chakra-heart), var(--chakra-sacral)); padding: 40px; border-radius: 15px; margin-top: 20px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.15);">
+    <div style="background: linear-gradient(135deg, var(--chakra-heart), var(--chakra-sacral)); padding: 40px; border-radius: 15px; margin-top: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); min-height: 800px;">
       <div style="background: rgba(255,255,255,0.95); padding: 30px; border-radius: 12px; color: var(--text-primary);">
         
-        <h3 style="color: var(--chakra-crown); margin-bottom: 25px; font-size: 1.8em;">Create Your Flow Art</h3>
+        <h3 style="color: var(--chakra-crown); margin-bottom: 25px; font-size: 1.8em; text-align: center;">Your Doodle Canvas</h3>
         
-        <!-- Music Selection -->
-        <div style="background: var(--chakra-throat); color: white; padding: 20px; border-radius: 10px; margin: 25px 0;">
-          <h4 style="color: white; margin-bottom: 15px; font-size: 1.2em;">Choose Your Concentration Music:</h4>
-          <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-            <button onclick="playAmbientSound('rain')" class="concentration-sound-btn" data-sound="rain" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
-              🌧️ Gentle Rain
-            </button>
-            <button onclick="playAmbientSound('ocean')" class="concentration-sound-btn" data-sound="ocean" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
-              🌊 Ocean Waves
-            </button>
-            <button onclick="playAmbientSound('forest')" class="concentration-sound-btn" data-sound="forest" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
-              🌲 Forest Sounds
-            </button>
-            <button onclick="playAmbientSound('chakra')" class="concentration-sound-btn" data-sound="chakra" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
-              🎵 Chakra Tones
-            </button>
-            <button onclick="stopAmbientSound()" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
-              🔇 Silence
-            </button>
-          </div>
-          <div id="music-controls" style="margin-top: 15px; display: none;">
-            <p style="margin: 5px 0; font-size: 0.9em;">Now playing: <span id="current-sound-name">None</span></p>
-            <input type="range" id="volume-control" min="0" max="100" value="30" onchange="adjustVolume(this.value)" style="width: 200px;">
-            <p style="margin: 5px 0; font-size: 0.8em;">Volume</p>
-          </div>
-        </div>
-
-        <!-- Drawing Canvas -->
-        <div style="background: white; padding: 20px; border-radius: 10px; margin: 25px 0;">
-          <canvas id="flow-canvas" width="350" height="250" style="border: 2px solid var(--chakra-crown); border-radius: 8px; touch-action: none; cursor: crosshair;">
-            Your browser doesn't support canvas. Please update your browser.
-          </canvas>
+        <div style="display: grid; grid-template-columns: 1fr 3fr 1fr; gap: 20px; align-items: start;">
           
-          <!-- Color Palette -->
-          <div style="margin-top: 15px;">
-            <p style="color: var(--text-primary); margin-bottom: 10px; font-weight: bold;">Choose Your Sacred Colors:</p>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
-              <div class="chakra-color" data-color="#FF0000" style="width: 30px; height: 30px; background: #FF0000; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Root Chakra - Grounding"></div>
-              <div class="chakra-color" data-color="#FF8C00" style="width: 30px; height: 30px; background: #FF8C00; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Sacral Chakra - Creativity"></div>
-              <div class="chakra-color" data-color="#FFD700" style="width: 30px; height: 30px; background: #FFD700; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Solar Plexus - Power"></div>
-              <div class="chakra-color" data-color="#32CD32" style="width: 30px; height: 30px; background: #32CD32; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Heart Chakra - Love"></div>
-              <div class="chakra-color" data-color="#1E90FF" style="width: 30px; height: 30px; background: #1E90FF; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Throat Chakra - Truth"></div>
-              <div class="chakra-color" data-color="#8A2BE2" style="width: 30px; height: 30px; background: #8A2BE2; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Third Eye - Wisdom"></div>
-              <div class="chakra-color" data-color="#9400D3" style="width: 30px; height: 30px; background: #9400D3; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Crown Chakra - Spirit"></div>
+          <!-- Left Panel - Drawing Tools -->
+          <div style="background: var(--chakra-throat); color: white; padding: 20px; border-radius: 10px;">
+            <h4 style="color: white; margin-bottom: 15px; font-size: 1.1em; text-align: center;">Drawing Tools</h4>
+            
+            <!-- Tool Selection -->
+            <div style="margin-bottom: 20px;">
+              <p style="margin-bottom: 10px; font-size: 0.9em;">Tool:</p>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button id="brush-tool" onclick="setDrawingTool('brush')" class="tool-btn active-tool" style="background: rgba(255,255,255,0.3); color: white; border: 2px solid white; padding: 8px; border-radius: 5px; font-size: 0.9em;">
+                  Brush
+                </button>
+                <button id="eraser-tool" onclick="setDrawingTool('eraser')" class="tool-btn" style="background: rgba(255,255,255,0.1); color: white; border: 2px solid rgba(255,255,255,0.3); padding: 8px; border-radius: 5px; font-size: 0.9em;">
+                  Eraser
+                </button>
+                <button id="stamp-tool" onclick="setDrawingTool('stamp')" class="tool-btn" style="background: rgba(255,255,255,0.1); color: white; border: 2px solid rgba(255,255,255,0.3); padding: 8px; border-radius: 5px; font-size: 0.9em;">
+                  Stamps
+                </button>
+              </div>
+            </div>
+            
+            <!-- Brush Size -->
+            <div style="margin-bottom: 20px;">
+              <p style="margin-bottom: 10px; font-size: 0.9em;">Size: <span id="brush-size-display">8</span>px</p>
+              <input type="range" id="brush-size" min="2" max="50" value="8" onchange="updateBrushSize(this.value)" style="width: 100%;">
+            </div>
+            
+            <!-- Color Palettes -->
+            <div style="margin-bottom: 20px;">
+              <p style="margin-bottom: 10px; font-size: 0.9em;">Chakra Colors:</p>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 15px;">
+                <div class="color-option chakra-color" data-color="#FF0000" style="width: 25px; height: 25px; background: #FF0000; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);" title="Root Chakra"></div>
+                <div class="color-option chakra-color" data-color="#FF8C00" style="width: 25px; height: 25px; background: #FF8C00; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);" title="Sacral Chakra"></div>
+                <div class="color-option chakra-color" data-color="#FFD700" style="width: 25px; height: 25px; background: #FFD700; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);" title="Solar Plexus"></div>
+                <div class="color-option chakra-color" data-color="#32CD32" style="width: 25px; height: 25px; background: #32CD32; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);" title="Heart Chakra"></div>
+                <div class="color-option chakra-color" data-color="#1E90FF" style="width: 25px; height: 25px; background: #1E90FF; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);" title="Throat Chakra"></div>
+                <div class="color-option chakra-color" data-color="#8A2BE2" style="width: 25px; height: 25px; background: #8A2BE2; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);" title="Third Eye"></div>
+                <div class="color-option chakra-color" data-color="#9400D3" style="width: 25px; height: 25px; background: #9400D3; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);" title="Crown Chakra"></div>
+              </div>
+              
+              <p style="margin-bottom: 10px; font-size: 0.9em;">More Colors:</p>
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 10px;">
+                <div class="color-option" data-color="#000000" style="width: 25px; height: 25px; background: #000000; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);"></div>
+                <div class="color-option" data-color="#FFFFFF" style="width: 25px; height: 25px; background: #FFFFFF; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.8);"></div>
+                <div class="color-option" data-color="#FF69B4" style="width: 25px; height: 25px; background: #FF69B4; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);"></div>
+                <div class="color-option" data-color="#00CED1" style="width: 25px; height: 25px; background: #00CED1; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);"></div>
+                <div class="color-option" data-color="#98FB98" style="width: 25px; height: 25px; background: #98FB98; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);"></div>
+                <div class="color-option" data-color="#DDA0DD" style="width: 25px; height: 25px; background: #DDA0DD; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);"></div>
+                <div class="color-option" data-color="#F0E68C" style="width: 25px; height: 25px; background: #F0E68C; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);"></div>
+                <div class="color-option" data-color="#FFA07A" style="width: 25px; height: 25px; background: #FFA07A; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5);"></div>
+              </div>
+              
+              <input type="color" id="custom-color" onchange="setCustomColor(this.value)" style="width: 100%; height: 30px; border: none; border-radius: 5px; margin-top: 5px;">
+            </div>
+            
+            <!-- Undo/Redo -->
+            <div style="display: flex; gap: 5px; margin-bottom: 15px;">
+              <button onclick="undoDraw()" style="flex: 1; background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 5px; border-radius: 5px; font-size: 0.8em;">
+                Undo
+              </button>
+              <button onclick="redoDraw()" style="flex: 1; background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 5px; border-radius: 5px; font-size: 0.8em;">
+                Redo
+              </button>
+            </div>
+            
+            <!-- Canvas Actions -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button onclick="clearCanvas()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px; border-radius: 5px; font-size: 0.9em;">
+                Clear All
+              </button>
+              <button onclick="saveDoodleArt()" style="background: var(--chakra-heart); color: white; border: none; padding: 8px; border-radius: 5px; font-size: 0.9em;">
+                Save Art
+              </button>
             </div>
           </div>
           
-          <!-- Canvas Controls -->
-          <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-            <button onclick="clearCanvas()" style="background: var(--chakra-crown); color: white; border: none; padding: 8px 15px; border-radius: 5px; font-size: 0.9em;">
-              Clear Canvas
-            </button>
-            <button onclick="saveFlowArt()" style="background: var(--chakra-heart); color: white; border: none; padding: 8px 15px; border-radius: 5px; font-size: 0.9em;">
-              Save Creation
-            </button>
+          <!-- Center Panel - Large Canvas -->
+          <div style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
+            <canvas id="doodle-canvas" width="600" height="450" style="border: 3px solid var(--chakra-crown); border-radius: 8px; touch-action: none; cursor: crosshair; max-width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+              Your browser doesn't support canvas. Please update your browser.
+            </canvas>
+            <p style="margin-top: 10px; font-size: 0.9em; color: var(--text-primary); font-style: italic;">Click and drag to draw • Use tools on the left</p>
+          </div>
+          
+          <!-- Right Panel - Stamps & Music -->
+          <div>
+            <!-- Stamps Panel -->
+            <div id="stamps-panel" style="background: var(--chakra-sacral); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: none;">
+              <h4 style="color: white; margin-bottom: 15px; font-size: 1.1em; text-align: center;">Stamps</h4>
+              
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px;">
+                <div class="stamp-option" data-stamp="heart" style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 5px; cursor: pointer; text-align: center; border: 2px solid transparent;">
+                  <div style="font-size: 24px;">❤️</div>
+                  <p style="font-size: 0.8em; margin: 5px 0 0 0;">Heart</p>
+                </div>
+                <div class="stamp-option" data-stamp="star" style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 5px; cursor: pointer; text-align: center; border: 2px solid transparent;">
+                  <div style="font-size: 24px;">⭐</div>
+                  <p style="font-size: 0.8em; margin: 5px 0 0 0;">Star</p>
+                </div>
+                <div class="stamp-option" data-stamp="flower" style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 5px; cursor: pointer; text-align: center; border: 2px solid transparent;">
+                  <div style="font-size: 24px;">🌸</div>
+                  <p style="font-size: 0.8em; margin: 5px 0 0 0;">Flower</p>
+                </div>
+                <div class="stamp-option" data-stamp="butterfly" style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 5px; cursor: pointer; text-align: center; border: 2px solid transparent;">
+                  <div style="font-size: 24px;">🦋</div>
+                  <p style="font-size: 0.8em; margin: 5px 0 0 0;">Butterfly</p>
+                </div>
+                <div class="stamp-option" data-stamp="moon" style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 5px; cursor: pointer; text-align: center; border: 2px solid transparent;">
+                  <div style="font-size: 24px;">🌙</div>
+                  <p style="font-size: 0.8em; margin: 5px 0 0 0;">Moon</p>
+                </div>
+                <div class="stamp-option" data-stamp="sun" style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 5px; cursor: pointer; text-align: center; border: 2px solid transparent;">
+                  <div style="font-size: 24px;">☀️</div>
+                  <p style="font-size: 0.8em; margin: 5px 0 0 0;">Sun</p>
+                </div>
+              </div>
+              
+              <p style="margin-bottom: 10px; font-size: 0.9em;">Stamp Size:</p>
+              <input type="range" id="stamp-size" min="20" max="80" value="40" onchange="updateStampSize(this.value)" style="width: 100%;">
+              <p style="font-size: 0.8em; text-align: center; margin: 5px 0 0 0;"><span id="stamp-size-display">40</span>px</p>
+            </div>
+            
+            <!-- Music Panel -->
+            <div style="background: var(--chakra-crown); color: white; padding: 20px; border-radius: 10px;">
+              <h4 style="color: white; margin-bottom: 15px; font-size: 1.1em; text-align: center;">Concentration Music</h4>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button onclick="playAmbientSound('rain')" class="concentration-sound-btn" data-sound="rain" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px; border-radius: 5px; font-size: 0.9em; text-align: left;">
+                  Gentle Rain
+                </button>
+                <button onclick="playAmbientSound('ocean')" class="concentration-sound-btn" data-sound="ocean" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px; border-radius: 5px; font-size: 0.9em; text-align: left;">
+                  Ocean Waves
+                </button>
+                <button onclick="playAmbientSound('forest')" class="concentration-sound-btn" data-sound="forest" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px; border-radius: 5px; font-size: 0.9em; text-align: left;">
+                  Forest Sounds
+                </button>
+                <button onclick="playAmbientSound('chakra')" class="concentration-sound-btn" data-sound="chakra" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px; border-radius: 5px; font-size: 0.9em; text-align: left;">
+                  Chakra Tones
+                </button>
+                <button onclick="stopAmbientSound()" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white; padding: 8px; border-radius: 5px; font-size: 0.9em; text-align: left;">
+                  Stop Music
+                </button>
+              </div>
+              <div id="music-controls" style="margin-top: 15px; display: none;">
+                <p style="margin: 5px 0; font-size: 0.9em;">Playing: <span id="current-sound-name">None</span></p>
+                <input type="range" id="volume-control" min="0" max="100" value="30" onchange="adjustVolume(this.value)" style="width: 100%;">
+                <p style="margin: 5px 0; font-size: 0.8em; text-align: center;">Volume</p>
+              </div>
+            </div>
           </div>
         </div>
         
-        <p style="font-style: italic; margin-bottom: 25px; color: var(--chakra-third-eye); font-size: 1.1em;">
-          "Let the music guide your brush, let your emotions flow through color."
-        </p>
-        
-        <button onclick="navigate('journal')" class="btn-primary" style="margin-right: 15px; font-size: 1.1em;">
-          Journal About Your Creation
-        </button>
-        <button onclick="navigate('soulart-cards')" class="btn-secondary" style="font-size: 1.1em;">
-          Pull a SoulArt Card
-        </button>
+        <div style="text-align: center; margin-top: 30px;">
+          <p style="font-style: italic; margin-bottom: 25px; color: var(--chakra-third-eye); font-size: 1.1em;">
+            "Create freely, express boldly, and let your soul speak through every stroke."
+          </p>
+          
+          <button onclick="navigate('journal')" class="btn-primary" style="margin-right: 15px; font-size: 1.1em;">
+            Journal About Your Art
+          </button>
+          <button onclick="navigate('soulart-cards')" class="btn-secondary" style="font-size: 1.1em;">
+            Pull a SoulArt Card
+          </button>
+        </div>
       </div>
     </div>
   `;
   
   // Initialize the canvas after the HTML is loaded
   setTimeout(() => {
-    initializeFlowCanvas();
+    initializeDoodleCanvas();
   }, 100);
 }
 
-// ===== FLOW ART CANVAS AND MUSIC FUNCTIONS =====
+// ===== DOODLE CANVAS AND MUSIC FUNCTIONS =====
 
 let drawing = false;
 let context;
 let currentAmbientAudio = null;
 let currentCanvas = null;
+let currentTool = 'brush';
+let currentColor = '#FF0000';
+let brushSize = 8;
+let stampSize = 40;
+let selectedStamp = null;
+let undoStack = [];
+let redoStack = [];
+let maxUndoSteps = 20;
 
-// Initialize the Flow Canvas
-function initializeFlowCanvas() {
-  const canvas = document.getElementById('flow-canvas');
+// Initialize the Doodle Canvas
+function initializeDoodleCanvas() {
+  const canvas = document.getElementById('doodle-canvas');
   if (!canvas) return;
   
   currentCanvas = canvas;
   context = canvas.getContext('2d');
-  context.lineWidth = 4;
+  context.lineWidth = brushSize;
   context.lineCap = 'round';
   context.lineJoin = 'round';
-  context.strokeStyle = '#FF0000'; // Start with root chakra color
+  context.strokeStyle = currentColor;
+  context.globalCompositeOperation = 'source-over';
+  
+  // Make canvas responsive
+  const container = canvas.parentElement;
+  const containerWidth = container.clientWidth - 40; // Account for padding
+  if (containerWidth < 600) {
+    canvas.style.width = '100%';
+    canvas.style.height = 'auto';
+  }
+  
+  // Save initial state for undo
+  saveCanvasState();
   
   // Add event listeners for both touch and mouse
-  canvas.addEventListener('mousedown', startDrawing);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stopDrawing);
-  canvas.addEventListener('mouseout', stopDrawing);
+  canvas.addEventListener('mousedown', startDoodleDrawing);
+  canvas.addEventListener('mousemove', doodleDraw);
+  canvas.addEventListener('mouseup', stopDoodleDrawing);
+  canvas.addEventListener('mouseout', stopDoodleDrawing);
   
-  canvas.addEventListener('touchstart', startDrawing);
-  canvas.addEventListener('touchmove', draw);
-  canvas.addEventListener('touchend', stopDrawing);
+  canvas.addEventListener('touchstart', startDoodleDrawing);
+  canvas.addEventListener('touchmove', doodleDraw);
+  canvas.addEventListener('touchend', stopDoodleDrawing);
   
   // Set up color palette clicks
-  const colorDivs = document.querySelectorAll('.chakra-color');
-  colorDivs.forEach(colorDiv => {
-    colorDiv.addEventListener('click', () => {
-      // Remove active state from all colors
-      colorDivs.forEach(c => c.style.border = '2px solid transparent');
-      // Add active state to clicked color
-      colorDiv.style.border = '3px solid var(--chakra-crown)';
-      // Change drawing color
-      context.strokeStyle = colorDiv.dataset.color;
+  setupColorPalette();
+  setupStampPalette();
+}
+
+// Tool Management Functions
+function setDrawingTool(tool) {
+  currentTool = tool;
+  
+  // Update tool button styles
+  document.querySelectorAll('.tool-btn').forEach(btn => {
+    btn.style.background = 'rgba(255,255,255,0.1)';
+    btn.style.border = '2px solid rgba(255,255,255,0.3)';
+  });
+  
+  const activeBtn = document.getElementById(tool + '-tool');
+  if (activeBtn) {
+    activeBtn.style.background = 'rgba(255,255,255,0.3)';
+    activeBtn.style.border = '2px solid white';
+  }
+  
+  // Show/hide stamps panel
+  const stampsPanel = document.getElementById('stamps-panel');
+  if (stampsPanel) {
+    stampsPanel.style.display = tool === 'stamp' ? 'block' : 'none';
+  }
+  
+  // Update cursor and drawing mode
+  if (currentCanvas) {
+    if (tool === 'eraser') {
+      currentCanvas.style.cursor = 'grab';
+      context.globalCompositeOperation = 'destination-out';
+    } else if (tool === 'stamp') {
+      currentCanvas.style.cursor = 'pointer';
+      context.globalCompositeOperation = 'source-over';
+    } else {
+      currentCanvas.style.cursor = 'crosshair';
+      context.globalCompositeOperation = 'source-over';
+    }
+  }
+}
+
+function updateBrushSize(size) {
+  brushSize = parseInt(size);
+  document.getElementById('brush-size-display').textContent = brushSize;
+  if (context) {
+    context.lineWidth = brushSize;
+  }
+}
+
+function updateStampSize(size) {
+  stampSize = parseInt(size);
+  document.getElementById('stamp-size-display').textContent = stampSize;
+}
+
+// Color Management Functions
+function setupColorPalette() {
+  const colorOptions = document.querySelectorAll('.color-option');
+  colorOptions.forEach(colorOption => {
+    colorOption.addEventListener('click', () => {
+      const color = colorOption.dataset.color;
+      setColor(color);
+      
+      // Update visual selection
+      colorOptions.forEach(c => c.style.border = c.classList.contains('chakra-color') ? '2px solid rgba(255,255,255,0.5)' : '2px solid rgba(255,255,255,0.5)');
+      colorOption.style.border = '3px solid white';
     });
   });
 }
 
-// Drawing functions
-function startDrawing(e) {
+function setColor(color) {
+  currentColor = color;
+  if (context && currentTool !== 'eraser') {
+    context.strokeStyle = color;
+    context.fillStyle = color;
+  }
+}
+
+function setCustomColor(color) {
+  setColor(color);
+  // Remove selection from other colors
+  document.querySelectorAll('.color-option').forEach(c => {
+    c.style.border = c.classList.contains('chakra-color') ? '2px solid rgba(255,255,255,0.5)' : '2px solid rgba(255,255,255,0.5)';
+  });
+}
+
+// Stamp Management Functions
+function setupStampPalette() {
+  const stampOptions = document.querySelectorAll('.stamp-option');
+  stampOptions.forEach(stampOption => {
+    stampOption.addEventListener('click', () => {
+      const stamp = stampOption.dataset.stamp;
+      setStamp(stamp);
+      
+      // Update visual selection
+      stampOptions.forEach(s => s.style.border = '2px solid transparent');
+      stampOption.style.border = '2px solid white';
+    });
+  });
+}
+
+function setStamp(stamp) {
+  selectedStamp = stamp;
+  setDrawingTool('stamp');
+}
+
+// Drawing Functions
+function startDoodleDrawing(e) {
   e.preventDefault();
-  drawing = true;
   
   const rect = currentCanvas.getBoundingClientRect();
-  let x, y;
+  const scaleX = currentCanvas.width / rect.width;
+  const scaleY = currentCanvas.height / rect.height;
   
+  let x, y;
   if (e.touches) {
-    x = e.touches[0].clientX - rect.left;
-    y = e.touches[0].clientY - rect.top;
+    x = (e.touches[0].clientX - rect.left) * scaleX;
+    y = (e.touches[0].clientY - rect.top) * scaleY;
   } else {
-    x = e.clientX - rect.left;
-    y = e.clientY - rect.top;
+    x = (e.clientX - rect.left) * scaleX;
+    y = (e.clientY - rect.top) * scaleY;
   }
   
+  if (currentTool === 'stamp' && selectedStamp) {
+    placeStamp(x, y);
+    saveCanvasState();
+    return;
+  }
+  
+  drawing = true;
   context.beginPath();
   context.moveTo(x, y);
 }
 
-function draw(e) {
+function doodleDraw(e) {
   e.preventDefault();
-  if (!drawing) return;
+  if (!drawing || currentTool === 'stamp') return;
   
   const rect = currentCanvas.getBoundingClientRect();
-  let x, y;
+  const scaleX = currentCanvas.width / rect.width;
+  const scaleY = currentCanvas.height / rect.height;
   
+  let x, y;
   if (e.touches) {
-    x = e.touches[0].clientX - rect.left;
-    y = e.touches[0].clientY - rect.top;
+    x = (e.touches[0].clientX - rect.left) * scaleX;
+    y = (e.touches[0].clientY - rect.top) * scaleY;
   } else {
-    x = e.clientX - rect.left;
-    y = e.clientY - rect.top;
+    x = (e.clientX - rect.left) * scaleX;
+    y = (e.clientY - rect.top) * scaleY;
   }
   
   context.lineTo(x, y);
   context.stroke();
 }
 
-function stopDrawing(e) {
+function stopDoodleDrawing(e) {
   e.preventDefault();
-  drawing = false;
+  if (drawing) {
+    drawing = false;
+    saveCanvasState();
+  }
+}
+
+function placeStamp(x, y) {
+  const stampIcons = {
+    heart: '❤️',
+    star: '⭐',
+    flower: '🌸',
+    butterfly: '🦋',
+    moon: '🌙',
+    sun: '☀️'
+  };
+  
+  const icon = stampIcons[selectedStamp];
+  if (!icon) return;
+  
+  context.font = `${stampSize}px Arial`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText(icon, x, y);
+}
+
+// Undo/Redo Functions
+function saveCanvasState() {
+  if (!currentCanvas) return;
+  
+  undoStack.push(currentCanvas.toDataURL());
+  if (undoStack.length > maxUndoSteps) {
+    undoStack.shift();
+  }
+  redoStack = []; // Clear redo stack when new action is performed
+}
+
+function undoDraw() {
+  if (undoStack.length <= 1) return; // Keep at least initial state
+  
+  redoStack.push(undoStack.pop());
+  const previousState = undoStack[undoStack.length - 1];
+  
+  const img = new Image();
+  img.onload = function() {
+    context.clearRect(0, 0, currentCanvas.width, currentCanvas.height);
+    context.drawImage(img, 0, 0);
+  };
+  img.src = previousState;
+}
+
+function redoDraw() {
+  if (redoStack.length === 0) return;
+  
+  const nextState = redoStack.pop();
+  undoStack.push(nextState);
+  
+  const img = new Image();
+  img.onload = function() {
+    context.clearRect(0, 0, currentCanvas.width, currentCanvas.height);
+    context.drawImage(img, 0, 0);
+  };
+  img.src = nextState;
 }
 
 function clearCanvas() {
   if (context && currentCanvas) {
     context.clearRect(0, 0, currentCanvas.width, currentCanvas.height);
+    saveCanvasState();
   }
 }
 
-function saveFlowArt() {
+// Save with Authentication
+async function saveDoodleArt() {
   if (!currentCanvas) return;
   
   try {
-    const dataURL = currentCanvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.download = 'flow-art-creation-' + Date.now() + '.png';
-    link.href = dataURL;
-    link.click();
+    // Check if user is authenticated
+    const authResponse = await fetch('/api/auth/user');
+    if (!authResponse.ok) {
+      if (confirm('You need to sign in to save your artwork. Would you like to sign in now?')) {
+        window.location.href = '/api/login';
+      }
+      return;
+    }
     
-    // Show success message
-    setTimeout(() => {
-      alert('Your Flow Art has been saved! Check your downloads folder.');
-    }, 100);
+    const dataURL = currentCanvas.toDataURL('image/png');
+    
+    // Prepare artwork data
+    const artworkData = {
+      title: prompt('Give your artwork a title (optional):') || `Doodle Art ${new Date().toLocaleDateString()}`,
+      imageDataUrl: dataURL,
+      canvasWidth: currentCanvas.width,
+      canvasHeight: currentCanvas.height,
+      toolsUsed: {
+        currentTool,
+        currentColor,
+        brushSize,
+        stampSize,
+        selectedStamp,
+        timestamp: new Date().toISOString()
+      }
+    };
+    
+    // Save to server
+    const saveResponse = await fetch('/api/artworks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(artworkData)
+    });
+    
+    const result = await saveResponse.json();
+    
+    if (saveResponse.ok) {
+      alert(`${result.message}\n\nYour artwork "${result.title}" has been saved to your SoulArt gallery!`);
+      
+      // Also offer to download locally
+      if (confirm('Would you also like to download a copy to your device?')) {
+        const link = document.createElement('a');
+        link.download = `${result.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.png`;
+        link.href = dataURL;
+        link.click();
+      }
+    } else {
+      alert(result.message || 'Failed to save artwork to server. Please try again.');
+    }
+    
   } catch (error) {
-    alert('Unable to save artwork. Please try again.');
+    console.error('Save error:', error);
+    alert('Unable to save artwork. Please check your connection and try again.');
+  }
+}
+
+// Meditation Art Pieces Functions
+function openMeditationPiece(pieceId) {
+  const pieces = {
+    1: {
+      title: 'Sacred Courage',
+      duration: 5,
+      description: 'A 5-minute meditation to build inner courage and strength',
+      music: 'chakra'
+    },
+    2: {
+      title: 'Healing Waters',
+      duration: 10,
+      description: 'A 10-minute emotional healing meditation with flowing water energy',
+      music: 'ocean'
+    },
+    3: {
+      title: 'Inner Wisdom',
+      duration: 15,
+      description: 'A 15-minute meditation to connect with your inner wisdom and intuition',
+      music: 'forest'
+    }
+  };
+  
+  const piece = pieces[pieceId];
+  if (!piece) return;
+  
+  const container = document.getElementById('doodle-canvas-area');
+  container.innerHTML = `
+    <div style="background: linear-gradient(135deg, var(--chakra-crown), var(--chakra-third-eye)); padding: 40px; border-radius: 15px; margin-top: 20px; text-align: center; min-height: 600px;">
+      <div style="background: rgba(255,255,255,0.95); padding: 40px; border-radius: 12px; color: var(--text-primary);">
+        
+        <h3 style="color: var(--chakra-crown); margin-bottom: 20px; font-size: 2em;">${piece.title}</h3>
+        <p style="font-size: 1.2em; margin-bottom: 30px; color: var(--text-primary);">${piece.description}</p>
+        
+        <!-- Meditation Timer Display -->
+        <div style="background: var(--chakra-throat); color: white; padding: 30px; border-radius: 15px; margin: 30px 0;">
+          <div id="timer-display" style="font-size: 3em; font-weight: bold; margin-bottom: 20px;">
+            ${String(piece.duration).padStart(2, '0')}:00
+          </div>
+          
+          <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <button id="start-meditation" onclick="startMeditation(${piece.duration}, '${piece.music}')" style="background: var(--chakra-heart); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 1.1em; cursor: pointer;">
+              Start Meditation
+            </button>
+            <button id="pause-meditation" onclick="pauseMeditation()" style="background: var(--chakra-sacral); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 1.1em; cursor: pointer; display: none;">
+              Pause
+            </button>
+            <button id="stop-meditation" onclick="stopMeditation()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 15px 30px; border-radius: 8px; font-size: 1.1em; cursor: pointer;">
+              Stop
+            </button>
+          </div>
+          
+          <!-- Timer Duration Selection -->
+          <div style="margin-top: 20px;">
+            <p style="margin-bottom: 10px; font-size: 1em;">Customize Duration:</p>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+              <button onclick="setMeditationDuration(3)" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 5px; font-size: 0.9em;">3 min</button>
+              <button onclick="setMeditationDuration(5)" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 5px; font-size: 0.9em;">5 min</button>
+              <button onclick="setMeditationDuration(10)" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 5px; font-size: 0.9em;">10 min</button>
+              <button onclick="setMeditationDuration(15)" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 5px; font-size: 0.9em;">15 min</button>
+              <button onclick="setMeditationDuration(20)" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 5px; font-size: 0.9em;">20 min</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Visualization Area -->
+        <div style="background: linear-gradient(45deg, var(--chakra-heart), var(--chakra-sacral)); padding: 30px; border-radius: 15px; margin: 30px 0; min-height: 200px; display: flex; align-items: center; justify-content: center;">
+          <div id="meditation-visual" style="text-align: center;">
+            <div style="width: 150px; height: 150px; border: 3px solid rgba(255,255,255,0.6); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1);">
+              <span style="color: white; font-size: 2em;">🧘‍♀️</span>
+            </div>
+            <p style="color: white; font-size: 1.2em; font-style: italic;">
+              "Find your center, breathe deeply, and allow peace to flow through you."
+            </p>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+          <button onclick="showMeditationArtPieces()" class="btn-secondary" style="margin-right: 15px; font-size: 1.1em;">
+            ← Back to Art Pieces
+          </button>
+          <button onclick="launchDoodleCanvas()" class="btn-primary" style="font-size: 1.1em;">
+            Create Doodle Art
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Meditation Timer Functions
+let meditationTimer = null;
+let meditationTimeRemaining = 0;
+let meditationPaused = false;
+
+function setMeditationDuration(minutes) {
+  meditationTimeRemaining = minutes * 60;
+  updateTimerDisplay();
+}
+
+function startMeditation(minutes, musicType) {
+  if (!meditationPaused) {
+    meditationTimeRemaining = minutes * 60;
+  }
+  meditationPaused = false;
+  
+  // Start background music
+  playAmbientSound(musicType);
+  
+  // Update button visibility
+  document.getElementById('start-meditation').style.display = 'none';
+  document.getElementById('pause-meditation').style.display = 'inline-block';
+  
+  // Start timer
+  meditationTimer = setInterval(() => {
+    meditationTimeRemaining--;
+    updateTimerDisplay();
+    
+    if (meditationTimeRemaining <= 0) {
+      completeMeditation();
+    }
+  }, 1000);
+}
+
+function pauseMeditation() {
+  meditationPaused = true;
+  clearInterval(meditationTimer);
+  
+  // Update button visibility
+  document.getElementById('start-meditation').style.display = 'inline-block';
+  document.getElementById('pause-meditation').style.display = 'none';
+  document.getElementById('start-meditation').textContent = 'Resume';
+  
+  // Pause music
+  stopAmbientSound();
+}
+
+function stopMeditation() {
+  clearInterval(meditationTimer);
+  meditationTimer = null;
+  meditationPaused = false;
+  
+  // Reset buttons
+  document.getElementById('start-meditation').style.display = 'inline-block';
+  document.getElementById('pause-meditation').style.display = 'none';
+  document.getElementById('start-meditation').textContent = 'Start Meditation';
+  
+  // Stop music
+  stopAmbientSound();
+  
+  // Reset timer to original duration
+  meditationTimeRemaining = 300; // Default 5 minutes
+  updateTimerDisplay();
+}
+
+function completeMeditation() {
+  clearInterval(meditationTimer);
+  meditationTimer = null;
+  
+  // Stop music
+  stopAmbientSound();
+  
+  // Show completion message
+  document.getElementById('meditation-visual').innerHTML = `
+    <div style="text-align: center;">
+      <div style="width: 150px; height: 150px; border: 3px solid rgba(255,255,255,0.6); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1);">
+        <span style="color: white; font-size: 2em;">✨</span>
+      </div>
+      <p style="color: white; font-size: 1.3em; font-weight: bold;">
+        Meditation Complete!
+      </p>
+      <p style="color: white; font-size: 1.1em; font-style: italic;">
+        "You have completed your healing journey. Carry this peace with you."
+      </p>
+    </div>
+  `;
+  
+  // Reset buttons
+  document.getElementById('start-meditation').style.display = 'inline-block';
+  document.getElementById('pause-meditation').style.display = 'none';
+  document.getElementById('start-meditation').textContent = 'Start Again';
+}
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(meditationTimeRemaining / 60);
+  const seconds = meditationTimeRemaining % 60;
+  const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  
+  const timerElement = document.getElementById('timer-display');
+  if (timerElement) {
+    timerElement.textContent = display;
   }
 }
 
