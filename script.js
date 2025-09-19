@@ -3269,34 +3269,72 @@ function launchArtCreator() {
     <div style="background: linear-gradient(135deg, var(--chakra-heart), var(--chakra-sacral)); padding: 40px; border-radius: 15px; margin-top: 20px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.15);">
       <div style="background: rgba(255,255,255,0.95); padding: 30px; border-radius: 12px; color: var(--text-primary);">
         
-        <div style="margin-bottom: 30px;">
-          <img src="/assets/flow-art-sample.png?t=${Date.now()}" alt="Be Courage Flow Art" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.15);" onload="console.log('Create flow art image loaded')" onerror="console.log('Create image failed'); this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRjZCNkIiLz48c3RvcCBvZmZzZXQ9IjIwJSIgc3RvcC1jb2xvcj0iIzRFQ0RDNCIvPjxzdG9wIG9mZnNldD0iNDAlIiBzdG9wLWNvbG9yPSIjNDVCN0QxIi8+PHN0b3Agb2Zmc2V0PSI2MCUiIHN0b3AtY29sb3I9IiM5NkNFQjQiLz48c3RvcCBvZmZzZXQ9IjgwJSIgc3RvcC1jb2xvcj0iI0ZFQ0E1NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0ZGOUZGMyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjUwIiBmaWxsPSJ1cmwoI2dyYWQpIi8+PHRleHQgeD0iMjAwIiB5PSIxMzAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj5CZSBDb3VyYWdlPC90ZXh0Pjwvc3ZnPg==';" />
-          <h3 style="color: var(--chakra-crown); margin-top: 15px; font-size: 1.8em; font-style: italic;">"Be Courage"</h3>
+        <h3 style="color: var(--chakra-crown); margin-bottom: 25px; font-size: 1.8em;">Create Your Flow Art</h3>
+        
+        <!-- Music Selection -->
+        <div style="background: var(--chakra-throat); color: white; padding: 20px; border-radius: 10px; margin: 25px 0;">
+          <h4 style="color: white; margin-bottom: 15px; font-size: 1.2em;">Choose Your Concentration Music:</h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+            <button onclick="playAmbientSound('rain')" class="concentration-sound-btn" data-sound="rain" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
+              🌧️ Gentle Rain
+            </button>
+            <button onclick="playAmbientSound('ocean')" class="concentration-sound-btn" data-sound="ocean" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
+              🌊 Ocean Waves
+            </button>
+            <button onclick="playAmbientSound('forest')" class="concentration-sound-btn" data-sound="forest" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
+              🌲 Forest Sounds
+            </button>
+            <button onclick="playAmbientSound('chakra')" class="concentration-sound-btn" data-sound="chakra" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
+              🎵 Chakra Tones
+            </button>
+            <button onclick="stopAmbientSound()" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
+              🔇 Silence
+            </button>
+          </div>
+          <div id="music-controls" style="margin-top: 15px; display: none;">
+            <p style="margin: 5px 0; font-size: 0.9em;">Now playing: <span id="current-sound-name">None</span></p>
+            <input type="range" id="volume-control" min="0" max="100" value="30" onchange="adjustVolume(this.value)" style="width: 200px;">
+            <p style="margin: 5px 0; font-size: 0.8em;">Volume</p>
+          </div>
         </div>
-        
-        <h3 style="color: var(--chakra-crown); margin-bottom: 25px; font-size: 1.6em;">Divine Creation Space Coming Soon</h3>
-        <p style="margin-bottom: 20px; line-height: 1.6; color: var(--text-primary); font-size: 1.1em;">
-          This sacred feature will soon allow you to paint intuitively on your screen with vibrant chakra-based colors. 
-          Express your inner world through flowing digital brushstrokes.
-        </p>
-        
-        <div style="background: var(--chakra-crown); color: white; padding: 25px; border-radius: 10px; margin: 25px 0;">
-          <h4 style="color: white; margin-bottom: 15px; font-size: 1.3em;">Coming Features:</h4>
-          <ul style="text-align: left; color: white; max-width: 300px; margin: 0 auto; font-size: 1.05em;">
-            <li style="margin-bottom: 8px;">Intuitive digital canvas</li>
-            <li style="margin-bottom: 8px;">Chakra-aligned color palette</li>
-            <li style="margin-bottom: 8px;">Save your sacred creations</li>
-            <li style="margin-bottom: 8px;">Print for your altar space</li>
-            <li style="margin-bottom: 8px;">Share with your soul tribe</li>
-          </ul>
+
+        <!-- Drawing Canvas -->
+        <div style="background: white; padding: 20px; border-radius: 10px; margin: 25px 0;">
+          <canvas id="flow-canvas" width="350" height="250" style="border: 2px solid var(--chakra-crown); border-radius: 8px; touch-action: none; cursor: crosshair;">
+            Your browser doesn't support canvas. Please update your browser.
+          </canvas>
+          
+          <!-- Color Palette -->
+          <div style="margin-top: 15px;">
+            <p style="color: var(--text-primary); margin-bottom: 10px; font-weight: bold;">Choose Your Sacred Colors:</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+              <div class="chakra-color" data-color="#FF0000" style="width: 30px; height: 30px; background: #FF0000; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Root Chakra - Grounding"></div>
+              <div class="chakra-color" data-color="#FF8C00" style="width: 30px; height: 30px; background: #FF8C00; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Sacral Chakra - Creativity"></div>
+              <div class="chakra-color" data-color="#FFD700" style="width: 30px; height: 30px; background: #FFD700; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Solar Plexus - Power"></div>
+              <div class="chakra-color" data-color="#32CD32" style="width: 30px; height: 30px; background: #32CD32; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Heart Chakra - Love"></div>
+              <div class="chakra-color" data-color="#1E90FF" style="width: 30px; height: 30px; background: #1E90FF; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Throat Chakra - Truth"></div>
+              <div class="chakra-color" data-color="#8A2BE2" style="width: 30px; height: 30px; background: #8A2BE2; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Third Eye - Wisdom"></div>
+              <div class="chakra-color" data-color="#9400D3" style="width: 30px; height: 30px; background: #9400D3; border-radius: 50%; cursor: pointer; border: 2px solid transparent;" title="Crown Chakra - Spirit"></div>
+            </div>
+          </div>
+          
+          <!-- Canvas Controls -->
+          <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button onclick="clearCanvas()" style="background: var(--chakra-crown); color: white; border: none; padding: 8px 15px; border-radius: 5px; font-size: 0.9em;">
+              Clear Canvas
+            </button>
+            <button onclick="saveFlowArt()" style="background: var(--chakra-heart); color: white; border: none; padding: 8px 15px; border-radius: 5px; font-size: 0.9em;">
+              Save Creation
+            </button>
+          </div>
         </div>
         
         <p style="font-style: italic; margin-bottom: 25px; color: var(--chakra-third-eye); font-size: 1.1em;">
-          "Every color you choose is a prayer, every stroke a healing."
+          "Let the music guide your brush, let your emotions flow through color."
         </p>
         
         <button onclick="navigate('journal')" class="btn-primary" style="margin-right: 15px; font-size: 1.1em;">
-          Journal Your Emotions Instead
+          Journal About Your Creation
         </button>
         <button onclick="navigate('soulart-cards')" class="btn-secondary" style="font-size: 1.1em;">
           Pull a SoulArt Card
@@ -3304,41 +3342,92 @@ function launchArtCreator() {
       </div>
     </div>
   `;
+  
+  // Initialize the canvas after the HTML is loaded
+  setTimeout(() => {
+    initializeFlowCanvas();
+  }, 100);
 }
+
+// ===== FLOW ART CANVAS AND MUSIC FUNCTIONS =====
+
 let drawing = false;
 let context;
+let currentAmbientAudio = null;
+let currentCanvas = null;
 
-function setupCanvas() {
-  const canvas = document.getElementById('flowCanvas');
+// Initialize the Flow Canvas
+function initializeFlowCanvas() {
+  const canvas = document.getElementById('flow-canvas');
+  if (!canvas) return;
+  
+  currentCanvas = canvas;
   context = canvas.getContext('2d');
-  context.lineWidth = 6;
+  context.lineWidth = 4;
   context.lineCap = 'round';
-  context.strokeStyle = document.getElementById('colorPicker').value;
-
+  context.lineJoin = 'round';
+  context.strokeStyle = '#FF0000'; // Start with root chakra color
+  
+  // Add event listeners for both touch and mouse
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+  
   canvas.addEventListener('touchstart', startDrawing);
   canvas.addEventListener('touchmove', draw);
   canvas.addEventListener('touchend', stopDrawing);
+  
+  // Set up color palette clicks
+  const colorDivs = document.querySelectorAll('.chakra-color');
+  colorDivs.forEach(colorDiv => {
+    colorDiv.addEventListener('click', () => {
+      // Remove active state from all colors
+      colorDivs.forEach(c => c.style.border = '2px solid transparent');
+      // Add active state to clicked color
+      colorDiv.style.border = '3px solid var(--chakra-crown)';
+      // Change drawing color
+      context.strokeStyle = colorDiv.dataset.color;
+    });
+  });
 }
 
-function changeColor() {
-  if (context) {
-    context.strokeStyle = document.getElementById('colorPicker').value;
-  }
-}
-
+// Drawing functions
 function startDrawing(e) {
   e.preventDefault();
   drawing = true;
-  const touch = e.touches[0];
+  
+  const rect = currentCanvas.getBoundingClientRect();
+  let x, y;
+  
+  if (e.touches) {
+    x = e.touches[0].clientX - rect.left;
+    y = e.touches[0].clientY - rect.top;
+  } else {
+    x = e.clientX - rect.left;
+    y = e.clientY - rect.top;
+  }
+  
   context.beginPath();
-  context.moveTo(touch.clientX - e.target.offsetLeft, touch.clientY - e.target.offsetTop);
+  context.moveTo(x, y);
 }
 
 function draw(e) {
   e.preventDefault();
   if (!drawing) return;
-  const touch = e.touches[0];
-  context.lineTo(touch.clientX - e.target.offsetLeft, touch.clientY - e.target.offsetTop);
+  
+  const rect = currentCanvas.getBoundingClientRect();
+  let x, y;
+  
+  if (e.touches) {
+    x = e.touches[0].clientX - rect.left;
+    y = e.touches[0].clientY - rect.top;
+  } else {
+    x = e.clientX - rect.left;
+    y = e.clientY - rect.top;
+  }
+  
+  context.lineTo(x, y);
   context.stroke();
 }
 
@@ -3348,8 +3437,190 @@ function stopDrawing(e) {
 }
 
 function clearCanvas() {
-  const canvas = document.getElementById('flowCanvas');
-  context.clearRect(0, 0, canvas.width, canvas.height);
+  if (context && currentCanvas) {
+    context.clearRect(0, 0, currentCanvas.width, currentCanvas.height);
+  }
+}
+
+function saveFlowArt() {
+  if (!currentCanvas) return;
+  
+  try {
+    const dataURL = currentCanvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.download = 'flow-art-creation-' + Date.now() + '.png';
+    link.href = dataURL;
+    link.click();
+    
+    // Show success message
+    setTimeout(() => {
+      alert('Your Flow Art has been saved! Check your downloads folder.');
+    }, 100);
+  } catch (error) {
+    alert('Unable to save artwork. Please try again.');
+  }
+}
+
+// ===== AMBIENT MUSIC FUNCTIONS =====
+
+const ambientSounds = {
+  rain: { name: 'Gentle Rain', freq: 'brownNoise' },
+  ocean: { name: 'Ocean Waves', freq: 'oceanWaves' },
+  forest: { name: 'Forest Sounds', freq: 'pinkNoise' },
+  chakra: { name: 'Chakra Tones', freq: '528Hz' }
+};
+
+function playAmbientSound(soundType) {
+  // Stop any current audio
+  stopAmbientSound();
+  
+  const sound = ambientSounds[soundType];
+  if (!sound) return;
+  
+  try {
+    // Create audio using Web Audio API for better control
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    if (soundType === 'rain' || soundType === 'forest') {
+      currentAmbientAudio = createNoiseBuffer(audioContext, soundType);
+    } else if (soundType === 'ocean') {
+      currentAmbientAudio = createOceanBuffer(audioContext);
+    } else if (soundType === 'chakra') {
+      currentAmbientAudio = createChakraBuffer(audioContext);
+    }
+    
+    // Show music controls
+    const controls = document.getElementById('music-controls');
+    const soundName = document.getElementById('current-sound-name');
+    if (controls && soundName) {
+      controls.style.display = 'block';
+      soundName.textContent = sound.name;
+    }
+    
+    // Highlight active button
+    const buttons = document.querySelectorAll('.concentration-sound-btn');
+    buttons.forEach(btn => {
+      if (btn.dataset.sound === soundType) {
+        btn.style.background = 'rgba(255,255,255,0.4)';
+      } else {
+        btn.style.background = 'rgba(255,255,255,0.2)';
+      }
+    });
+  } catch (error) {
+    console.log('Audio not supported in this browser');
+  }
+}
+
+function stopAmbientSound() {
+  if (currentAmbientAudio) {
+    try {
+      currentAmbientAudio.stop();
+    } catch (e) {
+      // Audio might already be stopped
+    }
+    currentAmbientAudio = null;
+  }
+  
+  // Hide controls
+  const controls = document.getElementById('music-controls');
+  if (controls) {
+    controls.style.display = 'none';
+  }
+  
+  // Reset button styles
+  const buttons = document.querySelectorAll('.concentration-sound-btn');
+  buttons.forEach(btn => {
+    btn.style.background = 'rgba(255,255,255,0.2)';
+  });
+}
+
+function adjustVolume(volume) {
+  const vol = volume / 100;
+  if (currentAmbientAudio && currentAmbientAudio.gainNode) {
+    currentAmbientAudio.gainNode.gain.value = vol;
+  }
+}
+
+// Audio generation functions
+function createNoiseBuffer(audioContext, type) {
+  const bufferSize = audioContext.sampleRate * 2;
+  const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+  const output = buffer.getChannelData(0);
+  
+  let b0 = 0, b1 = 0;
+  
+  for (let i = 0; i < bufferSize; i++) {
+    const white = Math.random() * 2 - 1;
+    
+    if (type === 'rain') {
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      output[i] = (b0 + b1) * 0.3;
+    } else {
+      b0 = 0.99765 * b0 + white * 0.0990460;
+      b1 = 0.96300 * b1 + white * 0.2965164;
+      output[i] = (b0 + b1) * 0.2;
+    }
+  }
+  
+  const source = audioContext.createBufferSource();
+  const gainNode = audioContext.createGain();
+  
+  source.buffer = buffer;
+  source.loop = true;
+  source.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  gainNode.gain.value = 0.3;
+  
+  source.start();
+  source.gainNode = gainNode;
+  return source;
+}
+
+function createOceanBuffer(audioContext) {
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  const filter = audioContext.createBiquadFilter();
+  
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(0.5, audioContext.currentTime);
+  
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(800, audioContext.currentTime);
+  
+  oscillator.connect(filter);
+  filter.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  gainNode.gain.value = 0.2;
+  
+  const lfo = audioContext.createOscillator();
+  const lfoGain = audioContext.createGain();
+  lfo.frequency.setValueAtTime(0.1, audioContext.currentTime);
+  lfoGain.gain.setValueAtTime(100, audioContext.currentTime);
+  lfo.connect(lfoGain);
+  lfoGain.connect(oscillator.frequency);
+  
+  oscillator.start();
+  lfo.start();
+  
+  oscillator.gainNode = gainNode;
+  return oscillator;
+}
+
+function createChakraBuffer(audioContext) {
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(528, audioContext.currentTime);
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  gainNode.gain.value = 0.15;
+  
+  oscillator.start();
+  oscillator.gainNode = gainNode;
+  return oscillator;
 }
 
 function saveArt() {
