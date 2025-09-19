@@ -234,7 +234,7 @@ async function navigate(page, addToHistory = true) {
             ← Back
           </button>
         </div>
-        <h2>Self Therapy with SoulArt</h2>
+        <h2>7-Steps Journey with SoulArt</h2>
         <p>Here you will move through the 7-step Harmonic Healing System.</p>
       `;
     } else if (page === 'soulart-cards') {
