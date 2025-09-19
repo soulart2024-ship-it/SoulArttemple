@@ -918,6 +918,244 @@ const SUBSCRIPTION_PLANS = {
   }
 };
 
+// Helper functions for subscription access control
+function hasBasicAccess(user) {
+  return user.subscriptionTier === 'basic' || user.subscriptionTier === 'premium';
+}
+
+function hasPremiumAccess(user) {
+  return user.subscriptionTier === 'premium';
+}
+
+function canUseEmotionDecoder(user) {
+  // Premium/basic subscribers get unlimited access
+  if (hasBasicAccess(user)) return true;
+  
+  // Free users get 3 sessions
+  return (user.emotionDecoderSessions || 0) < 3;
+}
+
+// Session Management API for healing features
+app.post('/api/sessions/start', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { feature } = req.body; // emotion_decoder, belief_decoder, allergy_identifier
+    
+    if (!['emotion_decoder', 'belief_decoder', 'allergy_identifier'].includes(feature)) {
+      return res.status(400).json({ message: "Invalid feature type" });
+    }
+    
+    const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+    if (!user[0]) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    // Check access permissions
+    if (feature === 'belief_decoder' || feature === 'allergy_identifier') {
+      if (!hasPremiumAccess(user[0])) {
+        return res.status(403).json({ 
+          message: `${feature.replace('_', ' ')} requires premium subscription`,
+          needsSubscription: true,
+          requiredTier: 'premium'
+        });
+      }
+    }
+    
+    if (feature === 'emotion_decoder' && !canUseEmotionDecoder(user[0])) {
+      return res.status(403).json({
+        message: "You've used all 3 free Emotion Decoder sessions. Subscribe for unlimited access!",
+        needsSubscription: true,
+        sessionsUsed: user[0].emotionDecoderSessions || 0,
+        maxSessions: 3
+      });
+    }
+    
+    // Check for existing active session
+    const [activeSession] = await db
+      .select()
+      .from(healingSessions)
+      .where(and(
+        eq(healingSessions.userId, userId),
+        eq(healingSessions.feature, feature),
+        eq(healingSessions.status, 'active')
+      ));
+    
+    if (activeSession) {
+      return res.json({
+        sessionId: activeSession.id,
+        feature: activeSession.feature,
+        startedAt: activeSession.startedAt,
+        removalCount: activeSession.removalCount,
+        status: 'active'
+      });
+    }
+    
+    // Create new session
+    const [newSession] = await db.insert(healingSessions).values({
+      userId,
+      feature,
+      status: 'active'
+    }).returning();
+    
+    res.json({
+      sessionId: newSession.id,
+      feature: newSession.feature,
+      startedAt: newSession.startedAt,
+      removalCount: newSession.removalCount,
+      status: 'active'
+    });
+  } catch (error) {
+    console.error('Session start error:', error);
+    res.status(500).json({ message: 'Error starting session' });
+  }
+});
+
+app.post('/api/sessions/:sessionId/record-removal', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { sessionId } = req.params;
+    const { emotion, belief, allergen } = req.body;
+    
+    // Find the session and verify ownership
+    const [session] = await db
+      .select()
+      .from(healingSessions)
+      .where(and(
+        eq(healingSessions.id, sessionId),
+        eq(healingSessions.userId, userId),
+        eq(healingSessions.status, 'active')
+      ));
+    
+    if (!session) {
+      return res.status(404).json({ message: "Session not found or not active" });
+    }
+    
+    // Increment removal count
+    const [updatedSession] = await db
+      .update(healingSessions)
+      .set({ 
+        removalCount: session.removalCount + 1,
+        updatedAt: new Date()
+      })
+      .where(eq(healingSessions.id, sessionId))
+      .returning();
+    
+    // Log the usage for analytics
+    await db.insert(usageLog).values({
+      userId,
+      action: `${session.feature}_use`,
+      emotionProcessed: emotion,
+      beliefProcessed: belief,
+      allergenProcessed: allergen,
+      metadata: { 
+        sessionId: sessionId,
+        removalNumber: updatedSession.removalCount 
+      }
+    });
+    
+    res.json({
+      sessionId: updatedSession.id,
+      removalCount: updatedSession.removalCount,
+      message: "Removal recorded successfully"
+    });
+  } catch (error) {
+    console.error('Record removal error:', error);
+    res.status(500).json({ message: 'Error recording removal' });
+  }
+});
+
+app.post('/api/sessions/:sessionId/complete', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { sessionId } = req.params;
+    
+    // Find the session and verify ownership
+    const [session] = await db
+      .select()
+      .from(healingSessions)
+      .where(and(
+        eq(healingSessions.id, sessionId),
+        eq(healingSessions.userId, userId),
+        eq(healingSessions.status, 'active')
+      ));
+    
+    if (!session) {
+      return res.status(404).json({ message: "Session not found or not active" });
+    }
+    
+    // Complete the session
+    const [completedSession] = await db
+      .update(healingSessions)
+      .set({ 
+        status: 'completed',
+        completedAt: new Date()
+      })
+      .where(eq(healingSessions.id, sessionId))
+      .returning();
+    
+    // If this is an emotion decoder session for a non-subscriber, increment their session count
+    if (session.feature === 'emotion_decoder') {
+      const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+      if (user[0] && !hasBasicAccess(user[0])) {
+        await db
+          .update(users)
+          .set({ 
+            emotionDecoderSessions: (user[0].emotionDecoderSessions || 0) + 1,
+            updatedAt: new Date()
+          })
+          .where(eq(users.id, userId));
+      }
+    }
+    
+    res.json({
+      sessionId: completedSession.id,
+      completedAt: completedSession.completedAt,
+      totalRemovals: completedSession.removalCount,
+      message: "Session completed successfully"
+    });
+  } catch (error) {
+    console.error('Complete session error:', error);
+    res.status(500).json({ message: 'Error completing session' });
+  }
+});
+
+app.get('/api/sessions/active', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { feature } = req.query;
+    
+    if (!feature || !['emotion_decoder', 'belief_decoder', 'allergy_identifier'].includes(feature)) {
+      return res.status(400).json({ message: "Valid feature parameter required" });
+    }
+    
+    const [activeSession] = await db
+      .select()
+      .from(healingSessions)
+      .where(and(
+        eq(healingSessions.userId, userId),
+        eq(healingSessions.feature, feature),
+        eq(healingSessions.status, 'active')
+      ));
+    
+    if (!activeSession) {
+      return res.json({ activeSession: null });
+    }
+    
+    res.json({
+      activeSession: {
+        sessionId: activeSession.id,
+        feature: activeSession.feature,
+        startedAt: activeSession.startedAt,
+        removalCount: activeSession.removalCount,
+        status: 'active'
+      }
+    });
+  } catch (error) {
+    console.error('Get active session error:', error);
+    res.status(500).json({ message: 'Error fetching active session' });
+  }
+});
+
 // New checkout endpoint for tiered subscriptions
 app.post('/api/checkout/start', isAuthenticated, async (req, res) => {
   try {
