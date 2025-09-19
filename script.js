@@ -367,16 +367,6 @@ async function navigate(page) {
         loadAllergyData().then(() => {
           renderAllergyTiles();
         });
-      } catch (error) {
-        console.error('Error checking access:', error);
-        main.innerHTML = `
-          <h2>Allergy Identification System</h2>
-          <div style="text-align: center; padding: 40px; background: #FF914D20; border-radius: 15px; margin: 20px 0;">
-            <p style="color: #FF914D;">Error checking access. Please try again.</p>
-            <button onclick="navigate('home')">Return Home</button>
-          </div>
-        `;
-      });
 
     } else if (page === 'belief-decoder') {
       // Check authentication first
@@ -470,16 +460,6 @@ async function navigate(page) {
         loadBeliefData().then(() => {
           renderBeliefTiles();
         });
-      } catch (error) {
-        console.error('Error checking access:', error);
-        main.innerHTML = `
-          <h2>Belief Decoder System</h2>
-          <div style="text-align: center; padding: 40px; background: #FF914D20; border-radius: 15px; margin: 20px 0;">
-            <p style="color: #FF914D;">Error checking access. Please try again.</p>
-            <button onclick="navigate('home')">Return Home</button>
-          </div>
-        `;
-      });
 
     } else if (page === 'emotion-decoder') {
       // Check authentication and usage first
@@ -590,7 +570,7 @@ async function navigate(page) {
         loadEmotionData().then(() => {
           renderEmotionTiles();
         });
-      } catch (error) {
+      }).catch(error => {
         console.error('Error checking access:', error);
         main.innerHTML = `
           <h2>Trapped Emotion Release Tiles</h2>
@@ -2185,7 +2165,6 @@ async function completeSession() {
     console.error('Error completing session:', error);
     alert('Unable to complete session. Please try again.');
   }
-}
 }
 
 // Function to check authentication and load membership dashboard
