@@ -316,75 +316,7 @@ async function navigate(page, addToHistory = true) {
         <button onclick="navigate('home')">Return to Home</button>
       `;
     } else if (page === 'allergy-identifier') {
-      // Check authentication first
-      try {
-        const response = await fetch('/api/auth/user');
-        
-        if (response.status === 401) {
-          main.innerHTML = `
-            <h2>🔒 Allergy Identification System</h2>
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px; margin: 20px 0;">
-              <h3 style="color: #8F5AFF; margin-bottom: 15px;">Sign In Required</h3>
-              <p style="margin-bottom: 20px; color: #666;">
-                Please sign in to access premium healing features and track your journey.
-              </p>
-              <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                Sign In to Continue
-              </button>
-            </div>
-          `;
-          return;
-        }
-        
-        const user = await response.json();
-        
-        // Check premium access using new single endpoint
-        const accessResponse = await fetch('/api/access');
-        if (!accessResponse.ok) {
-          throw new Error('Failed to check access');
-        }
-        const access = await accessResponse.json();
-        
-        if (!access.hasPremium) {
-          main.innerHTML = `
-            <h2>🔒 Allergy Identification System</h2>
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF6B9D20, #8F5AFF20); border-radius: 15px; margin: 20px 0;">
-              <h3 style="color: #FF6B9D; margin-bottom: 15px;">⭐ Premium Feature Required</h3>
-              <p style="margin-bottom: 20px; color: #666;">
-                The Allergy Identifier requires a <strong>Premium subscription (£5.99/month)</strong> to access advanced healing protocols.
-              </p>
-              <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #FF6B9D;">
-                <h4 style="color: #FF6B9D; margin-bottom: 15px;">⭐ Premium Membership Includes:</h4>
-                <ul style="text-align: left; color: #666; max-width: 350px; margin: 0 auto; line-height: 1.6;">
-                  <li><strong>🔓 Unlimited Allergy Identifier</strong> - Advanced allergen protocols</li>
-                  <li><strong>🔓 Unlimited Belief Decoder</strong> - Transform limiting beliefs</li>
-                  <li><strong>Everything in Basic</strong> - Emotion Decoder, Doodle Canvas, Journal</li>
-                  <li>Advanced analytics and priority support</li>
-                </ul>
-              </div>
-              <button onclick="showPricingModal()" style="background: linear-gradient(135deg, #FF6B9D, #8F5AFF); color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px; font-weight: bold;">
-                View Premium Plans
-              </button>
-              <button onclick="navigate('membership')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                View Dashboard
-              </button>
-            </div>
-          `;
-          return;
-        }
-      } catch (error) {
-        console.error('Error checking access:', error);
-        main.innerHTML = `
-          <h2>Allergy Identification System</h2>
-          <div style="text-align: center; padding: 40px;">
-            <p style="color: #FF6B9D;">Unable to verify access. Please try again.</p>
-            <button onclick="navigate('home')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer;">
-              Return Home
-            </button>
-          </div>
-        `;
-        return;
-      }
+      // Feature is now completely free - no authentication required
 
         // Show the allergy identifier interface
         main.innerHTML = `
@@ -396,10 +328,7 @@ async function navigate(page, addToHistory = true) {
         <h2>Allergy Identification System</h2>
         <div style="background: linear-gradient(135deg, #8ED6B7, #85C9F2); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
           <p style="color: white; margin: 0; font-weight: bold;">
-            ${accessInfo.isSubscribed ? 
-              'Unlimited Access Active' : 
-              `${accessInfo.usageCount}/3 Free Sessions Used`
-            }
+            Free Access - No Limits
           </p>
         </div>
         <p style="text-align: center; color: #666; margin-bottom: 30px;">
@@ -420,75 +349,7 @@ async function navigate(page, addToHistory = true) {
         });
 
     } else if (page === 'belief-decoder') {
-      // Check authentication first
-      try {
-        const response = await fetch('/api/auth/user');
-        
-        if (response.status === 401) {
-          main.innerHTML = `
-            <h2>🔒 Belief Decoder System</h2>
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #FF914D20); border-radius: 15px; margin: 20px 0;">
-              <h3 style="color: #8F5AFF; margin-bottom: 15px;">Sign In Required</h3>
-              <p style="margin-bottom: 20px; color: #666;">
-                Please sign in to access premium healing features and transform limiting beliefs.
-              </p>
-              <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                Sign In to Continue
-              </button>
-            </div>
-          `;
-          return;
-        }
-        
-        const user = await response.json();
-        
-        // Check premium access using new single endpoint
-        const accessResponse = await fetch('/api/access');
-        if (!accessResponse.ok) {
-          throw new Error('Failed to check access');
-        }
-        const access = await accessResponse.json();
-        
-        if (!access.hasPremium) {
-          main.innerHTML = `
-            <h2>🔒 Belief Decoder System</h2>
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #FF6B9D20, #8F5AFF20); border-radius: 15px; margin: 20px 0;">
-              <h3 style="color: #FF6B9D; margin-bottom: 15px;">⭐ Premium Feature Required</h3>
-              <p style="margin-bottom: 20px; color: #666;">
-                The Belief Decoder requires a <strong>Premium subscription (£5.99/month)</strong> to access advanced belief transformation protocols.
-              </p>
-              <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #FF6B9D;">
-                <h4 style="color: #FF6B9D; margin-bottom: 15px;">⭐ Premium Membership Includes:</h4>
-                <ul style="text-align: left; color: #666; max-width: 350px; margin: 0 auto; line-height: 1.6;">
-                  <li><strong>🔓 Unlimited Belief Decoder</strong> - Transform limiting beliefs</li>
-                  <li><strong>🔓 Unlimited Allergy Identifier</strong> - Advanced allergen protocols</li>
-                  <li><strong>Everything in Basic</strong> - Emotion Decoder, Doodle Canvas, Journal</li>
-                  <li>Advanced analytics and priority support</li>
-                </ul>
-              </div>
-              <button onclick="showPricingModal()" style="background: linear-gradient(135deg, #FF6B9D, #8F5AFF); color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px; font-weight: bold;">
-                View Premium Plans
-              </button>
-              <button onclick="navigate('membership')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                View Dashboard
-              </button>
-            </div>
-          `;
-          return;
-        }
-      } catch (error) {
-        console.error('Error checking access:', error);
-        main.innerHTML = `
-          <h2>Belief Decoder System</h2>
-          <div style="text-align: center; padding: 40px;">
-            <p style="color: #FF6B9D;">Unable to verify access. Please try again.</p>
-            <button onclick="navigate('home')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer;">
-              Return Home
-            </button>
-          </div>
-        `;
-        return;
-      }
+      // Feature is now completely free - no authentication required
 
         // Show the belief decoder interface
         main.innerHTML = `
@@ -500,10 +361,7 @@ async function navigate(page, addToHistory = true) {
         <h2>Belief Decoder System</h2>
         <div style="background: linear-gradient(135deg, #8ED6B7, #85C9F2); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
           <p style="color: white; margin: 0; font-weight: bold;">
-            ${accessInfo.isSubscribed ? 
-              'Unlimited Access Active' : 
-              `${accessInfo.usageCount}/3 Free Sessions Used`
-            }
+            Free Access - No Limits
           </p>
         </div>
         <p style="text-align: center; color: #666; margin-bottom: 30px;">
@@ -524,133 +382,62 @@ async function navigate(page, addToHistory = true) {
         });
 
     } else if (page === 'emotion-decoder') {
-      // Check authentication and usage first
-      checkEmotionDecoderAccess().then(accessInfo => {
-        if (accessInfo.needsAuth) {
-          main.innerHTML = `
-            <h2>Trapped Emotion Release Tiles</h2>
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px; margin: 20px 0;">
-              <h3 style="color: #8F5AFF; margin-bottom: 15px;">Sign In Required</h3>
-              <p style="margin-bottom: 20px; color: #666;">
-                Please sign in to access the Emotion Decoder and track your healing journey.
-              </p>
-              <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                Sign In to Continue
-              </button>
-            </div>
-          `;
-          return;
-        }
-
-        if (accessInfo.needsSubscription) {
-          main.innerHTML = `
-            <h2>Trapped Emotion Release Tiles</h2>
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #8F5AFF20, #EAD3FF20); border-radius: 15px; margin: 20px 0;">
-              <h3 style="color: #8F5AFF; margin-bottom: 15px;">Free Sessions Complete</h3>
-              <p style="margin-bottom: 10px; color: #666;">
-                You've used all 3 free Emotion Decoder sessions.
-              </p>
-              <p style="margin-bottom: 20px; color: #666;">
-                Choose a subscription plan to continue your healing journey.
-              </p>
-              <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #8F5AFF;">
-                <h4 style="color: #8F5AFF; margin-bottom: 15px;">Available Subscription Plans:</h4>
-                <ul style="text-align: left; color: #666; max-width: 350px; margin: 0 auto; line-height: 1.6;">
-                  <li><strong>My Decoder (£3.99/month):</strong> Unlimited Emotion Decoder + Doodle Canvas + Journal</li>
-                  <li><strong>Premium Decoder (£5.99/month):</strong> Everything + Belief Decoder + Allergy Identifier</li>
-                  <li>Annual plans available with 25% discount</li>
-                </ul>
-              </div>
-              <button onclick="showPricingModal()" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px; font-weight: bold;">
-                View Pricing Plans
-              </button>
-              <button onclick="navigate('home')" style="background: transparent; color: #8F5AFF; padding: 15px 30px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                Return Home
-              </button>
-            </div>
-          `;
-          return;
-        }
-
-        // Normal access - show the decoder
-        main.innerHTML = `
-          <div style="margin-bottom: 20px;">
-            <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
-              ← Back
-            </button>
-          </div>
-          <h2>Trapped Emotion Release Tiles</h2>
-          <p>Use muscle testing (Kinesiology) to identify which trapped emotion is ready for release today.</p>
+      // Feature is now completely free - no authentication or usage limits
+      main.innerHTML = `
+        <div style="margin-bottom: 20px;">
+          <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+            ← Back
+          </button>
+        </div>
+        <h2>Trapped Emotion Release Tiles</h2>
+        <div style="background: linear-gradient(135deg, #8ED6B7, #85C9F2); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+          <p style="color: white; margin: 0; font-weight: bold;">
+            Free Access - No Limits
+          </p>
+        </div>
+        <p>Use muscle testing (Kinesiology) to identify which trapped emotion is ready for release today.</p>
           
-          <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0; padding: 15px; background: linear-gradient(135deg, #8ED6B720, #EAD3FF20); border-radius: 10px;">
-            <div style="text-align: left;">
-              <h4 style="color: #8F5AFF; margin: 0;">Your Usage</h4>
-              <p style="margin: 5px 0; color: #666;">${accessInfo.isSubscribed ? 'Unlimited Access' : `${accessInfo.usageCount}/3 free sessions used`}</p>
-            </div>
-            <div style="text-align: right;">
-              ${accessInfo.isSubscribed ? 
-                '<span style="background: #8ED6B7; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold;">PREMIUM</span>' :
-                `<span style="color: #FF914D; font-size: 14px;">${3 - accessInfo.usageCount} sessions remaining</span>`
-              }
-            </div>
-          </div>
-          
-          <div style="text-align: center; margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px;">
-            <h3 style="color: #8F5AFF; margin-bottom: 15px;">Kinesiology Muscle Testing Guide</h3>
-            <p style="font-style: italic; color: #666; margin-bottom: 10px;">
-              Test each row systematically - your body knows which emotions need healing
-            </p>
-            <p style="font-size: 14px; color: #8F5AFF;">
-              Once you identify the row, muscle test each emotion in that row to find the specific one
-            </p>
+        <div style="text-align: center; margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px;">
+          <h3 style="color: #8F5AFF; margin-bottom: 15px;">Kinesiology Muscle Testing Guide</h3>
+          <p style="font-style: italic; color: #666; margin-bottom: 10px;">
+            Test each row systematically - your body knows which emotions need healing
+          </p>
+          <p style="font-size: 14px; color: #8F5AFF;">
+            Once you identify the row, muscle test each emotion in that row to find the specific one
+          </p>
+        </div>
+
+        <div id="emotion-tiles-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+          <!-- Column 1: Rows 1-3 -->
+          <div id="column-1" style="background: linear-gradient(135deg, #8ED6B710, transparent); padding: 20px; border-radius: 15px;">
+            <h3 style="text-align: center; color: #8ED6B7; margin-bottom: 20px; font-size: 18px;">
+              Foundation & Heart Rows
+            </h3>
+            <div id="rows-1-3"></div>
           </div>
 
-          <div id="emotion-tiles-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-            <!-- Column 1: Rows 1-3 -->
-            <div id="column-1" style="background: linear-gradient(135deg, #8ED6B710, transparent); padding: 20px; border-radius: 15px;">
-              <h3 style="text-align: center; color: #8ED6B7; margin-bottom: 20px; font-size: 18px;">
-                Foundation & Heart Rows
-              </h3>
-              <div id="rows-1-3"></div>
-            </div>
-
-            <!-- Column 2: Rows 4-6 -->  
-            <div id="column-2" style="background: linear-gradient(135deg, #EAD3FF10, transparent); padding: 20px; border-radius: 15px;">
-              <h3 style="text-align: center; color: #8F5AFF; margin-bottom: 20px; font-size: 18px;">
-                Expression & Wisdom Rows
-              </h3>
-              <div id="rows-4-6"></div>
-            </div>
+          <!-- Column 2: Rows 4-6 -->  
+          <div id="column-2" style="background: linear-gradient(135deg, #EAD3FF10, transparent); padding: 20px; border-radius: 15px;">
+            <h3 style="text-align: center; color: #8F5AFF; margin-bottom: 20px; font-size: 18px;">
+              Expression & Wisdom Rows
+            </h3>
+            <div id="rows-4-6"></div>
           </div>
-          
-          <div id="emotion-results" style="margin-top: 20px;">
-            <div style="text-align: center; color: #8F5AFF; font-style: italic;">
-              Click on a trapped emotion tile above to begin your healing journey
-            </div>
+        </div>
+        
+        <div id="emotion-results" style="margin-top: 20px;">
+          <div style="text-align: center; color: #8F5AFF; font-style: italic;">
+            Click on a trapped emotion tile above to begin your healing journey
           </div>
-          
-          <div id="healing-process" style="margin-top: 30px; display: none;">
-            <!-- Healing process will be inserted here -->
-          </div>
-        `;
-        // Load emotion data and render tiles
-        loadEmotionData().then(() => {
-          renderEmotionTiles();
-        });
-      }).catch(error => {
-        console.error('Error checking access:', error);
-        main.innerHTML = `
-          <h2>Trapped Emotion Release Tiles</h2>
-          <div style="text-align: center; padding: 40px; background: #FFE6E6; border-radius: 15px; margin: 20px 0;">
-            <h3 style="color: #FF6B6B; margin-bottom: 15px;">Sign In Required</h3>
-            <p style="margin-bottom: 20px; color: #666;">
-              Please sign in to access the Emotion Decoder and track your healing journey.
-            </p>
-            <button onclick="window.location.href='/api/login'" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
-              Sign In to Continue
-            </button>
-          </div>
-        `;
+        </div>
+        
+        <div id="healing-process" style="margin-top: 30px; display: none;">
+          <!-- Healing process will be inserted here -->
+        </div>
+      `;
+      // Load emotion data and render tiles
+      loadEmotionData().then(() => {
+        renderEmotionTiles();
       });
     } else if (page === 'membership') {
       // Check authentication and load membership dashboard

@@ -507,17 +507,7 @@ app.get('/api/auth/user', isAuthenticated, async (req, res) => {
   }
 });
 
-// Premium access endpoint - single source of truth
-app.get('/api/access', isAuthenticated, async (req, res) => {
-  try {
-    const userId = req.user.claims.sub;
-    const access = await storage.getPremiumAccess(userId);
-    res.json(access);
-  } catch (error) {
-    console.error("Error checking premium access:", error);
-    res.status(500).json({ message: "Failed to check access" });
-  }
-});
+// Removed premium access restrictions - all features are now free
 
 // Emotion decoder routes
 app.get('/api/emotion-decoder/can-use', isAuthenticated, async (req, res) => {
