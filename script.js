@@ -494,8 +494,8 @@ async function navigate(page) {
               <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #8F5AFF;">
                 <h4 style="color: #8F5AFF; margin-bottom: 15px;">Available Subscription Plans:</h4>
                 <ul style="text-align: left; color: #666; max-width: 350px; margin: 0 auto; line-height: 1.6;">
-                  <li><strong>Basic (£3.99/month):</strong> Unlimited Emotion Decoder + Doodle Canvas + Journal</li>
-                  <li><strong>Premium (£5.99/month):</strong> Everything + Belief Decoder + Allergy Identifier</li>
+                  <li><strong>My Decoder (£3.99/month):</strong> Unlimited Emotion Decoder + Doodle Canvas + Journal</li>
+                  <li><strong>Premium Decoder (£5.99/month):</strong> Everything + Belief Decoder + Allergy Identifier</li>
                   <li>Annual plans available with 25% discount</li>
                 </ul>
               </div>
@@ -1704,10 +1704,10 @@ function showPricingModal() {
       </div>
       
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-        <!-- Basic Monthly -->
+        <!-- My Decoder Monthly -->
         <div style="border: 3px solid #8F5AFF; border-radius: 15px; padding: 25px; position: relative;">
           <div style="background: #8F5AFF; color: white; padding: 5px 15px; border-radius: 20px; position: absolute; top: -12px; left: 20px; font-size: 12px; font-weight: bold;">POPULAR</div>
-          <h3 style="color: #8F5AFF; margin: 0 0 10px 0;">✨ Basic Monthly</h3>
+          <h3 style="color: #8F5AFF; margin: 0 0 10px 0;">✨ My Decoder Monthly</h3>
           <div style="font-size: 32px; font-weight: bold; color: #8F5AFF; margin-bottom: 5px;">£3.99<span style="font-size: 16px; color: #666;">/month</span></div>
           <ul style="margin: 20px 0; padding-left: 20px; color: #666; line-height: 1.8;">
             <li><strong>Unlimited Emotion Decoder</strong></li>
@@ -1718,18 +1718,18 @@ function showPricingModal() {
           </ul>
           <div style="text-align: center;">
             <button onclick="subscribeToPlan('basic_monthly')" style="background: #8F5AFF; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold;">
-              Choose Basic
+              Choose My Decoder
             </button>
           </div>
         </div>
         
-        <!-- Premium Monthly -->
+        <!-- Premium Decoder Monthly -->
         <div style="border: 3px solid #FF6B9D; border-radius: 15px; padding: 25px; position: relative; background: linear-gradient(135deg, #FF6B9D05, #8F5AFF05);">
           <div style="background: linear-gradient(135deg, #FF6B9D, #8F5AFF); color: white; padding: 5px 15px; border-radius: 20px; position: absolute; top: -12px; left: 20px; font-size: 12px; font-weight: bold;">⭐ PREMIUM</div>
-          <h3 style="color: #FF6B9D; margin: 0 0 10px 0;">⭐ Premium Monthly</h3>
+          <h3 style="color: #FF6B9D; margin: 0 0 10px 0;">⭐ Premium Decoder Monthly</h3>
           <div style="font-size: 32px; font-weight: bold; color: #FF6B9D; margin-bottom: 5px;">£5.99<span style="font-size: 16px; color: #666;">/month</span></div>
           <ul style="margin: 20px 0; padding-left: 20px; color: #666; line-height: 1.8;">
-            <li><strong>Everything in Basic, plus:</strong></li>
+            <li><strong>Everything in My Decoder, plus:</strong></li>
             <li><strong>🔓 Belief Decoder</strong> - Transform beliefs</li>
             <li><strong>🔓 Allergy Identifier</strong> - Heal allergens</li>
             <li>Advanced analytics & insights</li>
@@ -1737,7 +1737,7 @@ function showPricingModal() {
           </ul>
           <div style="text-align: center;">
             <button onclick="subscribeToPlan('premium_monthly')" style="background: linear-gradient(135deg, #FF6B9D, #8F5AFF); color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold;">
-              Choose Premium
+              Choose Premium Decoder
             </button>
           </div>
         </div>
@@ -1758,11 +1758,11 @@ function showPricingModal() {
           
           <!-- Premium Yearly -->  
           <div style="border: 2px solid #FF6B9D; border-radius: 15px; padding: 20px;">
-            <h4 style="color: #FF6B9D; margin: 0 0 10px 0;">⭐ Premium Annual</h4>
+            <h4 style="color: #FF6B9D; margin: 0 0 10px 0;">⭐ Premium Decoder Annual</h4>
             <div style="font-size: 24px; font-weight: bold; color: #FF6B9D;">£53.91<span style="font-size: 14px; color: #666;">/year</span></div>
             <div style="font-size: 12px; color: #8ED6B7; margin: 5px 0;">Save £17.97 vs monthly</div>
             <button onclick="subscribeToPlan('premium_yearly')" style="background: linear-gradient(135deg, #FF6B9D, #8F5AFF); color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px;">
-              Choose Annual Premium
+              Choose Annual Premium Decoder
             </button>
           </div>
         </div>
