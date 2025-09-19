@@ -2092,8 +2092,8 @@ async function checkAuthAndLoadMembership() {
           </div>
           <div style="margin-bottom: 15px;">
             <strong>Status:</strong> 
-            <span style="background: ${usageStats.isSubscribed ? '#8ED6B7' : '#FF914D'}; color: white; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: bold;">
-              ${usageStats.isSubscribed ? 'PREMIUM MEMBER' : 'FREE MEMBER'}
+            <span style="background: #8ED6B7; color: white; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: bold;">
+              All Access
             </span>
           </div>
           <button onclick="window.location.href='/api/logout'" style="background: transparent; color: #8F5AFF; padding: 10px 20px; border: 2px solid #8F5AFF; border-radius: 8px; cursor: pointer; font-size: 14px;">
@@ -2150,14 +2150,12 @@ async function checkAuthAndLoadMembership() {
             <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${usageStats.emotionUsage || 0} sessions completed</div>
           </button>
           <button onclick="navigate('allergy-identifier')" style="background: linear-gradient(135deg, #8ED6B7, #B0E5D1); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left; position: relative;">
-            <div style="font-weight: bold; margin-bottom: 5px;">🔒 Allergy Identifier</div>
+            <div style="font-weight: bold; margin-bottom: 5px;">Allergy Identifier</div>
             <div style="font-size: 12px; opacity: 0.9;">Identify & heal allergens</div>
-            <div style="font-size: 10px; opacity: 0.8; margin-top: 5px; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 10px; display: inline-block;">Premium £5.99+</div>
           </button>
           <button onclick="navigate('belief-decoder')" style="background: linear-gradient(135deg, #FF914D, #FFAD70); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left; position: relative;">
-            <div style="font-weight: bold; margin-bottom: 5px;">🔒 Belief Decoder</div>
+            <div style="font-weight: bold; margin-bottom: 5px;">Belief Decoder</div>
             <div style="font-size: 12px; opacity: 0.9;">Transform limiting beliefs</div>
-            <div style="font-size: 10px; opacity: 0.8; margin-top: 5px; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 10px; display: inline-block;">Premium £5.99+</div>
           </button>
           <button onclick="navigate('journal')" style="background: linear-gradient(135deg, #85C9F2, #B3D9FF); color: white; padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; text-align: left;">
             <div style="font-weight: bold; margin-bottom: 5px;">Journal</div>
