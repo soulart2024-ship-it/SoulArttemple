@@ -405,6 +405,10 @@ async function setupAuth() {
   };
 
   const domains = process.env.REPLIT_DOMAINS ? process.env.REPLIT_DOMAINS.split(",") : ['localhost'];
+  // Always include the custom domain for production
+  if (!domains.includes('soularttemple.com')) {
+    domains.push('soularttemple.com');
+  }
   for (const domain of domains) {
     const strategy = new Strategy(
       {
