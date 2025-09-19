@@ -1573,6 +1573,13 @@ function completeHealing() {
   const healingDiv = document.getElementById('healing-process');
   const resultsDiv = document.getElementById('emotion-results');
   
+  // Get session information to display
+  const sessionInfo = currentEmotionSession ? `
+    <p style="color: white; font-size: 14px; margin: 10px 0;">
+      Session Progress: ${currentEmotionSession.removalCount || 0} emotions processed
+    </p>
+  ` : '';
+  
   healingDiv.innerHTML = `
     <div style="background: linear-gradient(135deg, #8ED6B7, #EAD3FF); 
                 padding: 40px; border-radius: 15px; text-align: center;">
@@ -1582,16 +1589,99 @@ function completeHealing() {
       <p style="font-size: 18px; color: white; margin: 20px 0;">
         You have successfully released your trapped emotion and filled the space with high vibration energy.
       </p>
-      <p style="color: white; font-style: italic;">
+      ${sessionInfo}
+      <p style="color: white; font-style: italic; margin-bottom: 30px;">
         Remember to work with your chosen colors and continue your shadow work practice.
       </p>
-      <button onclick="returnToChart()" style="background: white; color: #8F5AFF; 
-                     padding: 15px 30px; border: none; border-radius: 8px; 
-                     cursor: pointer; font-size: 16px; margin-top: 20px; font-weight: bold;">
-        Return to Emotion Tiles
-      </button>
+      
+      <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <button onclick="identifyAnotherEmotion()" style="background: #FF6B9D; color: white; 
+                       padding: 15px 25px; border: none; border-radius: 8px; 
+                       cursor: pointer; font-size: 16px; font-weight: bold; 
+                       box-shadow: 0 4px 15px rgba(255,107,157,0.3);">
+          Identify and Release Another Emotion
+        </button>
+        
+        <button onclick="completeSession()" style="background: white; color: #8F5AFF; 
+                       padding: 15px 25px; border: none; border-radius: 8px; 
+                       cursor: pointer; font-size: 16px; font-weight: bold;
+                       box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+          Complete This Session
+        </button>
+      </div>
+      
+      <p style="color: white; font-size: 12px; margin-top: 20px; opacity: 0.8;">
+        Continue processing emotions in this session, or complete to save your progress.
+      </p>
     </div>
   `;
+}
+
+// Function to identify another emotion (continue session)
+async function identifyAnotherEmotion() {
+  try {
+    // Return to the emotion selection
+    const healingDiv = document.getElementById('healing-process');
+    const resultsDiv = document.getElementById('emotion-results');
+    
+    healingDiv.style.display = 'none';
+    resultsDiv.style.display = 'block';
+    
+    // Show session progress
+    const sessionProgress = currentEmotionSession ? `
+      <div style="background: #8F5AFF15; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+        <h3 style="color: #8F5AFF; margin: 0 0 10px 0;">Session in Progress</h3>
+        <p style="margin: 5px 0; color: #8F5AFF;">Emotions processed: ${currentEmotionSession.removalCount || 0}</p>
+        <p style="margin: 5px 0; font-size: 14px; color: #8F5AFF;">Select another emotion to continue your healing session</p>
+      </div>
+    ` : '';
+    
+    resultsDiv.innerHTML = `
+      ${sessionProgress}
+      <div style="text-align: center; color: #8F5AFF; font-style: italic;">
+        Click on a trapped emotion above to continue your healing journey
+      </div>
+    `;
+  } catch (error) {
+    console.error('Error continuing session:', error);
+    alert('Unable to continue session. Please try again.');
+  }
+}
+
+// Function to complete the current session
+async function completeSession() {
+  try {
+    const result = await completeEmotionSession();
+    
+    // Show completion summary
+    const healingDiv = document.getElementById('healing-process');
+    healingDiv.innerHTML = `
+      <div style="background: linear-gradient(135deg, #4CAF50, #8ED6B7); 
+                  padding: 40px; border-radius: 15px; text-align: center;">
+        <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+          Session Complete!
+        </h2>
+        <p style="font-size: 18px; color: white; margin: 20px 0;">
+          ${result.message || 'Your healing session has been completed successfully.'}
+        </p>
+        <p style="color: white; font-size: 16px;">
+          Emotions processed in this session: ${result.totalRemovals || 0}
+        </p>
+        <p style="color: white; font-style: italic; margin: 20px 0;">
+          Your progress has been saved. Thank you for taking this journey of healing and self-discovery.
+        </p>
+        
+        <button onclick="returnToChart()" style="background: white; color: #8F5AFF; 
+                       padding: 15px 30px; border: none; border-radius: 8px; 
+                       cursor: pointer; font-size: 16px; margin-top: 20px; font-weight: bold;">
+          Start New Session
+        </button>
+      </div>
+    `;
+  } catch (error) {
+    console.error('Error completing session:', error);
+    alert('Unable to complete session. Please try again.');
+  }
 }
 
 // Function to return to chart
@@ -1637,37 +1727,62 @@ function selectVibeWord(word) {
   }
 }
 
-// Function to check emotion decoder access and usage
-async function checkEmotionDecoderAccess() {
+// Global session state for Emotion Decoder
+let currentEmotionSession = null;
+
+// Function to start or get active emotion session
+async function startEmotionSession() {
   try {
-    const response = await makeApiCall('/api/emotion-decoder/can-use');
+    const response = await fetch('/api/sessions/start', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ feature: 'emotion_decoder' })
+    });
     
     if (response.status === 401) {
-      return { needsAuth: true, canUse: false, usageCount: 0, isSubscribed: false };
+      return { needsAuth: true, canUse: false };
+    }
+    
+    if (response.status === 403) {
+      const data = await response.json();
+      return {
+        needsAuth: false,
+        needsSubscription: true,
+        canUse: false,
+        sessionsUsed: data.sessionsUsed || 0,
+        maxSessions: data.maxSessions || 3,
+        message: data.message
+      };
     }
     
     if (!response.ok) {
-      throw new Error('Failed to check access');
+      throw new Error('Failed to start session');
     }
     
-    const data = await response.json();
+    const sessionData = await response.json();
+    currentEmotionSession = sessionData;
     return {
       needsAuth: false,
-      needsSubscription: !data.canUse,
-      canUse: data.canUse,
-      usageCount: data.usageCount,
-      isSubscribed: data.isSubscribed
+      canUse: true,
+      sessionId: sessionData.sessionId,
+      removalCount: sessionData.removalCount
     };
   } catch (error) {
-    console.error('Error checking access:', error);
+    console.error('Error starting session:', error);
     throw error;
   }
 }
 
-// Function to record emotion decoder usage
-async function recordEmotionDecoderUsage(emotion) {
+// Function to record emotion removal in current session
+async function recordEmotionRemoval(emotion) {
+  if (!currentEmotionSession) {
+    throw new Error('No active session');
+  }
+  
   try {
-    const response = await makeApiCall('/api/emotion-decoder/use', {
+    const response = await fetch(`/api/sessions/${currentEmotionSession.sessionId}/record-removal`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1675,24 +1790,54 @@ async function recordEmotionDecoderUsage(emotion) {
       body: JSON.stringify({ emotion })
     });
     
-    if (response.status === 403) {
-      const data = await response.json();
-      if (data.needsSubscription) {
-        // Redirect to subscription page
-        navigate('emotion-decoder');
-        return;
-      }
-    }
-    
     if (!response.ok) {
-      throw new Error('Failed to record usage');
+      throw new Error('Failed to record removal');
     }
     
-    return await response.json();
+    const data = await response.json();
+    currentEmotionSession.removalCount = data.removalCount;
+    return data;
   } catch (error) {
-    console.error('Error recording usage:', error);
+    console.error('Error recording removal:', error);
     throw error;
   }
+}
+
+// Function to complete current emotion session
+async function completeEmotionSession() {
+  if (!currentEmotionSession) {
+    return { message: 'No active session to complete' };
+  }
+  
+  try {
+    const response = await fetch(`/api/sessions/${currentEmotionSession.sessionId}/complete`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to complete session');
+    }
+    
+    const data = await response.json();
+    currentEmotionSession = null; // Clear session
+    return data;
+  } catch (error) {
+    console.error('Error completing session:', error);
+    throw error;
+  }
+}
+
+// Legacy function for backward compatibility - now uses session system
+async function checkEmotionDecoderAccess() {
+  return await startEmotionSession();
+}
+
+// Legacy function for backward compatibility - now uses session system
+async function recordEmotionDecoderUsage(emotion) {
+  return await recordEmotionRemoval(emotion);
 }
 
 // Function to check allergy identifier access and usage
