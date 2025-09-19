@@ -95,6 +95,9 @@ function showInstallButton() {
   }, 10000);
 }
 
+// Navigation history for back buttons
+let navigationHistory = ['home'];
+
 // Dropdown menu functionality
 function toggleDropdown(event) {
   event.preventDefault();
@@ -102,6 +105,17 @@ function toggleDropdown(event) {
   
   const dropdown = document.getElementById('membership-dropdown');
   dropdown.classList.toggle('active');
+}
+
+// Back button functionality
+function goBack() {
+  if (navigationHistory.length > 1) {
+    navigationHistory.pop(); // Remove current page
+    const previousPage = navigationHistory[navigationHistory.length - 1];
+    navigate(previousPage, false); // Don't add to history when going back
+  } else {
+    navigate('home', false);
+  }
 }
 
 // Close dropdown when clicking outside (with delay)
@@ -126,9 +140,18 @@ document.addEventListener('mouseenter', function(event) {
   }
 });
 
-async function navigate(page) {
+async function navigate(page, addToHistory = true) {
   const main = document.getElementById('main-content');
   main.style.opacity = 0;
+  
+  // Add to navigation history
+  if (addToHistory && navigationHistory[navigationHistory.length - 1] !== page) {
+    navigationHistory.push(page);
+    // Keep history manageable (max 10 entries)
+    if (navigationHistory.length > 10) {
+      navigationHistory.shift();
+    }
+  }
   
   // Close dropdown when navigating
   const dropdown = document.getElementById('membership-dropdown');
@@ -148,6 +171,11 @@ async function navigate(page) {
       `;
     } else if (page === 'initiation') {
       main.innerHTML = `
+        <div style="margin-bottom: 20px;">
+          <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+            ← Back
+          </button>
+        </div>
         <h2>Step 1: Identify Your Frequency</h2>
         <p>
           This is your sacred beginning. Submit a voice note, video link, or reflection.  
@@ -199,6 +227,11 @@ async function navigate(page) {
       `;
     } else if (page === 'therapy') {
       main.innerHTML = `
+        <div style="margin-bottom: 20px;">
+          <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+            ← Back
+          </button>
+        </div>
         <h2>Self Therapy with SoulArt</h2>
         <p>Here you will move through the 7-step Harmonic Healing System.</p>
       `;
@@ -208,6 +241,11 @@ async function navigate(page) {
     } else if (page === 'journal') {
       main.innerHTML = `
         <div class="journal-container">
+          <div style="margin-bottom: 20px;">
+            <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+              ← Back
+            </button>
+          </div>
           <h2>Sacred Reflections Journal</h2>
           <p class="journal-subtitle">A space for your spiritual insights and daily reflections</p>
           
@@ -342,6 +380,11 @@ async function navigate(page) {
 
         // Show the allergy identifier interface
         main.innerHTML = `
+        <div style="margin-bottom: 20px;">
+          <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+            ← Back
+          </button>
+        </div>
         <h2>Allergy Identification System</h2>
         <div style="background: linear-gradient(135deg, #8ED6B7, #85C9F2); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
           <p style="color: white; margin: 0; font-weight: bold;">
@@ -435,6 +478,11 @@ async function navigate(page) {
 
         // Show the belief decoder interface
         main.innerHTML = `
+        <div style="margin-bottom: 20px;">
+          <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+            ← Back
+          </button>
+        </div>
         <h2>Belief Decoder System</h2>
         <div style="background: linear-gradient(135deg, #8ED6B7, #85C9F2); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
           <p style="color: white; margin: 0; font-weight: bold;">
@@ -512,6 +560,11 @@ async function navigate(page) {
 
         // Normal access - show the decoder
         main.innerHTML = `
+          <div style="margin-bottom: 20px;">
+            <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+              ← Back
+            </button>
+          </div>
           <h2>Trapped Emotion Release Tiles</h2>
           <p>Use muscle testing (Kinesiology) to identify which trapped emotion is ready for release today.</p>
           
@@ -2177,6 +2230,11 @@ async function checkAuthAndLoadMembership() {
     if (response.status === 401) {
       // Not authenticated
       main.innerHTML = `
+        <div style="margin-bottom: 20px;">
+          <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+            ← Back
+          </button>
+        </div>
         <h2>Membership Dashboard</h2>
         <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #EAD3FF20, #8ED6B720); border-radius: 15px; margin: 20px 0;">
           <h3 style="color: #8F5AFF; margin-bottom: 15px;">Sign In Required</h3>
@@ -2214,6 +2272,11 @@ async function checkAuthAndLoadMembership() {
     
     // Render membership dashboard
     main.innerHTML = `
+      <div style="margin-bottom: 20px;">
+        <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+          ← Back
+        </button>
+      </div>
       <h2>Membership Dashboard</h2>
       
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
@@ -2332,6 +2395,11 @@ async function checkAuthAndLoadMembership() {
   } catch (error) {
     console.error('Error loading membership dashboard:', error);
     main.innerHTML = `
+      <div style="margin-bottom: 20px;">
+        <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+          ← Back
+        </button>
+      </div>
       <h2>Membership Dashboard</h2>
       <div style="text-align: center; padding: 40px; background: #FFE6E6; border-radius: 15px; margin: 20px 0;">
         <h3 style="color: #FF6B6B; margin-bottom: 15px;">Sign In Required</h3>
@@ -3127,6 +3195,11 @@ function createSoulArtCardsSection() {
   soulArtSection.style.display = 'block';
   soulArtSection.innerHTML = `
     <div class="cards-container">
+      <div style="margin-bottom: 20px;">
+        <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+          ← Back
+        </button>
+      </div>
       <h2>SoulArt Oracle Cards</h2>
       <p class="cards-subtitle">
         Connect with your inner wisdom through this sacred 44-card deck. 
@@ -3510,6 +3583,11 @@ function launchDoodleCanvas() {
     <div style="background: linear-gradient(135deg, var(--chakra-heart), var(--chakra-sacral)); padding: 40px; border-radius: 15px; margin-top: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); min-height: 800px;">
       <div style="background: rgba(255,255,255,0.95); padding: 30px; border-radius: 12px; color: var(--text-primary);">
         
+        <div style="margin-bottom: 20px; text-align: left;">
+          <button onclick="goBack()" style="background: transparent; color: #8F5AFF; border: 2px solid #8F5AFF; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+            ← Back
+          </button>
+        </div>
         <h3 style="color: var(--chakra-crown); margin-bottom: 25px; font-size: 1.8em; text-align: center;">Your Doodle Canvas</h3>
         
         <div style="display: grid; grid-template-columns: 1fr 3fr 1fr; gap: 20px; align-items: start;">
