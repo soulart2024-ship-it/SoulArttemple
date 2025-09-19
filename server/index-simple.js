@@ -882,6 +882,113 @@ app.delete('/api/artworks/:artworkId', isAuthenticated, async (req, res) => {
   }
 });
 
+// New tiered subscription system
+const SUBSCRIPTION_PLANS = {
+  basic_monthly: {
+    name: 'SoulArt Temple Basic Monthly',
+    description: 'Emotion Decoder + Doodle Canvas + Journal',
+    amount: 399, // £3.99 in pence
+    currency: 'gbp',
+    interval: 'month',
+    tier: 'basic'
+  },
+  premium_monthly: {
+    name: 'SoulArt Temple Premium Monthly', 
+    description: 'All features including Belief Decoder + Allergy Identifier',
+    amount: 599, // £5.99 in pence
+    currency: 'gbp',
+    interval: 'month',
+    tier: 'premium'
+  },
+  basic_yearly: {
+    name: 'SoulArt Temple Basic Yearly',
+    description: 'Emotion Decoder + Doodle Canvas + Journal (25% discount)',
+    amount: 3600, // £36.00 in pence (25% off £48)
+    currency: 'gbp',
+    interval: 'year',
+    tier: 'basic'
+  },
+  premium_yearly: {
+    name: 'SoulArt Temple Premium Yearly',
+    description: 'All features (25% discount)',
+    amount: 5391, // £53.91 in pence (25% off £71.88)
+    currency: 'gbp',
+    interval: 'year', 
+    tier: 'premium'
+  }
+};
+
+// New checkout endpoint for tiered subscriptions
+app.post('/api/checkout/start', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const { plan } = req.query; // basic_monthly, premium_monthly, basic_yearly, premium_yearly
+    
+    if (!plan || !SUBSCRIPTION_PLANS[plan]) {
+      return res.status(400).json({ message: "Invalid subscription plan" });
+    }
+    
+    let user = await storage.getUser(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    if (!user.email) {
+      return res.status(400).json({ message: 'No user email on file' });
+    }
+
+    // Create or get Stripe customer
+    let customerId = user.stripeCustomerId;
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email,
+      });
+      customerId = customer.id;
+      await storage.updateUserStripeInfo(userId, customerId, null);
+    }
+
+    const planConfig = SUBSCRIPTION_PLANS[plan];
+    
+    // Create Checkout Session
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: planConfig.currency,
+          product_data: {
+            name: planConfig.name,
+            description: planConfig.description,
+          },
+          unit_amount: planConfig.amount,
+          recurring: {
+            interval: planConfig.interval,
+          },
+        },
+        quantity: 1,
+      }],
+      mode: 'subscription',
+      success_url: `${req.headers.origin || 'https://soularttemple.com'}/membership?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin || 'https://soularttemple.com'}/membership`,
+      metadata: {
+        userId: userId,
+        plan: plan,
+        tier: planConfig.tier,
+        interval: planConfig.interval
+      }
+    });
+
+    res.json({
+      checkoutUrl: session.url,
+      sessionId: session.id
+    });
+  } catch (error) {
+    console.error('Checkout error:', error);
+    res.status(500).json({ message: 'Error creating checkout session' });
+  }
+});
+
 // Stripe subscription routes
 app.post('/api/get-or-create-subscription', isAuthenticated, async (req, res) => {
   try {
@@ -913,8 +1020,10 @@ app.post('/api/get-or-create-subscription', isAuthenticated, async (req, res) =>
 
       return res.json({
         subscriptionId: subscription.id,
-        clientSecret,
-        status: subscription.status
+        status: subscription.status,
+        tier: user.subscriptionTier || 'basic',
+        interval: user.subscriptionInterval || 'month',
+        currentPeriodEnd: user.subscriptionCurrentPeriodEnd
       });
     }
     
@@ -928,40 +1037,11 @@ app.post('/api/get-or-create-subscription', isAuthenticated, async (req, res) =>
       name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email,
     });
 
-    // Create subscription for $3.99/month
-    const subscription = await stripe.subscriptions.create({
-      customer: customer.id,
-      items: [{
-        price_data: {
-          currency: 'gbp',
-          product_data: {
-            name: 'SoulArt Temple Unlimited Access',
-          },
-          unit_amount: 399, // £3.99 in pence
-          recurring: {
-            interval: 'month',
-          },
-        },
-      }],
-      payment_behavior: 'default_incomplete',
-      expand: ['latest_invoice.payment_intent'],
-    });
-
-    // Update user with Stripe info
-    await storage.updateUserStripeInfo(userId, customer.id, subscription.id);
-
-    let clientSecret = null;
-    if (subscription.latest_invoice && typeof subscription.latest_invoice === 'object') {
-      const invoice = subscription.latest_invoice;
-      if (invoice.payment_intent && typeof invoice.payment_intent === 'object') {
-        clientSecret = invoice.payment_intent.client_secret;
-      }
-    }
-
-    res.json({
-      subscriptionId: subscription.id,
-      clientSecret,
-      status: subscription.status
+    // Redirect to new checkout system (default to basic monthly)
+    return res.json({
+      message: "Please use the new checkout system",
+      redirectTo: "/api/checkout/start?plan=basic_monthly",
+      hasSubscription: false
     });
   } catch (error) {
     console.error("Subscription error:", error);
@@ -1017,12 +1097,24 @@ app.post('/api/stripe/webhook', express.raw({type: 'application/json'}), async (
     switch (event.type) {
       case 'checkout.session.completed':
         const session = event.data.object;
-        if (session.subscription) {
-          // Find user by subscription ID and update status
-          const [user] = await db.select().from(users).where(eq(users.stripeSubscriptionId, session.subscription));
-          if (user) {
-            await storage.updateSubscriptionStatus(user.id, 'active', true);
-          }
+        console.log('Checkout session completed:', session.metadata);
+        
+        if (session.subscription && session.metadata?.userId) {
+          const userId = session.metadata.userId;
+          const tier = session.metadata.tier || 'basic';
+          const interval = session.metadata.interval || 'month';
+          
+          // Update user with subscription details
+          await db.update(users)
+            .set({
+              stripeSubscriptionId: session.subscription,
+              subscriptionStatus: 'active',
+              isSubscribed: true,
+              subscriptionTier: tier,
+              subscriptionInterval: interval,
+              updatedAt: new Date()
+            })
+            .where(eq(users.id, userId));
         }
         break;
         
@@ -1031,7 +1123,13 @@ app.post('/api/stripe/webhook', express.raw({type: 'application/json'}), async (
         if (paidInvoice.subscription) {
           const [user] = await db.select().from(users).where(eq(users.stripeSubscriptionId, paidInvoice.subscription));
           if (user) {
-            await storage.updateSubscriptionStatus(user.id, 'active', true);
+            await db.update(users)
+              .set({
+                subscriptionStatus: 'active',
+                isSubscribed: true,
+                updatedAt: new Date()
+              })
+              .where(eq(users.id, user.id));
           }
         }
         break;
@@ -1041,18 +1139,49 @@ app.post('/api/stripe/webhook', express.raw({type: 'application/json'}), async (
         if (failedInvoice.subscription) {
           const [user] = await db.select().from(users).where(eq(users.stripeSubscriptionId, failedInvoice.subscription));
           if (user) {
-            await storage.updateSubscriptionStatus(user.id, 'past_due', false);
+            await db.update(users)
+              .set({
+                subscriptionStatus: 'past_due',
+                isSubscribed: false,
+                updatedAt: new Date()
+              })
+              .where(eq(users.id, user.id));
           }
         }
         break;
         
       case 'customer.subscription.updated':
+        const updatedSubscription = event.data.object;
+        const [subscriptionUser] = await db.select().from(users).where(eq(users.stripeSubscriptionId, updatedSubscription.id));
+        
+        if (subscriptionUser) {
+          // Get the current period end and update subscription details
+          await db.update(users)
+            .set({
+              subscriptionStatus: updatedSubscription.status,
+              isSubscribed: updatedSubscription.status === 'active',
+              subscriptionCurrentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000),
+              updatedAt: new Date()
+            })
+            .where(eq(users.id, subscriptionUser.id));
+        }
+        break;
+        
       case 'customer.subscription.deleted':
-        const subscription = event.data.object;
-        const [user] = await db.select().from(users).where(eq(users.stripeSubscriptionId, subscription.id));
-        if (user) {
-          const isActive = subscription.status === 'active';
-          await storage.updateSubscriptionStatus(user.id, subscription.status, isActive);
+        const deletedSubscription = event.data.object;
+        const [canceledUser] = await db.select().from(users).where(eq(users.stripeSubscriptionId, deletedSubscription.id));
+        
+        if (canceledUser) {
+          await db.update(users)
+            .set({
+              subscriptionStatus: 'canceled',
+              isSubscribed: false,
+              subscriptionTier: null,
+              subscriptionInterval: null,
+              subscriptionCurrentPeriodEnd: null,
+              updatedAt: new Date()
+            })
+            .where(eq(users.id, canceledUser.id));
         }
         break;
         
