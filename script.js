@@ -340,6 +340,14 @@ async function navigate(page, addToHistory = true) {
         
         // Debug: Log user data to see what we're getting for allergy access
         console.log('User data for allergy access:', user);
+        console.log('Subscription fields:', {
+          subscriptionTier: user.subscriptionTier,
+          subscription_tier: user.subscription_tier,
+          subscriptionStatus: user.subscriptionStatus,
+          subscription_status: user.subscription_status,
+          isSubscribed: user.isSubscribed,
+          is_subscribed: user.is_subscribed
+        });
         
         // Check if user has premium access
         if (user.subscriptionTier !== 'premium' || user.subscriptionStatus !== 'active') {
